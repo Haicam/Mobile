@@ -1,20 +1,31 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:haicam/views/home.dart';
+import 'package:haicam/common/langs/codegen_loader.g.dart';
+import 'package:haicam/common/langs/supported_locale.dart';
+import 'package:haicam/features/home/view/home.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+      path: 'assets/langs',
+      fallbackLocale: const Locale('en'),
+      supportedLocales: LangSupported.all,
+      assetLoader: const CodegenLoader(),
+      child: Main(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
+class Main extends StatelessWidget {
+  // This widget is the Main of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      supportedLocales: context.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
+      locale: context.locale,
       debugShowCheckedModeBanner: false,
       home: const Home(),
     );
