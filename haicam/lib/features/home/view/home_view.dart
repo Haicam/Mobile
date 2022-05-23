@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:prac_haicam/common/utils/app_colors.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
-import 'package:prac_haicam/features/home/controller/home_controller.dart';
+import 'package:prac_haicam/common/widgets/navigation_drawer_widget.dart';
 
-class HomeView extends GetView<HomeController> {
+class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: AppColors.primary,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            logoText('HAICAM'),
-          ],
-        ),
+      backgroundColor: AppColors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: logoText("HAICAM"),
       ),
+      drawer: NavigationDrawerWidget(),
+      body: Center(child: headerTitleText("HOME")),
     );
   }
 }

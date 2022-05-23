@@ -2,6 +2,41 @@ import 'package:flutter/material.dart';
 import 'package:prac_haicam/common/utils/app_colors.dart';
 import 'package:prac_haicam/common/utils/app_font.dart';
 
+Widget addVerticalPadding({required Widget child}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8.0),
+    child: child,
+  );
+}
+
+Widget addHorizentalPadding({required Widget child}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    child: child,
+  );
+}
+
+Widget addPadding({required Widget child}) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: child,
+  );
+}
+
+Widget addCustomPadding({
+  required Widget child,
+  required double top,
+  required double left,
+  required double right,
+  required double bottom,
+}) {
+  return Padding(
+    padding:
+        EdgeInsets.only(top: top, left: left, right: right, bottom: bottom),
+    child: child,
+  );
+}
+
 Text logoText(String title) {
   return Text(
     title,
@@ -38,8 +73,8 @@ Text headerTitleText(String title) {
   return Text(
     title,
     style: const TextStyle(
-      color: AppColors.darkGreen,
-      fontSize: 30,
+      color: AppColors.black,
+      fontSize: AppFonts.headingSize,
       fontWeight: FontWeight.bold,
     ),
   );
@@ -149,6 +184,17 @@ Widget horizentalBar() {
       border: Border.all(
         color: AppColors.grey,
       ),
+    ),
+  );
+}
+
+Text menuNormalText(String title) {
+  return Text(
+    title,
+    style: const TextStyle(
+      color: AppColors.black,
+      fontSize: AppFonts.regularSize,
+      fontWeight: FontWeight.w400,
     ),
   );
 }

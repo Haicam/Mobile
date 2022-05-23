@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prac_haicam/features/onboarding/view/onboarding_view.dart';
+import 'package:prac_haicam/features/onboarding/view/splash_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,13 +10,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
+      title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      title: 'Haicam-App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const Onboarding(),
+      home: SplashView(),
     );
   }
 }

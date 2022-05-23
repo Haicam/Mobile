@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prac_haicam/common/utils/app_colors.dart';
 import 'package:prac_haicam/common/utils/app_font.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
+import 'package:prac_haicam/features/home/view/home_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -12,6 +13,15 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   validateAndSubmit() {}
+  goHome() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HomeView(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -111,6 +121,12 @@ class _LoginViewState extends State<LoginView> {
               'Forgot Password?',
             ),
           ],
+        ),
+        TextButton(
+          onPressed: () {
+            goHome();
+          },
+          child: const Center(child: Text('Go Home ->')),
         ),
       ],
     );
