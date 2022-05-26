@@ -1,8 +1,0 @@
-version: "Apple Swift version 5.6 (swiftlang-5.6.0.323.62 clang-1316.0.20.8)"
-options: "9a1a92567da5ba281853eeb8aa848932366c22d4c906cd6a3183548b7eafb970"
-build_start_time: [1652750733, 801480054]
-build_end_time: [1652750747, 331458091]
-inputs:
-  "/Users/gb/fProject/clone/live/prac_haicam/haicam/macos/Flutter/GeneratedPluginRegistrant.swift": [1652750682, 274797439]
-  "/Users/gb/fProject/clone/live/prac_haicam/haicam/macos/Runner/AppDelegate.swift": [1646278331, 0]
-  "/Users/gb/fProject/clone/live/prac_haicam/haicam/macos/Runner/MainFlutterWindow.swift": [1646278331, 0]
