@@ -29,7 +29,10 @@ class _CamSettingViewState extends State<CamSettingView> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         iconTheme: const IconThemeData(),
-        title: Center(child: bodyDarkText("Camera")),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 100.0),
+          child: bodyDarkText("Camera"),
+        ),
       ),
       body: _buildMainMenu(),
     );

@@ -42,7 +42,10 @@ class _AppSettingViewState extends State<AppSettingView> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         iconTheme: const IconThemeData(),
-        title: Center(child: bodyDarkText("App Setting")),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 100.0),
+          child: bodyDarkText("App Setting"),
+        ),
       ),
       body: buildMainView(),
     );

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prac_haicam/features/device/view/device_view.dart';
 import 'package:prac_haicam/features/home/view/home_view.dart';
 import 'package:prac_haicam/features/setting/view/app_setting_view.dart';
-import 'package:prac_haicam/features/setting/view/cam_setting_view.dart';
 
 class NavigationDrawer extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
@@ -33,27 +31,27 @@ class NavigationDrawer extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'App Setting',
+                    text: 'Setting',
                     icon: Icons.settings,
                     onClicked: () => selectedItem(context, 1),
                   ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Camera Setting',
-                    icon: Icons.camera,
-                    onClicked: () => selectedItem(context, 2),
-                  ),
-                  buildMenuItem(
-                    text: 'Devices',
-                    icon: Icons.device_hub,
-                    onClicked: () => selectedItem(context, 3),
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Logout',
-                    icon: Icons.logout,
-                    onClicked: () => selectedItem(context, 4),
-                  ),
+                  // const SizedBox(height: 16),
+                  // buildMenuItem(
+                  //   text: 'Camera Setting',
+                  //   icon: Icons.camera,
+                  //   onClicked: () => selectedItem(context, 2),
+                  // ),
+                  // buildMenuItem(
+                  //   text: 'Devices',
+                  //   icon: Icons.device_hub,
+                  //   onClicked: () => selectedItem(context, 3),
+                  // ),
+                  // const SizedBox(height: 16),
+                  // buildMenuItem(
+                  //   text: 'Logout',
+                  //   icon: Icons.logout,
+                  //   onClicked: () => selectedItem(context, 4),
+                  // ),
                 ],
               ),
             ),
@@ -132,16 +130,6 @@ class NavigationDrawer extends StatelessWidget {
       case 1:
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => const AppSettingView(),
-        ));
-        break;
-      case 2:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const CamSettingView(),
-        ));
-        break;
-      case 3:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const DeviceView(),
         ));
         break;
     }

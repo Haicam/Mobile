@@ -12,8 +12,17 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  validateAndSubmit() {}
-  goHome() {
+  // validateAndSubmit() {}
+  // goHome() {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => const HomeView(),
+  //     ),
+  //   );
+  // }
+
+  moveToHome() {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -39,14 +48,14 @@ class _LoginViewState extends State<LoginView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          addHeight(50),
+          addHeight(60),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               logoText('HAICAM'),
             ],
           ),
-          addHeight(40),
+          addHeight(50),
           // bodyDarkText('Login'),
           bodyLightText('Get great experience with tracky'),
           addHeight(20),
@@ -110,7 +119,7 @@ class _LoginViewState extends State<LoginView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            appPrimaryButton('Sign in', validateAndSubmit),
+            appPrimaryButton('Sign in', moveToHome),
           ],
         ),
         addHeight(15),
@@ -121,15 +130,6 @@ class _LoginViewState extends State<LoginView> {
               'Forgot Password?',
             ),
           ],
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const HomeView()),
-            );
-          },
-          child: const Center(child: Text('Go Home ->')),
         ),
       ],
     );
@@ -157,7 +157,7 @@ class _LoginViewState extends State<LoginView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            appPrimaryButton('Create Account', validateAndSubmit),
+            appPrimaryButton('Create Account', moveToHome),
           ],
         ),
       ],

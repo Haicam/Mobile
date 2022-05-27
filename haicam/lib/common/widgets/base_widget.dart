@@ -63,7 +63,7 @@ Text bodyDarkText(String title) {
     title,
     style: const TextStyle(
         // color: AppColors.regularDarkFont,
-        fontSize: AppFonts.bodySizePrimary,
+        fontSize: AppFonts.appBarTitle,
         fontWeight: FontWeight.w400),
   );
 }
@@ -110,7 +110,7 @@ Widget appPrimaryButton(String title, Function function) {
             padding: const EdgeInsets.all(10) //content padding inside button
             ),
         onPressed: () {
-          //code to execute when this button is pressed.
+          function();
         },
         child: Text(
           title,
