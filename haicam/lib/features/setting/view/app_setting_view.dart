@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prac_haicam/common/utils/app_colors.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
 import 'package:prac_haicam/features/home/view/home_view.dart';
 import 'package:prac_haicam/features/setting/model/app_setting_model.dart';
+import 'package:prac_haicam/features/theme/bloc/theme_bloc.dart';
 
 class AppSettingView extends StatefulWidget {
-  const AppSettingView({Key? key}) : super(key: key);
-
   @override
   State<AppSettingView> createState() => _AppSettingViewState();
 }
@@ -27,18 +27,22 @@ class _AppSettingViewState extends State<AppSettingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 100,
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
-            color: Colors.black,
+            // color: Colors.black,
             size: 18,
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        iconTheme: const IconThemeData(color: Colors.black),
-        title: bodyDarkText("App Setting"),
+        iconTheme: const IconThemeData(),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 100.0),
+          child: bodyDarkText("App Setting"),
+        ),
       ),
       body: buildMainView(),
     );
@@ -81,6 +85,13 @@ class _AppSettingViewState extends State<AppSettingView> {
         onChanged: (value) {
           _isThemeSwitch = value;
           setState(() {});
+          if (_isThemeSwitch) {
+            BlocProvider.of<ThemeBloc>(context)
+                .add(ThemeEvent(theme: AppTheme.darkTheme));
+          } else {
+            BlocProvider.of<ThemeBloc>(context)
+                .add(ThemeEvent(theme: AppTheme.lightTheme));
+          }
         },
         title: const Text("Theme Dark/Light"),
       ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:prac_haicam/common/utils/app_colors.dart';
-import 'package:prac_haicam/common/widgets/base_widget.dart';
 
 class CamSettingView extends StatefulWidget {
   const CamSettingView({Key? key}) : super(key: key);
@@ -17,32 +16,32 @@ class _CamSettingViewState extends State<CamSettingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 100,
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
-            color: Colors.black,
+            // color: Colors.black,
             size: 18,
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        iconTheme: const IconThemeData(color: Colors.black),
-        title: bodyDarkText("Camera"),
-      ),
+        iconTheme: const IconThemeData(),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 100.0),
       body: _buildMainMenu(),
     );
   }
 
   Widget _buildMainMenu() {
-    return ListView(
       children: [
         buildCameraRow(),
         buildIpRow(),
         buildOnOffRow(),
         buildAudioRow(),
       ],
-    );
+    )
   }
 
   Widget buildCameraRow() {

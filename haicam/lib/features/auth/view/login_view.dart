@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:prac_haicam/common/utils/app_colors.dart';
-import 'package:prac_haicam/common/utils/app_font.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
 import 'package:prac_haicam/features/home/view/home_view.dart';
 
@@ -12,8 +10,17 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  validateAndSubmit() {}
-  goHome() {
+  // validateAndSubmit() {}
+  // goHome() {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder: (context) => const HomeView(),
+  //     ),
+  //   );
+  // }
+
+  moveToHome() {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -28,7 +35,7 @@ class _LoginViewState extends State<LoginView> {
       length: 2,
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: _buildMainView(),
+        body: Center(child: _buildMainView()),
       ),
     );
   }
@@ -39,19 +46,12 @@ class _LoginViewState extends State<LoginView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          addHeight(10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              logoText('HAICAM'),
-            ],
-          ),
-          addHeight(40),
+          addHeight(50),
           // bodyDarkText('Login'),
           bodyLightText('Get great experience with tracky'),
           addHeight(20),
           Container(
-            height: 40,
+            height: 50,
             padding: const EdgeInsets.all(2.0),
             decoration: BoxDecoration(
               color: AppColors.lightGrey,
@@ -62,14 +62,14 @@ class _LoginViewState extends State<LoginView> {
               labelColor: AppColors.unSelectedTab,
               unselectedLabelColor: AppColors.selectedTab,
               indicatorWeight: 5,
-              labelStyle: const TextStyle(fontSize: AppFonts.smallSize),
+              labelStyle: const TextStyle(fontSize: AppFonts.bodySizePrimary),
               indicator: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(50),
               ),
               tabs: const [
                 Tab(
-                  text: "Sign In",
+                  text: ("Sign In"),
                 ),
                 Tab(text: "Sign Up"),
               ],
@@ -89,7 +89,7 @@ class _LoginViewState extends State<LoginView> {
           ),
         ],
       ),
-    );
+    )
   }
 
   Widget _buildTabSignIn() {
@@ -101,16 +101,16 @@ class _LoginViewState extends State<LoginView> {
         regularSpace(),
         appPrimaryTextField(
             'Enter your username', false, Icons.person, "email"),
-        regularSpace(),
+        addHeight(30),
         bodyDarkText('Password'),
         regularSpace(),
         appPrimaryTextField(
             'Enter your password', true, Icons.lock, "password"),
-        addHeight(15),
+        addHeight(30),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            appPrimaryButton('Sign in', validateAndSubmit),
+            appPrimaryButton('Sign in', moveToHome),
           ],
         ),
         addHeight(15),
@@ -121,12 +121,6 @@ class _LoginViewState extends State<LoginView> {
               'Forgot Password?',
             ),
           ],
-        ),
-        TextButton(
-          onPressed: () {
-            goHome();
-          },
-          child: const Center(child: Text('Go Home ->')),
         ),
       ],
     );
@@ -141,20 +135,20 @@ class _LoginViewState extends State<LoginView> {
         regularSpace(),
         appPrimaryTextField(
             'Enter your username', false, Icons.person, "email"),
-        regularSpace(),
+        addHeight(30),
         bodyDarkText('Phone Number'),
         regularSpace(),
         appPrimaryTextField(
             'Enter your number', false, Icons.phone, "password"),
-        regularSpace(),
+        addHeight(30),
         bodyDarkText('Password'),
         regularSpace(),
         appPrimaryTextField('Enter your password', true, Icons.lock, "phone"),
-        addHeight(15),
+        addHeight(30),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            appPrimaryButton('Create Account', validateAndSubmit),
+            appPrimaryButton('Create Account', moveToHome),
           ],
         ),
       ],

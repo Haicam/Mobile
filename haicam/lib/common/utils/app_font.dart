@@ -4,6 +4,8 @@ class AppFonts {
   static const String mediumFont = '$defaultFontName-Medium';
   static const String largeFont = '$defaultFontName-Large';
 
+  static const double appBarTitle = 18;
+
   static const double regularSize = 16;
   static const double logoSize = 30;
   static const double headingSize = 24;
@@ -14,4 +16,5 @@ class AppFonts {
   static const double bodySizeSecondary = 10;
   static const double captionSize = 12;
   static const double smallSize = 10;
+  static const double buttonTextSize = 16;
 }

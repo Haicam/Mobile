@@ -43,7 +43,6 @@ Text logoText(String title) {
     style: const TextStyle(
       fontSize: AppFonts.logoSize,
       fontWeight: FontWeight.w900,
-      color: AppColors.primary,
     ),
   );
 }
@@ -52,8 +51,8 @@ Text bodyLightText(String title) {
   return Text(
     title,
     style: const TextStyle(
-      color: AppColors.regularLightFont,
-      fontSize: AppFonts.smallSize,
+      color: AppColors.lightGrey2,
+      fontSize: AppFonts.bodySizePrimary,
       fontWeight: FontWeight.w400,
     ),
   );
@@ -63,8 +62,8 @@ Text bodyDarkText(String title) {
   return Text(
     title,
     style: const TextStyle(
-        color: AppColors.regularDarkFont,
-        fontSize: AppFonts.bodySizePrimary,
+        // color: AppColors.regularDarkFont,
+        fontSize: AppFonts.appBarTitle,
         fontWeight: FontWeight.w400),
   );
 }
@@ -73,7 +72,6 @@ Text headerTitleText(String title) {
   return Text(
     title,
     style: const TextStyle(
-      color: AppColors.black,
       fontSize: AppFonts.headingSize,
       fontWeight: FontWeight.bold,
     ),
@@ -96,8 +94,8 @@ Widget appPrimaryButton(String title, Function function) {
     key: Key(title),
     padding: const EdgeInsets.all(8),
     child: SizedBox(
-      height: 40, //height of button
-      width: 200,
+      height: 50, //height of button
+      width: 300,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
             primary: AppColors.primary, //background color of button
@@ -112,11 +110,11 @@ Widget appPrimaryButton(String title, Function function) {
             padding: const EdgeInsets.all(10) //content padding inside button
             ),
         onPressed: () {
-          //code to execute when this button is pressed.
+          function();
         },
         child: Text(
           title,
-          style: const TextStyle(fontSize: 10),
+          style: const TextStyle(fontSize: AppFonts.buttonTextSize),
         ),
       ),
     ),
@@ -146,6 +144,7 @@ Widget appPrimaryTextField(
   return SizedBox(
     width: 350,
     child: TextField(
+      minLines: 1,
       key: Key(key),
       obscureText: obscureText,
       style: const TextStyle(fontSize: 12, height: 0.5),
