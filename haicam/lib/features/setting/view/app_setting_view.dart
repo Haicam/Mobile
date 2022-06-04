@@ -3,10 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prac_haicam/common/utils/app_colors.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
 import 'package:prac_haicam/features/home/view/home_view.dart';
+
 import 'package:prac_haicam/features/setting/model/app_setting_model.dart';
 import 'package:prac_haicam/features/theme/bloc/theme_bloc.dart';
+import 'package:prac_haicam/features/theme/theme.dart';
 
 class AppSettingView extends StatefulWidget {
+  const AppSettingView({Key? key}) : super(key: key);
+
   @override
   State<AppSettingView> createState() => _AppSettingViewState();
 }
@@ -68,12 +72,10 @@ class _AppSettingViewState extends State<AppSettingView> {
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            //                   <--- left side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
           top: BorderSide(
-            //                    <--- top side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
@@ -115,12 +117,10 @@ class _AppSettingViewState extends State<AppSettingView> {
           decoration: const BoxDecoration(
             border: Border(
               bottom: BorderSide(
-                //                   <--- left side
                 color: AppColors.darkGrey,
                 width: 0.2,
               ),
               top: BorderSide(
-                //                    <--- top side
                 color: AppColors.darkGrey,
                 width: 0.2,
               ),
@@ -139,12 +139,10 @@ class _AppSettingViewState extends State<AppSettingView> {
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            //                   <--- left side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
           top: BorderSide(
-            //                    <--- top side
             color: AppColors.darkGrey,
             width: 0.2,
           ),

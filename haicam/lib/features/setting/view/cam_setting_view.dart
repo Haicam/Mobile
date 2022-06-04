@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prac_haicam/common/utils/app_colors.dart';
+import 'package:prac_haicam/common/widgets/base_widget.dart';
 
 class CamSettingView extends StatefulWidget {
   const CamSettingView({Key? key}) : super(key: key);
@@ -30,18 +31,22 @@ class _CamSettingViewState extends State<CamSettingView> {
         iconTheme: const IconThemeData(),
         title: Padding(
           padding: const EdgeInsets.only(left: 100.0),
+          child: bodyDarkText("Camera"),
+        ),
+      ),
       body: _buildMainMenu(),
     );
   }
 
   Widget _buildMainMenu() {
+    return ListView(
       children: [
         buildCameraRow(),
         buildIpRow(),
         buildOnOffRow(),
         buildAudioRow(),
       ],
-    )
+    );
   }
 
   Widget buildCameraRow() {
@@ -49,12 +54,10 @@ class _CamSettingViewState extends State<CamSettingView> {
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            //                   <--- left side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
           top: BorderSide(
-            //                    <--- top side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
@@ -79,12 +82,10 @@ class _CamSettingViewState extends State<CamSettingView> {
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            //                   <--- left side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
           top: BorderSide(
-            //                    <--- top side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
@@ -109,12 +110,10 @@ class _CamSettingViewState extends State<CamSettingView> {
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            //                   <--- left side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
           top: BorderSide(
-            //                    <--- top side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
@@ -139,12 +138,10 @@ class _CamSettingViewState extends State<CamSettingView> {
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            //                   <--- left side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
           top: BorderSide(
-            //                    <--- top side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
