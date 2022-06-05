@@ -54,12 +54,10 @@ class _CamSettingViewState extends State<CamSettingView> {
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            //                   <--- left side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
           top: BorderSide(
-            //                    <--- top side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
@@ -84,12 +82,10 @@ class _CamSettingViewState extends State<CamSettingView> {
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            //                   <--- left side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
           top: BorderSide(
-            //                    <--- top side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
@@ -114,12 +110,10 @@ class _CamSettingViewState extends State<CamSettingView> {
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            //                   <--- left side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
           top: BorderSide(
-            //                    <--- top side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
@@ -144,12 +138,10 @@ class _CamSettingViewState extends State<CamSettingView> {
       decoration: const BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            //                   <--- left side
             color: AppColors.darkGrey,
             width: 0.2,
           ),
           top: BorderSide(
-            //                    <--- top side
             color: AppColors.darkGrey,
             width: 0.2,
           ),

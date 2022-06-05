@@ -13,10 +13,10 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    _navigateToHome();
+    goToHome();
   }
 
-  void _navigateToHome() async {
+  void goToHome() async {
     await Future.delayed(const Duration(milliseconds: 1500), () {});
     if (!mounted) return;
     Navigator.pushReplacement(
