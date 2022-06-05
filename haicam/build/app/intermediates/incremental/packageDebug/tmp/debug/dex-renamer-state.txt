@@ -1,4 +1,0 @@
-#Wed May 25 21:30:44 PKT 2022
-base.0=/Users/gb/fProject/clone/local/GhaniMobile/Mobile/haicam/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
-renamed.0=classes.dex
-path.0=classes.dex
