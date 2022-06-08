@@ -40,18 +40,14 @@ class _LoginViewState extends State<LoginView> {
       child: Padding(
         padding:
             const EdgeInsets.only(top: 20, left: 16.0, right: 16, bottom: 16),
-        child: Container(
-          color: Colors.white,
-          padding: const EdgeInsets.all(16.0),
-          child: buildContentView(),
-        ),
+        child: buildContentView(),
       ),
     );
   }
 
   Widget buildContentView() {
     return Form(
-      key: formKey,
+      key: const Key('form_key'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: buildLogoTextView() + buildInputView(),
@@ -95,7 +91,7 @@ class _LoginViewState extends State<LoginView> {
           ),
           tabs: const [
             Tab(text: ("Sign In")),
-            Tab(text: "Sign Up"),
+            Tab(text: ("Sign Up")),
           ],
         ),
       ),
@@ -124,7 +120,7 @@ class _LoginViewState extends State<LoginView> {
         SizedBox(
           child: TextField(
             minLines: 1,
-            key: email,
+            key: const Key('email'),
             obscureText: false,
             style: const TextStyle(fontSize: 12, height: 0.5),
             decoration: InputDecoration(
@@ -157,7 +153,7 @@ class _LoginViewState extends State<LoginView> {
         SizedBox(
           child: TextField(
             minLines: 1,
-            key: password,
+            key: const Key('password'),
             obscureText: true,
             style: const TextStyle(fontSize: 12, height: 0.5),
             decoration: InputDecoration(
@@ -214,7 +210,7 @@ class _LoginViewState extends State<LoginView> {
         SizedBox(
           child: TextField(
             minLines: 1,
-            key: fullName,
+            key: const Key('full_name'),
             obscureText: false,
             style: const TextStyle(fontSize: 12, height: 0.5),
             decoration: InputDecoration(
@@ -247,7 +243,7 @@ class _LoginViewState extends State<LoginView> {
         SizedBox(
           child: TextField(
             minLines: 1,
-            key: phoneNumber,
+            key: const Key('phone_number'),
             obscureText: false,
             style: const TextStyle(fontSize: 12, height: 0.5),
             decoration: InputDecoration(
@@ -280,7 +276,7 @@ class _LoginViewState extends State<LoginView> {
         SizedBox(
           child: TextField(
             minLines: 1,
-            key: password,
+            key: const Key('password'),
             obscureText: true,
             style: const TextStyle(fontSize: 12, height: 0.5),
             decoration: InputDecoration(
