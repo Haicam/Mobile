@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prac_haicam/features/onboarding/view/splash_view.dart';
+import 'package:prac_haicam/features/player/view/video_player_view.dart';
 import 'package:prac_haicam/features/theme/bloc/theme_bloc.dart';
 
 void main() {
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Haicam',
             theme: state.theme,
-            home: const SplashView(),
+            home: const VideoPlayerView(),
           );
         },
       ),

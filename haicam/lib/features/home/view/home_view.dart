@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prac_haicam/common/utils/app_colors.dart';
+import 'package:prac_haicam/common/utils/app_images.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
 import 'package:prac_haicam/features/menu/widget/navigation_drawer_widget.dart';
 import 'package:prac_haicam/features/player/view/video_player_view.dart';
@@ -54,7 +55,7 @@ class _HomeViewState extends State<HomeView> {
         height: 200,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/$camName'),
+            image: AssetImage('$imagePath$camName'),
             fit: BoxFit.fill,
           ),
         ),
@@ -81,7 +82,7 @@ class _HomeViewState extends State<HomeView> {
               children: [
                 IconButton(
                   icon: const ImageIcon(
-                    AssetImage('assets/icons/cam_setting.png'),
+                    AssetImage(appSettingIcon),
                   ),
                   color: AppColors.white,
                   iconSize: 50,

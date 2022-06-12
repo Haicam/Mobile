@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prac_haicam/common/utils/app_colors.dart';
+import 'package:prac_haicam/common/utils/app_images.dart';
 import 'package:prac_haicam/features/auth/view/login_view.dart';
 
 class SplashView extends StatefulWidget {
@@ -17,7 +18,7 @@ class _SplashViewState extends State<SplashView> {
   }
 
   void goToHome() async {
-    await Future.delayed(const Duration(milliseconds: 1500), () {});
+    await Future.delayed(const Duration(milliseconds: 3000), () {});
     if (!mounted) return;
     Navigator.pushReplacement(
       context,
@@ -33,10 +34,10 @@ class _SplashViewState extends State<SplashView> {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Container(
-        color: Colors.grey[200],
+        color: AppColors.lightGrey,
         alignment: Alignment.center,
         child: const Image(
-          image: AssetImage('assets/images/haicam_logo.png'),
+          image: AssetImage(appLogoImage),
         ),
       ),
     );

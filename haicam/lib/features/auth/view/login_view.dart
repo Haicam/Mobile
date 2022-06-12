@@ -29,7 +29,7 @@ class _LoginViewState extends State<LoginView> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.white,
         body: buildMainView(),
       ),
     );
