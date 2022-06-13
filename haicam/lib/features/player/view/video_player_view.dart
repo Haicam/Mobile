@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prac_haicam/common/utils/app_colors.dart';
+import 'package:prac_haicam/common/utils/app_images.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
 import 'package:prac_haicam/features/home/view/home_view.dart';
 import 'package:prac_haicam/features/menu/widget/navigation_drawer_widget.dart';
 import 'package:prac_haicam/features/player/model/video_player_item.dart';
+import 'package:prac_haicam/features/player/widget/timeline_widget.dart';
 
 class VideoPlayerView extends StatefulWidget {
   const VideoPlayerView({Key? key}) : super(key: key);
@@ -48,19 +50,77 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
         iconTheme: const IconThemeData(),
         title: Padding(
           padding: const EdgeInsets.only(left: 100.0),
-          child: bodyDarkText("Vedio Player"),
+          child: bodyDarkText("Video Player"),
         ),
       ),
       drawer: NavigationDrawer(),
-      body: buildMainView(),
+      body: SingleChildScrollView(child: buildMainView()),
       bottomNavigationBar: prepareBottomTabs(),
     );
   }
 
   Widget buildMainView() {
-    return ListView(
+    return Column(
       children: <Widget>[
-        displayDevice("Doorbell", "cam_pic_01.png"),
+        Container(
+          child: displayDevice("Doorbell", "cam_pic_01.png"),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(left: 5.0, right: 10.0),
+              // color: Colors.amber,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Column(
+                    children: const [
+                      cardTimeline(),
+                      cardTimeline(),
+                      cardTimeline(),
+                      cardTimeline(),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: 20,
+                  // color: Colors.blue,
+                  child: RichText(
+                    text: const TextSpan(
+                      style: TextStyle(
+                        color: Colors.black,
+                        height: 1.5,
+                        letterSpacing: 1.0,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: '01/01/2022 ',
+                          style: TextStyle(
+                            fontSize: 10,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '13:00:35',
+                          style: TextStyle(
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
@@ -68,11 +128,11 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   Widget displayDevice(String camLocation, String camName) {
     return Container(
       padding: const EdgeInsets.all(5),
-      margin: const EdgeInsets.all(14),
+      margin: const EdgeInsets.only(left: 8.0, right: 8.0),
       height: 200,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/images/$camName'),
+          image: AssetImage('$imagePath$camName'),
           fit: BoxFit.fill,
         ),
       ),
@@ -86,7 +146,6 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ],
