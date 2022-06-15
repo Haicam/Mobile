@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:prac_haicam/common/utils/app_colors.dart';
-import 'package:prac_haicam/common/utils/app_font.dart';
+import 'package:prac_haicam/core/utils/app_colors.dart';
+import 'package:prac_haicam/core/utils/app_fonts.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
-import 'package:prac_haicam/features/home/view/home_view.dart';
+import 'package:prac_haicam/core/utils/app_routes.dart' as route;
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -12,16 +12,10 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  var email, password, phoneNumber, fullName;
   final formKey = GlobalKey<FormState>();
 
-  goToHome() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const HomeView(),
-      ),
-    );
+  validateAndSubmit() {
+    Navigator.pushNamed(context, route.homeView);
   }
 
   @override
@@ -30,32 +24,35 @@ class _LoginViewState extends State<LoginView> {
       length: 2,
       child: Scaffold(
         backgroundColor: AppColors.white,
-        body: buildMainView(),
+        body: _buildMainView(),
       ),
     );
   }
 
-  Widget buildMainView() {
+// build Main (elements and scroll view)
+  Widget _buildMainView() {
     return SingleChildScrollView(
       child: Padding(
         padding:
             const EdgeInsets.only(top: 20, left: 16.0, right: 16, bottom: 16),
-        child: buildContentView(),
+        child: _buildContentView(),
       ),
     );
   }
 
-  Widget buildContentView() {
+//build content (build and form view)
+  Widget _buildContentView() {
     return Form(
       key: const Key('form_key'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: buildLogoTextView() + buildInputView(),
+        children: _buildLogoTextView() + _buildInputView(),
       ),
     );
   }
 
-  List<Widget> buildLogoTextView() {
+// build app logo OR Text
+  List<Widget> _buildLogoTextView() {
     return <Widget>[
       addHeight(60),
       Row(
@@ -70,7 +67,8 @@ class _LoginViewState extends State<LoginView> {
     ];
   }
 
-  List<Widget> buildInputView() {
+// build Tab. view
+  List<Widget> _buildInputView() {
     return <Widget>[
       Container(
         height: 50,
@@ -102,15 +100,16 @@ class _LoginViewState extends State<LoginView> {
         decoration: const BoxDecoration(),
         child: TabBarView(
           children: <Widget>[
-            buildSignInTab(),
-            buildSignUpTab(),
+            _buildSignInTab(),
+            _buildSignUpTab(),
           ],
         ),
       ),
     ];
   }
 
-  Widget buildSignInTab() {
+// build sign-in view
+  Widget _buildSignInTab() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -184,7 +183,7 @@ class _LoginViewState extends State<LoginView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            appPrimaryButton('Sign in', goToHome),
+            appPrimaryButton('Sign in', validateAndSubmit),
           ],
         ),
         addHeight(20),
@@ -200,7 +199,8 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  Widget buildSignUpTab() {
+// build sign-up view
+  Widget _buildSignUpTab() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -307,7 +307,7 @@ class _LoginViewState extends State<LoginView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            appPrimaryButton('Create Account', goToHome),
+            appPrimaryButton('Create Account', validateAndSubmit),
           ],
         ),
       ],

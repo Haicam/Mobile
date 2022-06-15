@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prac_haicam/common/utils/app_colors.dart';
-import 'package:prac_haicam/common/utils/app_images.dart';
+import 'package:prac_haicam/core/utils/app_colors.dart';
+import 'package:prac_haicam/core/utils/app_images.dart';
 import 'package:prac_haicam/features/auth/view/login_view.dart';
 
 class SplashView extends StatefulWidget {

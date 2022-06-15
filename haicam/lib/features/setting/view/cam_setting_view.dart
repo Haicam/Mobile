@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:prac_haicam/common/utils/app_colors.dart';
+import 'package:prac_haicam/core/utils/app_colors.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
 
-class CamSettingView extends StatefulWidget {
-  const CamSettingView({Key? key}) : super(key: key);
+class CameraSettingView extends StatefulWidget {
+  const CameraSettingView({Key? key}) : super(key: key);
 
   @override
-  State<CamSettingView> createState() => _CamSettingViewState();
+  State<CameraSettingView> createState() => _CameraSettingViewState();
 }
 
-class _CamSettingViewState extends State<CamSettingView> {
+class _CameraSettingViewState extends State<CameraSettingView> {
   bool _value_on = false;
   bool _value_audio = false;
 
@@ -29,10 +29,7 @@ class _CamSettingViewState extends State<CamSettingView> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         iconTheme: const IconThemeData(),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 100.0),
-          child: bodyDarkText("Camera"),
-        ),
+        title: bodyDarkText("Camera"),
       ),
       body: _buildMainMenu(),
     );

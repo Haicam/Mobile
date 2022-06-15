@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prac_haicam/common/utils/app_colors.dart';
+import 'package:prac_haicam/core/utils/app_colors.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
 import 'package:prac_haicam/features/home/view/home_view.dart';
 
@@ -43,10 +43,7 @@ class _AppSettingViewState extends State<AppSettingView> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         iconTheme: const IconThemeData(),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 100.0),
-          child: bodyDarkText("App Setting"),
-        ),
+        title: bodyDarkText("App Setting"),
       ),
       body: buildMainView(),
     );

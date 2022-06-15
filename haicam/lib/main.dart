@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prac_haicam/features/player/view/video_player_view.dart';
 import 'package:prac_haicam/features/theme/bloc/theme_bloc.dart';
+import 'package:prac_haicam/core/utils/app_routes.dart' as route;
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +21,8 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Haicam',
             theme: state.theme,
-            home: const VideoPlayerView(),
+            onGenerateRoute: route.controller,
+            initialRoute: route.splashView,
           );
         },
       ),

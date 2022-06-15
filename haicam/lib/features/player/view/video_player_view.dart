@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prac_haicam/common/utils/app_colors.dart';
-import 'package:prac_haicam/common/utils/app_images.dart';
+import 'package:prac_haicam/core/utils/app_colors.dart';
+import 'package:prac_haicam/core/utils/app_images.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
 import 'package:prac_haicam/features/home/view/home_view.dart';
-import 'package:prac_haicam/features/menu/widget/navigation_drawer_widget.dart';
+import 'package:prac_haicam/common/drawer/navigation_drawer_widget.dart';
 import 'package:prac_haicam/features/player/model/video_player_item.dart';
 import 'package:prac_haicam/features/player/widget/timeline_widget.dart';
 
@@ -48,10 +48,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         iconTheme: const IconThemeData(),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 100.0),
-          child: bodyDarkText("Video Player"),
-        ),
+        title: bodyDarkText("Video Player"),
       ),
       drawer: NavigationDrawer(),
       body: SingleChildScrollView(child: buildMainView()),

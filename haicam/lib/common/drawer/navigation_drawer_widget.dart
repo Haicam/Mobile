@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:prac_haicam/core/utils/app_colors.dart';
-import 'package:prac_haicam/features/home/view/home_view.dart';
-import 'package:prac_haicam/features/setting/view/app_setting_view.dart';
-import 'package:prac_haicam/features/setting/view/cam_setting_view.dart';
 
-class NavigationDrawerWidget extends StatelessWidget {
+import 'package:prac_haicam/core/utils/app_routes.dart' as route;
+
+class NavigationDrawer extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
   @override
   Widget build(BuildContext context) {
@@ -13,22 +11,19 @@ class NavigationDrawerWidget extends StatelessWidget {
 
     return Drawer(
       child: Material(
-        color: AppColors.white,
         child: ListView(
           children: <Widget>[
             const SizedBox(height: 40),
             buildHeader(
               name: name,
               email: email,
-              onClicked: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const HomeView(),
-              )),
+              onClicked: () => Navigator.of(context).pop(),
             ),
             Container(
               padding: padding,
               child: Column(
                 children: [
-                  const Divider(color: AppColors.black),
+                  const Divider(),
                   buildMenuItem(
                     text: 'Home',
                     icon: Icons.home,
@@ -36,21 +31,9 @@ class NavigationDrawerWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'App Setting',
+                    text: 'Setting',
                     icon: Icons.settings,
                     onClicked: () => selectedItem(context, 1),
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Camera Setting',
-                    icon: Icons.camera,
-                    onClicked: () => selectedItem(context, 2),
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: 'Logout',
-                    icon: Icons.logout,
-                    onClicked: () => selectedItem(context, 3),
                   ),
                 ],
               ),
@@ -78,23 +61,22 @@ class NavigationDrawerWidget extends StatelessWidget {
                   Text(
                     name,
                     style: const TextStyle(
-                        fontSize: 20,
-                        color: AppColors.black,
-                        fontWeight: FontWeight.bold),
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     email,
-                    style:
-                        const TextStyle(fontSize: 14, color: AppColors.black),
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
               const Spacer(),
               const CircleAvatar(
                 radius: 12,
-                backgroundColor: AppColors.black,
-                child: Icon(Icons.close, color: AppColors.white),
+                // backgroundColor: AppColors.black,
+                child: Icon(Icons.close),
               )
             ],
           ),
@@ -106,13 +88,15 @@ class NavigationDrawerWidget extends StatelessWidget {
     required IconData icon,
     VoidCallback? onClicked,
   }) {
-    const color = Colors.black;
-    const hoverColor = Colors.black87;
+    // const color = Colors.black;
+    // const hoverColor = Colors.black87;
 
     return ListTile(
-      leading: Icon(icon, color: color),
-      title: Text(text, style: const TextStyle(color: color)),
-      hoverColor: hoverColor,
+      // leading: Icon(icon, color: backgroundColor),
+      leading: Icon(icon),
+      // title: Text(text, style: const TextStyle(color: backgroundColor)),
+      title: Text(text),
+      // hoverColor: hoverColor,
       onTap: onClicked,
     );
   }
@@ -122,20 +106,10 @@ class NavigationDrawerWidget extends StatelessWidget {
 
     switch (index) {
       case 0:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const HomeView(),
-        ));
+        Navigator.pushNamed(context, route.homeView);
         break;
       case 1:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const AppSettingView(),
-        ));
-        break;
-      case 2:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const CameraSettingView(),
-        ));
-        break;
+        Navigator.pushNamed(context, route.appSettingView);
         break;
     }
   }
