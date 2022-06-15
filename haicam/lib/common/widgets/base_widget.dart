@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prac_haicam/common/utils/app_colors.dart';
-import 'package:prac_haicam/common/utils/app_font.dart';
+import 'package:prac_haicam/core/utils/app_colors.dart';
+import 'package:prac_haicam/core/utils/app_fonts.dart';
 
 Widget addVerticalPadding({required Widget child}) {
   return Padding(

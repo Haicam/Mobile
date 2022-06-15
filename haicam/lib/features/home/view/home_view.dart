@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:prac_haicam/common/utils/app_colors.dart';
-import 'package:prac_haicam/common/utils/app_images.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
-import 'package:prac_haicam/features/menu/widget/navigation_drawer_widget.dart';
-import 'package:prac_haicam/features/player/view/video_player_view.dart';
-import 'package:prac_haicam/features/setting/view/cam_setting_view.dart';
+import 'package:prac_haicam/core/utils/app_colors.dart';
+import 'package:prac_haicam/core/utils/app_images.dart';
+import 'package:prac_haicam/common/drawer/navigation_drawer_widget.dart';
+
+import 'package:prac_haicam/core/utils/app_routes.dart' as route;
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -22,10 +22,7 @@ class _HomeViewState extends State<HomeView> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         iconTheme: const IconThemeData(),
-        title: Padding(
-          padding: const EdgeInsets.only(left: 100.0),
-          child: bodyDarkText("Devices"),
-        ),
+        title: bodyDarkText("Devices"),
       ),
       drawer: NavigationDrawer(),
       body: buildMainView(),
@@ -45,9 +42,7 @@ class _HomeViewState extends State<HomeView> {
   Widget displayDevice(String camLocation, String camName) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const VideoPlayerView(),
-        ));
+        Navigator.pushNamed(context, route.videoPlayerView);
       },
       child: Container(
         padding: const EdgeInsets.all(5),
@@ -87,9 +82,7 @@ class _HomeViewState extends State<HomeView> {
                   color: AppColors.white,
                   iconSize: 50,
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const CamSettingView(),
-                    ));
+                    Navigator.pushNamed(context, route.cameraSettingView);
                   },
                 ),
               ],
