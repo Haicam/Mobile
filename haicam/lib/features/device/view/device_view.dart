@@ -40,7 +40,7 @@ class _DeviceViewState extends State<DeviceView> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         iconTheme: const IconThemeData(),
-        title: Center(child: bodyDarkText("Devices")),
+        title: Center(child: appBarTitle("Devices")),
       ),
       body: ListView(
         children: <Widget>[

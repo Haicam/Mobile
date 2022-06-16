@@ -22,13 +22,17 @@ class _HomeViewState extends State<HomeView> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         iconTheme: const IconThemeData(),
-        title: bodyDarkText("Devices"),
+        title: Center(child: bodyDarkText("Devices")),
+        actions: [
+          Container(),
+        ],
       ),
       drawer: NavigationDrawer(),
       body: buildMainView(),
     );
   }
 
+// build main view (using Listview)
   Widget buildMainView() {
     return ListView(
       children: <Widget>[
@@ -39,6 +43,7 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+// build to display camera
   Widget displayDevice(String camLocation, String camName) {
     return InkWell(
       onTap: () {

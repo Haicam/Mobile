@@ -32,7 +32,7 @@ class _SplashViewState extends State<SplashView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.white,
       body: Container(
         color: AppColors.lightGrey,
         alignment: Alignment.center,

@@ -43,7 +43,7 @@ class _AppSettingViewState extends State<AppSettingView> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         iconTheme: const IconThemeData(),
-        title: bodyDarkText("App Setting"),
+        title: Center(child: appBarTitle("App Setting")),
       ),
       body: buildMainView(),
     );

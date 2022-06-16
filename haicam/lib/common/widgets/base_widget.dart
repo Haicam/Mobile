@@ -58,6 +58,16 @@ Text bodyLightText(String title) {
   );
 }
 
+Text appBarTitle(String title) {
+  return Text(
+    title,
+    style: const TextStyle(
+        // color: AppColors.regularDarkFont,
+        fontSize: AppFonts.appBarTitle,
+        fontWeight: FontWeight.w400),
+  );
+}
+
 Text bodyDarkText(String title) {
   return Text(
     title,
@@ -193,6 +203,16 @@ Text menuNormalText(String title) {
     style: const TextStyle(
       color: AppColors.black,
       fontSize: AppFonts.regularSize,
+      fontWeight: FontWeight.w400,
+    ),
+  );
+}
+
+Text textTimeStamp(String title) {
+  return Text(
+    title,
+    style: const TextStyle(
+      fontSize: AppFonts.smallSize,
       fontWeight: FontWeight.w400,
     ),
   );
