@@ -1,15 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prac_haicam/core/utils/app_colors.dart';
-import 'package:prac_haicam/core/utils/app_images.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
-import 'package:prac_haicam/features/home/view/home_view.dart';
 import 'package:prac_haicam/common/drawer/navigation_drawer_widget.dart';
 import 'package:prac_haicam/features/player/model/events_model.dart';
-import 'package:prac_haicam/features/player/model/video_player_item.dart';
 import 'package:prac_haicam/features/player/widget/image_widget.dart';
 import 'package:prac_haicam/features/player/widget/line_generator.dart';
 import 'package:prac_haicam/features/player/widget/point_widget.dart';
+import 'package:prac_haicam/features/player/widget/set_dialog.dart';
 
 class VideoPlayerView extends StatefulWidget {
   const VideoPlayerView({Key? key}) : super(key: key);
@@ -19,8 +15,6 @@ class VideoPlayerView extends StatefulWidget {
 }
 
 class _VideoPlayerViewState extends State<VideoPlayerView> {
-  int _currentTabIndex = 0;
-
   var menuItems = [];
 
   final List<Events> listOfEvents = [
@@ -33,18 +27,6 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     Events(time: "01:00 PM", image: "assets/images/cam_pic_01.png"),
     Events(time: "01:10 PM", image: "assets/images/cam_pic_01.png"),
   ];
-
-  @override
-  void initState() {
-    menuItems = [
-      BottomViedoPlayerItem(title: "Calender", view: const HomeView()),
-      BottomViedoPlayerItem(title: "Audio On/Off", view: const HomeView()),
-      BottomViedoPlayerItem(title: "Recording", view: const HomeView()),
-      BottomViedoPlayerItem(title: "Play", view: const HomeView()),
-      BottomViedoPlayerItem(title: "Export", view: const HomeView())
-    ];
-    super.initState();
-  }
 
   String startTime = "12:00 PM";
   String endTime = "12:00 PM";
@@ -68,10 +50,11 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
       ),
       drawer: NavigationDrawer(),
       body: buildMainView(),
-      bottomNavigationBar: prepareBottomTabs(),
+      bottomNavigationBar: _builBottomTab(),
     );
   }
 
+// build camera. timestamp and timeline view
   Widget buildMainView() {
     Size size = MediaQuery.of(context).size;
     return Column(
@@ -153,104 +136,78 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     );
   }
 
-  Widget displayDevice(String camLocation, String camName) {
-    return Container(
-      padding: const EdgeInsets.all(5),
-      margin: const EdgeInsets.only(left: 8.0, right: 8.0),
-      height: 200,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('$imagePath$camName'),
-          fit: BoxFit.fill,
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+// build bottom tab actions
+  Widget _builBottomTab() {
+    double iconSize = 32;
+    return SizedBox(
+      height: 60,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              Text(
-                camLocation,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.calendar_month),
+                color: Colors.grey,
+                iconSize: iconSize,
+                onPressed: () {},
+              ),
+            ],
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.volume_down_alt),
+                color: Colors.grey,
+                iconSize: iconSize,
+                onPressed: () {},
+              ),
+            ],
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.mic_outlined),
+                color: Colors.grey,
+                iconSize: iconSize,
+                onPressed: () {},
+              ),
+            ],
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.forward_10),
+                color: Colors.grey,
+                iconSize: iconSize,
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const ShowTimelapseBox();
+                      });
+                },
+              ),
+            ],
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.circle_sharp),
+                color: Colors.grey,
+                iconSize: iconSize,
+                onPressed: () {},
               ),
             ],
           ),
         ],
       ),
     );
-  }
-
-  Widget prepareBottomTabs() {
-    double size = 24;
-    return CupertinoTabBar(
-      activeColor: AppColors.primary,
-      inactiveColor: Colors.grey,
-      backgroundColor: const Color(0xB3FFFFFF),
-      onTap: onTabTapped,
-      currentIndex: _currentTabIndex,
-      items: [
-        BottomNavigationBarItem(
-          activeIcon: Icon(
-            Icons.calendar_month,
-            size: size,
-          ),
-          icon: Icon(
-            Icons.calendar_month_outlined,
-            size: size,
-          ),
-          label: menuItems[0].title,
-        ),
-        BottomNavigationBarItem(
-          activeIcon: Icon(
-            Icons.volume_down_alt,
-            size: size,
-          ),
-          icon: Icon(
-            Icons.volume_down_outlined,
-            size: size,
-          ),
-          label: menuItems[1].title,
-        ),
-        BottomNavigationBarItem(
-            activeIcon: Icon(
-              Icons.mic,
-              size: size,
-            ),
-            icon: Icon(
-              Icons.mic_outlined,
-              size: size,
-            ),
-            label: menuItems[2].title),
-        BottomNavigationBarItem(
-            activeIcon: Icon(
-              Icons.forward_10,
-              size: size,
-            ),
-            icon: Icon(
-              Icons.forward_10_outlined,
-              size: size,
-            ),
-            label: menuItems[3].title),
-        BottomNavigationBarItem(
-            activeIcon: Icon(
-              Icons.circle_sharp,
-              size: size,
-            ),
-            icon: Icon(
-              Icons.circle_sharp,
-              size: size,
-            ),
-            label: menuItems[4].title),
-      ],
-    );
-  }
-
-  void onTabTapped(int index) {
-    setState(() {
-      _currentTabIndex = index;
-    });
   }
 }
