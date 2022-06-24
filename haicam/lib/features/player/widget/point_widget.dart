@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:prac_haicam/core/utils/app_colors.dart';
 
 Widget verticlePoints() {
   return Column(
     children: [
       ClipOval(
         child: Material(
-          color: Colors.lightGreen, // Button color
+          color: AppColors.lightGrey2, // Button color
           child: InkWell(
             splashColor: Colors.blue, // Splash color
             onTap: () {},
@@ -20,7 +21,7 @@ Widget verticlePoints() {
       const SizedBox(height: 10),
       ClipOval(
         child: Material(
-          color: Colors.lightGreen, // Button color
+          color: AppColors.lightGrey2, // Button color
           child: InkWell(
             splashColor: Colors.blue, // Splash color
             onTap: () {},

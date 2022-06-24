@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:prac_haicam/core/utils/app_colors.dart';
 
 Widget eventImage(String image) {
   return Column(
@@ -10,18 +11,20 @@ Widget eventImage(String image) {
             clipper: ArrowClipper(10, 0, Edge.LEFT),
             child: Container(
               height: 20,
-              color: Colors.lightGreen,
+              color: AppColors.lightGrey2,
               child: const Center(
                   child: Text(
                 "H",
-                style: TextStyle(color: Colors.lightGreen),
+                style: TextStyle(
+                  color: AppColors.lightGrey2,
+                ),
               )),
             ),
           ),
           Container(
             height: 90.0,
             width: 140.0,
-            color: Colors.lightGreen,
+            color: AppColors.lightGrey2,
             child: Padding(
               padding: const EdgeInsets.all(2.0),
               child: Container(

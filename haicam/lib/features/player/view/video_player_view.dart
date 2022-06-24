@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
 import 'package:prac_haicam/common/drawer/navigation_drawer_widget.dart';
+import 'package:prac_haicam/core/utils/app_colors.dart';
 import 'package:prac_haicam/features/player/model/events_model.dart';
 import 'package:prac_haicam/features/player/widget/image_widget.dart';
 import 'package:prac_haicam/features/player/widget/line_generator.dart';
 import 'package:prac_haicam/features/player/widget/point_widget.dart';
 import 'package:prac_haicam/features/player/widget/set_dialog.dart';
-import 'package:intl/intl.dart';
 
 class VideoPlayerView extends StatefulWidget {
   const VideoPlayerView({Key? key}) : super(key: key);
@@ -28,22 +28,6 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     Events(time: "01:00 PM", image: "assets/images/cam_pic_01.png"),
     Events(time: "01:10 PM", image: "assets/images/cam_pic_01.png"),
   ];
-
-  String startTime = "12:00 PM";
-  String endTime = "12:00 PM";
-
-  // DateTime date =
-  //     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-
-  DateTime? dateTime;
-
-  String getDateTime() {
-    if (dateTime == null) {
-      return 'Select Date and Time';
-    } else {
-      return DateFormat('dd/MM/yyyy HH:mm').format(dateTime!);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,11 +81,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
             Positioned(
               bottom: -20,
               right: 15,
-              // child: textTimeStamp('00/00/0000 00:00:00'),
-              child: Row(
-                children: [
-                  textTimeStamp(getDateTime()),
-                ],
+              child: textTimeStamp(
+                '00/00/0000 00:00:00',
               ),
             )
           ],
@@ -170,9 +151,10 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
             children: <Widget>[
               IconButton(
                 icon: const Icon(Icons.calendar_month),
-                color: Colors.grey,
+                color: AppColors.darkGrey,
                 iconSize: iconSize,
-                onPressed: () => pickDateTime(context),
+                // onPressed: () => pickDateTime(context),
+                onPressed: () => _showMyDialog(),
               ),
             ],
           ),
@@ -181,7 +163,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
             children: <Widget>[
               IconButton(
                 icon: const Icon(Icons.volume_down_alt),
-                color: Colors.grey,
+                color: AppColors.darkGrey,
                 iconSize: iconSize,
                 onPressed: () {},
               ),
@@ -192,7 +174,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
             children: <Widget>[
               IconButton(
                 icon: const Icon(Icons.mic_outlined),
-                color: Colors.grey,
+                color: AppColors.darkGrey,
                 iconSize: iconSize,
                 onPressed: () {},
               ),
@@ -203,7 +185,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
             children: <Widget>[
               IconButton(
                 icon: const Icon(Icons.forward_10),
-                color: Colors.grey,
+                color: AppColors.darkGrey,
                 iconSize: iconSize,
                 onPressed: () {
                   showDialog(
@@ -220,7 +202,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
             children: <Widget>[
               IconButton(
                 icon: const Icon(Icons.circle_sharp),
-                color: Colors.grey,
+                color: AppColors.darkGrey,
                 iconSize: iconSize,
                 onPressed: () {},
               ),
@@ -231,49 +213,62 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     );
   }
 
-  Future pickDateTime(BuildContext context) async {
-    final date = await pickDate(context);
-    if (date == null) return;
-
-    final time = await pickTime(context);
-    if (time == null) return;
-
-    setState(() {
-      dateTime = DateTime(
-        date.year,
-        date.month,
-        date.day,
-        time.hour,
-        time.minute,
-      );
-    });
+  _showDatePickerDialogue() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: CalendarDatePicker(
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2020),
+        lastDate: DateTime(2030),
+        onDateChanged: (newDate) {},
+      ),
+    );
   }
 
-  Future<DateTime?> pickDate(BuildContext context) async {
-    final initialDate = DateTime.now();
-    final newDate = await showDatePicker(
-      context: context,
-      initialDate: dateTime ?? initialDate,
-      firstDate: DateTime(DateTime.now().year - 10),
-      lastDate: DateTime(DateTime.now().year + 10),
+  _showTimePickerDialogue() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: TimePickerDialog(
+        initialTime: TimeOfDay.now(),
+        // initialEntryMode: TimePickerEntryMode.dial,
+        confirmText: "ok",
+        cancelText: "cancel",
+        helpText: "",
+      ),
     );
-    if (newDate == null) return null;
-    return newDate;
   }
 
-  Future<TimeOfDay?> pickTime(BuildContext context) async {
-    const initialTime = TimeOfDay(hour: 12, minute: 00);
-    final newTime = await showTimePicker(
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
       context: context,
-      initialTime: dateTime != null
-          ? TimeOfDay(
-              hour: dateTime!.hour,
-              minute: dateTime!.minute,
-            )
-          : initialTime,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          child: AlertDialog(
+            title: const Text('Select Date & Time'),
+            content: ListBody(
+              children: <Widget>[
+                _showDatePickerDialogue(),
+                _showTimePickerDialogue(),
+              ],
+            ),
+            // actions: <Widget>[
+            //   TextButton(
+            //     child: const Text('Cancel'),
+            //     onPressed: () {
+            //       Navigator.of(context).pop();
+            //     },
+            //   ),
+            //   TextButton(
+            //     child: const Text('Ok'),
+            //     onPressed: () {
+            //       Navigator.of(context).pop();
+            //     },
+            //   ),
+            // ],
+          ),
+        );
+      },
     );
-    if (newTime == null) return null;
-
-    return newTime;
   }
 }
