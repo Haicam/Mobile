@@ -62,6 +62,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "device_frame",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/device_frame-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "device_preview",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/device_preview-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "equatable",
       "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/equatable-2.0.3",
       "packageUri": "lib/",
@@ -98,8 +110,26 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_custom_clippers",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_custom_clippers-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_datetime_picker",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_datetime_picker-1.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_lints",
       "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_localizations",
+      "rootUri": "file:///Users/gb/development/flutter/packages/flutter_localizations",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -122,6 +152,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "freezed_annotation",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/freezed_annotation-2.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
       "name": "hive",
       "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/hive-2.2.1",
       "packageUri": "lib/",
@@ -140,10 +176,22 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "intl",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "js",
       "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.4",
       "packageUri": "lib/",
       "languageVersion": "2.16"
+    },
+    {
+      "name": "json_annotation",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/json_annotation-4.5.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
     },
     {
       "name": "lints",
@@ -244,6 +292,54 @@
     {
       "name": "provider",
       "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/provider-6.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "shared_preferences",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.15",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "shared_preferences_android",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_android-2.0.12",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "shared_preferences_ios",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_ios-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.14"
+    },
+    {
+      "name": "shared_preferences_linux",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_linux-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "shared_preferences_macos",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_macos-2.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "shared_preferences_platform_interface",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_platform_interface-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "shared_preferences_web",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_web-2.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "shared_preferences_windows",
+      "rootUri": "file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/shared_preferences_windows-2.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -356,7 +452,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2022-06-06T13:00:58.323916Z",
+  "generated": "2022-06-24T06:03:23.743999Z",
   "generator": "pub",
   "generatorVersion": "2.17.1"
 }
