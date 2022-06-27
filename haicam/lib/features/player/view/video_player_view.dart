@@ -7,6 +7,8 @@ import 'package:prac_haicam/features/player/widget/image_widget.dart';
 import 'package:prac_haicam/features/player/widget/line_generator.dart';
 import 'package:prac_haicam/features/player/widget/point_widget.dart';
 import 'package:prac_haicam/features/player/widget/set_dialog.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:intl/intl.dart';
 
 class VideoPlayerView extends StatefulWidget {
   const VideoPlayerView({Key? key}) : super(key: key);
@@ -28,6 +30,10 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     Events(time: "01:00 PM", image: "assets/images/cam_pic_01.png"),
     Events(time: "01:10 PM", image: "assets/images/cam_pic_01.png"),
   ];
+
+  DateTime date = DateTime.now().toUtc().add(const Duration(hours: -11));
+  final DateFormat workerHistoryDateTimeFormat =
+      DateFormat('dd MMMM yyyy - h:mm a');
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +90,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
               child: textTimeStamp(
                 '00/00/0000 00:00:00',
               ),
-            )
+              // child: textTimeStamp(workerHistoryDateTimeFormat.format(date)),
+            ),
           ],
         ),
         Flexible(
@@ -111,7 +118,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                                 eventImage(listOfEvents[i].image),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ),
@@ -119,13 +126,15 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                       bottom: 5,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 20.0),
-                        child: Column(
-                          children: [
-                            Text(listOfEvents[i].time),
-                            const LineGenerator(
-                              lines: [20.0, 10.0, 10.0, 10.0],
-                            ),
-                          ],
+                        child: NotificationListener<ScrollNotification>(
+                          child: Column(
+                            children: [
+                              Text(listOfEvents[i].time),
+                              const LineGenerator(
+                                lines: [20.0, 10.0, 10.0, 10.0],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -153,8 +162,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                 icon: const Icon(Icons.calendar_month),
                 color: AppColors.darkGrey,
                 iconSize: iconSize,
-                // onPressed: () => pickDateTime(context),
-                onPressed: () => _showMyDialog(),
+                onPressed: () => pickDateAndTime(context),
+                // onPressed: () => textTimeStamp(getDateTime()),
               ),
             ],
           ),
@@ -213,62 +222,18 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     );
   }
 
-  _showDatePickerDialogue() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: CalendarDatePicker(
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2020),
-        lastDate: DateTime(2030),
-        onDateChanged: (newDate) {},
-      ),
-    );
-  }
-
-  _showTimePickerDialogue() {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: TimePickerDialog(
-        initialTime: TimeOfDay.now(),
-        // initialEntryMode: TimePickerEntryMode.dial,
-        confirmText: "ok",
-        cancelText: "cancel",
-        helpText: "",
-      ),
-    );
-  }
-
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
+// build time and date picker
+  Future pickDateAndTime(BuildContext context) async {
+    final initialDate = DateTime.now().toUtc().add(const Duration(hours: -11));
+    DateTime? dateTime = await showOmniDateTimePicker(
       context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return SingleChildScrollView(
-          child: AlertDialog(
-            title: const Text('Select Date & Time'),
-            content: ListBody(
-              children: <Widget>[
-                _showDatePickerDialogue(),
-                _showTimePickerDialogue(),
-              ],
-            ),
-            // actions: <Widget>[
-            //   TextButton(
-            //     child: const Text('Cancel'),
-            //     onPressed: () {
-            //       Navigator.of(context).pop();
-            //     },
-            //   ),
-            //   TextButton(
-            //     child: const Text('Ok'),
-            //     onPressed: () {
-            //       Navigator.of(context).pop();
-            //     },
-            //   ),
-            // ],
-          ),
-        );
-      },
+      is24HourMode: false,
+      isShowSeconds: false,
+      startInitialDate: initialDate,
+      startFirstDate:
+          DateTime.now().toUtc().subtract(const Duration(days: 365)),
+      startLastDate: DateTime.now().toUtc(),
+      borderRadius: const Radius.circular(16),
     );
   }
 }

@@ -70,10 +70,6 @@ flutter_custom_clippers
 2.12
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_custom_clippers-2.0.0/
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_custom_clippers-2.0.0/lib/
-flutter_datetime_picker
-2.12
-file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_datetime_picker-1.5.1/
-file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_datetime_picker-1.5.1/lib/
 flutter_lints
 2.17
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-2.0.1/
@@ -130,6 +126,10 @@ nested
 2.12
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/nested-1.0.0/
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/nested-1.0.0/lib/
+omni_datetime_picker
+2.14
+file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/omni_datetime_picker-0.1.0/
+file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/omni_datetime_picker-0.1.0/lib/
 path
 2.12
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/path-1.8.1/

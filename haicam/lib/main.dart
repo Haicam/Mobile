@@ -7,7 +7,7 @@ import 'package:prac_haicam/core/utils/app_routes.dart' as route;
 void main() {
   runApp(
     DevicePreview(
-      enabled: true,
+      enabled: false,
       tools: const [
         ...DevicePreview.defaultTools,
       ],
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
             title: 'Haicam',
             theme: state.theme,
             onGenerateRoute: route.controller,
-            initialRoute: route.splashView,
+            initialRoute: route.videoPlayerView,
           );
         },
       ),
