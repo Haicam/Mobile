@@ -11,12 +11,12 @@ Widget eventImage(String image) {
             clipper: ArrowClipper(10, 0, Edge.LEFT),
             child: Container(
               height: 20,
-              color: AppColors.lightGrey2,
+              color: AppColors.darkGrey,
               child: const Center(
                   child: Text(
                 "H",
                 style: TextStyle(
-                  color: AppColors.lightGrey2,
+                  color: AppColors.darkGrey,
                 ),
               )),
             ),
@@ -24,7 +24,7 @@ Widget eventImage(String image) {
           Container(
             height: 90.0,
             width: 140.0,
-            color: AppColors.lightGrey2,
+            color: AppColors.darkGrey,
             child: Padding(
               padding: const EdgeInsets.all(2.0),
               child: Container(

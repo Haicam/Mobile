@@ -42,6 +42,8 @@ dependencies:
   hydrated_bloc: ^8.1.0
   path_provider: ^2.0.10
   ffi: ^1.2.1
+  timeline_tile: ^2.0.0
+  inview_notifier_list: ^3.0.0
 
 dev_dependencies:
   flutter_test:
