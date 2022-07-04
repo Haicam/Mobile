@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
@@ -22,31 +20,29 @@ class VideoPlayerView extends StatefulWidget {
 }
 
 class _VideoPlayerViewState extends State<VideoPlayerView> {
-  late int _indexValue;
-  late String _indexTime;
-  final double _height = 100.0;
+  // initialize required controller and other variable
   ScrollController? _scrollController;
-  bool alterText = false;
-  int _number = 20;
   String timeStampText = '';
   String newTimeStampText = '';
-  late double position = 0.0;
-  DateTime? dateTime;
-  late DateTime _minDate, _maxDate;
+  bool alterText = false;
   double? width;
   double? height;
+  DateTime? dateTime;
 
+  // set initial values for date and indexes
   DateTime startDate = DateTime.now().subtract(const Duration(days: 365));
   DateTime endDate = DateTime.now();
-  late int _indexPosition = 0;
+  final int _indexPosition = 0;
+  String imageSample = "assets/images/cam_pic_01.png";
 
-  // DateTime date= DateFormat.yMd().format(endDate);
+  //set date formatting
+  final DateFormat dateFormat = DateFormat('hh:mm');
 
   List<FrameEvent> events = [];
-
   late int _indexTimeLine;
   late double setPosition = 52704;
 
+  // init state of view
   @override
   initState() {
     _scrollController = ScrollController();
@@ -62,30 +58,23 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
         startDate.minute + 10,
       );
     }
-
     super.initState();
   }
 
-  getInitPosition(int index) {
-    print(index);
+// dispose state of view
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController!.dispose();
   }
 
-  String imageSample = "assets/images/cam_pic_01.png";
-
-  final DateFormat dateFormat = DateFormat('hh:mm');
-
+  // set get Date for timestamp view
   String getDate(String string) {
     if (dateTime == null) {
       return string;
     } else {
       return dateFormat.format(DateTime.parse(dateTime.toString()));
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _scrollController!.dispose();
   }
 
   //on Tap calendar icon
@@ -112,15 +101,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   //on Tap Circle icon
   void onTapCircleTab() {}
 
-  //goto index item
-  void goToItemIndex(int index) {
-    _scrollController!.animateTo(
-      index * _height,
-      duration: const Duration(microseconds: 2),
-      curve: Curves.fastOutSlowIn,
-    );
-  }
-
+// This widget is the root of view.
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -196,7 +177,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              textDateTimeStamp(
+              textDateStamp(
                   '${events[_indexPosition].dateTime!.day.toString()}/${events[_indexPosition].dateTime!.month.toString()}/${events[_indexPosition].dateTime!.year.toString()}'),
               addWidth(30),
               textTimeStamp(
@@ -349,7 +330,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                 icon: const Icon(Icons.circle_sharp),
                 color: AppColors.darkGrey,
                 iconSize: iconSize,
-                onPressed: () {},
+                onPressed: onTapCircleTab,
               ),
             ],
           ),
@@ -382,7 +363,6 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
       selectTime.hour,
       selectTime.minute,
     );
-
     // print(selectTime);
     // final index =
     //     events.indexWhere((element) => element.dateTime == selectTime);

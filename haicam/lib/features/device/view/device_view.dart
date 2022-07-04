@@ -13,17 +13,21 @@ class _DeviceViewState extends State<DeviceView> {
   late VideoPlayerController videoPlayerController;
   late Future<void> videoPlayerFuture;
 
+  //init state of vie
   @override
   void initState() {
     super.initState();
     videoPlayerController =
         VideoPlayerController.asset('assets/videos/haicam_intro.mp4')
-          ..initialize().then((_) {
-            setState(() {});
-            videoPlayerController.play();
-          });
+          ..initialize().then(
+            (_) {
+              setState(() {});
+              videoPlayerController.play();
+            },
+          );
   }
 
+  // This widget is the root of view.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +73,7 @@ class _DeviceViewState extends State<DeviceView> {
       ),
     );
   }
-
+//dispose state of view
   @override
   void dispose() {
     videoPlayerController.dispose();
