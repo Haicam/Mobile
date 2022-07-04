@@ -45,7 +45,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   List<FrameEvent> events = [];
 
   late int _indexTimeLine;
-  late int setPosition=52704;
+  late double setPosition = 52704;
 
   @override
   initState() {
@@ -62,12 +62,18 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
         startDate.minute + 10,
       );
     }
+
     super.initState();
+  }
+
+  getInitPosition(int index) {
+    print(index);
   }
 
   String imageSample = "assets/images/cam_pic_01.png";
 
   final DateFormat dateFormat = DateFormat('hh:mm');
+
   String getDate(String string) {
     if (dateTime == null) {
       return string;
@@ -190,13 +196,12 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-          textDateTimeStamp('${events[_indexPosition].dateTime!.day.toString()}/${events[_indexPosition].dateTime!.month.toString()}/${events[_indexPosition].dateTime!.year.toString()}'
-              ),
+              textDateTimeStamp(
+                  '${events[_indexPosition].dateTime!.day.toString()}/${events[_indexPosition].dateTime!.month.toString()}/${events[_indexPosition].dateTime!.year.toString()}'),
               addWidth(30),
               textTimeStamp(
                 getDate(
-                    '${events[_indexPosition].dateTime!.hour.toString()}:${events[_indexPosition].dateTime!.minute.toString()}'
-                ),
+                    '${events[_indexPosition].dateTime!.hour.toString()}:${events[_indexPosition].dateTime!.minute.toString()}'),
               ),
             ],
           ),
@@ -211,77 +216,78 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     return NotificationListener<UserScrollNotification>(
       onNotification: (notification) {
         setState(() {
-          if (_scrollController!.position.userScrollDirection ==
-              ScrollDirection.reverse) {
-
-            _indexPosition++;
-            textDateTimeStamp('${events[_indexPosition].dateTime!.day.toString()}/${events[_indexPosition].dateTime!.month.toString()}/${events[_indexPosition].dateTime!.year.toString()}');
-                textTimeStamp(getDate(
-                '${events[_indexPosition].dateTime!.hour.toString()}:${events[_indexPosition].dateTime!.minute.toString()}'));
-
-          }
-          if (_scrollController!.position.userScrollDirection ==
-              ScrollDirection.forward) {
-            _indexPosition--;
-            print(_indexPosition);
-            textDateTimeStamp('${events[_indexPosition].dateTime!.day.toString()}/${events[_indexPosition].dateTime!.month.toString()}/${events[_indexPosition].dateTime!.year.toString()}');
-            textTimeStamp(getDate(
-                '${events[_indexPosition].dateTime!.hour.toString()}:${events[_indexPosition].dateTime!.minute.toString()}'));
-            _indexPosition--;
-
-          }
+          // if (_scrollController!.position.userScrollDirection ==
+          //     ScrollDirection.reverse) {
+          //   // _indexPosition++;
+          //   textDateTimeStamp(
+          //       '${events[_indexPosition].dateTime!.day.toString()}/${events[_indexPosition].dateTime!.month.toString()}/${events[_indexPosition].dateTime!.year.toString()}');
+          //   textTimeStamp(getDate(
+          //       '${events[_indexPosition].dateTime!.hour.toString()}:${events[_indexPosition].dateTime!.minute.toString()}'));
+          // }
+          // if (_scrollController!.position.userScrollDirection ==
+          //     ScrollDirection.forward) {
+          //   _indexPosition--;
+          //   print(_indexPosition);
+          //   textDateTimeStamp(
+          //       '${events[_indexPosition].dateTime!.day.toString()}/${events[_indexPosition].dateTime!.month.toString()}/${events[_indexPosition].dateTime!.year.toString()}');
+          //   textTimeStamp(getDate(
+          //       '${events[_indexPosition].dateTime!.hour.toString()}:${events[_indexPosition].dateTime!.minute.toString()}'));
+          //   // _indexPosition--;
+          //
+          // }
         });
         return true;
       },
       child: ListView.builder(
-          controller: _scrollController,
-          shrinkWrap: true,
-          itemCount: events.length,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context, index) {
-            return Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 6, left: 5, right: 0, bottom: 16),
-                  child: Row(
-                    children: [
-                      SizedBox(width: width! * 0.1),
-                      SizedBox(
-                        width: width! * 0.18,
-                        child: verticlePoints(),
+        controller: _scrollController,
+        shrinkWrap: true,
+        itemCount: events.length,
+        scrollDirection: Axis.vertical,
+        itemBuilder: (context, index) {
+          return Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 6, left: 5, right: 0, bottom: 16),
+                child: Row(
+                  children: [
+                    SizedBox(width: width! * 0.1),
+                    SizedBox(
+                      width: width! * 0.18,
+                      child: verticlePoints(),
+                    ),
+                    SizedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          eventImage(imageSample),
+                          // Text('$index'),
+                        ],
                       ),
-                      SizedBox(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            eventImage(imageSample),
-                            // Text('$index'),
-                          ],
-                        ),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                bottom: 5,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20.0),
+                  child: Column(
+                    children: [
+                      Text(
+                          '${events[index].dateTime!.hour.toString()}:${events[index].dateTime!.minute.toString()}'),
+                      // Text('$index'),
+                      const LineGenerator(
+                        lines: [20.0, 10.0, 10.0, 10.0],
                       ),
                     ],
                   ),
                 ),
-                Positioned(
-                  bottom: 5,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: Column(
-                      children: [
-                        Text(
-                            '${events[index].dateTime!.hour.toString()}:${events[index].dateTime!.minute.toString()}'),
-                        // Text('$index'),
-                        const LineGenerator(
-                          lines: [20.0, 10.0, 10.0, 10.0],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
