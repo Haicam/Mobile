@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
             title: 'Haicam',
             theme: state.theme,
             onGenerateRoute: route.controller,
-            initialRoute: route.videoPlayerView,
+            initialRoute: route.splashView,
           );
         },
       ),

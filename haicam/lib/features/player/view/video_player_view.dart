@@ -1,19 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
 import 'package:prac_haicam/common/drawer/navigation_drawer_widget.dart';
 import 'package:prac_haicam/core/utils/app_colors.dart';
-import 'package:prac_haicam/features/player/model/events_model.dart';
+import 'package:prac_haicam/features/player/model/frame_events_model.dart';
 import 'package:prac_haicam/features/player/widget/image_widget.dart';
 import 'package:prac_haicam/features/player/widget/line_generator.dart';
 import 'package:prac_haicam/features/player/widget/point_widget.dart';
 import 'package:prac_haicam/features/player/widget/set_dialog.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:prac_haicam/features/player/widget/timeline_card_view.dart';
-import 'package:timeline_tile/timeline_tile.dart';
 
 class VideoPlayerView extends StatefulWidget {
   const VideoPlayerView({Key? key}) : super(key: key);
@@ -37,18 +36,37 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   double? width;
   double? height;
 
-  var menuItems = [];
+  DateTime startDate = DateTime.now().subtract(const Duration(days: 365));
+  DateTime endDate = DateTime.now();
+  // DateTime date= DateFormat.yMd().format(endDate);
 
-  final List<Events> listOfEvents = [
-    Events(time: "12:00 PM", image: "assets/images/cam_pic_01.png"),
-    Events(time: "12:10 PM", image: "assets/images/cam_pic_01.png"),
-    Events(time: "12:20 PM", image: "assets/images/cam_pic_01.png"),
-    Events(time: "12:30 PM", image: "assets/images/cam_pic_01.png"),
-    Events(time: "12:40 PM", image: "assets/images/cam_pic_01.png"),
-    Events(time: "12:50 PM", image: "assets/images/cam_pic_01.png"),
-    Events(time: "13:00 PM", image: "assets/images/cam_pic_01.png"),
-    Events(time: "13:10 PM", image: "assets/images/cam_pic_01.png"),
-  ];
+  List<FrameEvent> events = [];
+
+  late int _indexTimeLine;
+
+  @override
+  initState() {
+      _scrollController = ScrollController();
+    endDate = endDate.add(const Duration(days: 1));
+    while (startDate.isBefore(endDate)) {
+      FrameEvent event = FrameEvent(dateTime: startDate);
+      events.add(event);
+
+      // startDate = startDate.add(const Duration(minutes: 10));
+      startDate = DateTime(
+        startDate.year,
+        startDate.month,
+        startDate.day,
+        startDate.hour,
+        startDate.minute + 10,
+      );
+      // print(event.dateTime);
+    }
+    super.initState();
+    // Add listeners to this class
+  }
+
+  String imageSample = "assets/images/cam_pic_01.png";
 
   // final DateFormat workerHistoryDateTimeFormat =
   //     DateFormat('dd MMMM yyyy - h:mm a');
@@ -60,14 +78,6 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     } else {
       return dateFormat.format(DateTime.parse(dateTime.toString()));
     }
-  }
-
-  @override
-  void initState() {
-    _minDate = DateTime(2020, 3, 5, 9, 0, 0);
-    _maxDate = DateTime(2020, 3, 25, 9, 0, 0);
-    _scrollController = ScrollController();
-    super.initState();
   }
 
   @override
@@ -104,7 +114,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   void goToItemIndex(int index) {
     _scrollController!.animateTo(
       index * _height,
-      duration: Duration(seconds: 2),
+      duration: const Duration(microseconds: 2),
       curve: Curves.fastOutSlowIn,
     );
   }
@@ -186,11 +196,11 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
             children: [
               textTimeStamp('$position'),
               addWidth(40),
-              textTimeStamp(
-                getDate(
-                  listOfEvents[0].time.toString(),
-                ),
-              ),
+              textTimeStamp('00'
+                  // getDate(
+                  //   listOfEvents[0].dateTime.hour.toString(),
+                  // ),
+                  ),
             ],
           ),
         ),
@@ -224,7 +234,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
       child: ListView.builder(
           controller: _scrollController,
           shrinkWrap: true,
-          itemCount: listOfEvents.length,
+          itemCount: events.length,
+          scrollDirection: Axis.vertical,
           itemBuilder: (context, index) {
             return Stack(
               children: [
@@ -242,7 +253,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            eventImage(listOfEvents[index].image),
+                            eventImage(imageSample),
+                            // Text('$index'),
                           ],
                         ),
                       ),
@@ -255,7 +267,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
                     padding: const EdgeInsets.only(left: 20.0),
                     child: Column(
                       children: [
-                        Text(listOfEvents[index].time),
+                        Text(
+                            '${events[index].dateTime!.hour.toString()}:${events[index].dateTime!.minute.toString()}'),
                         // Text('$index'),
                         const LineGenerator(
                           lines: [20.0, 10.0, 10.0, 10.0],
@@ -267,49 +280,6 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
               ],
             );
           }),
-    );
-  }
-
-  // build builtin timeline model
-  Widget _timeTileModel() {
-    return Container(
-      child: ListView.builder(
-        reverse: true,
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return TimelineTile(
-            alignment: TimelineAlign.manual,
-            lineXY: 0.2,
-            beforeLineStyle: const LineStyle(
-              color: AppColors.black,
-              thickness: 0.5,
-            ),
-            afterLineStyle: const LineStyle(
-              color: AppColors.black,
-              thickness: 0.5,
-            ),
-            indicatorStyle: const IndicatorStyle(
-              color: AppColors.black,
-              width: 7,
-              height: 7,
-              indicatorXY: 0.22, //responsive for everything but tablet
-            ),
-            endChild: InkWell(
-              onTap: () {}, //ontap is defined in card itself
-              child: TimeLineCard(
-                height: height,
-                width: width,
-              ),
-            ),
-            startChild: Text('02:00 PM'),
-            isFirst: index == 2,
-            //Makes sure no line is drawn before
-            isLast: index == 3,
-          );
-        },
-        // itemCount: 13,
-      ),
     );
   }
 
@@ -396,12 +366,20 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     if (newdateTime == null) return;
     setState(() => dateTime = newdateTime);
     DateTime selectTime = newdateTime;
-    String selectedFormattedTime = DateFormat.jm().format(selectTime);
-    print(selectedFormattedTime);
-    final index = listOfEvents
-        .indexWhere((element) => element.time == selectedFormattedTime);
-    if (index >= 0) {
-      goToItemIndex(index);
-    }
+    // String selectedFormattedTime = DateFormat.jm().format(selectTime);
+    selectTime = DateTime(
+      selectTime.year,
+      selectTime.month,
+      selectTime.day,
+      selectTime.hour,
+      selectTime.minute,
+    );
+
+    // print(selectTime);
+    // final index =
+    //     events.indexWhere((element) => element.dateTime == selectTime);
+    // if (index >= 0) {
+    //   goToItemIndex(index);
+    // }
   }
 }
