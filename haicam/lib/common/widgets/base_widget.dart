@@ -217,3 +217,13 @@ Text textTimeStamp(String title) {
     ),
   );
 }
+
+Text textDateTimeStamp(String title) {
+  return Text(
+    title,
+    style: const TextStyle(
+      fontSize: AppFonts.smallSize,
+      fontWeight: FontWeight.w400,
+    ),
+  );
+}

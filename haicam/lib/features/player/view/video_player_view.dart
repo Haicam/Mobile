@@ -38,21 +38,22 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
 
   DateTime startDate = DateTime.now().subtract(const Duration(days: 365));
   DateTime endDate = DateTime.now();
+  late int _indexPosition = 0;
+
   // DateTime date= DateFormat.yMd().format(endDate);
 
   List<FrameEvent> events = [];
 
   late int _indexTimeLine;
+  late int setPosition=52704;
 
   @override
   initState() {
-      _scrollController = ScrollController();
+    _scrollController = ScrollController();
     endDate = endDate.add(const Duration(days: 1));
     while (startDate.isBefore(endDate)) {
       FrameEvent event = FrameEvent(dateTime: startDate);
       events.add(event);
-
-      // startDate = startDate.add(const Duration(minutes: 10));
       startDate = DateTime(
         startDate.year,
         startDate.month,
@@ -60,18 +61,13 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
         startDate.hour,
         startDate.minute + 10,
       );
-      // print(event.dateTime);
     }
     super.initState();
-    // Add listeners to this class
   }
 
   String imageSample = "assets/images/cam_pic_01.png";
 
-  // final DateFormat workerHistoryDateTimeFormat =
-  //     DateFormat('dd MMMM yyyy - h:mm a');
-  final DateFormat dateFormat = DateFormat('hh:mm a');
-
+  final DateFormat dateFormat = DateFormat('hh:mm');
   String getDate(String string) {
     if (dateTime == null) {
       return string;
@@ -194,13 +190,14 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              textTimeStamp('$position'),
-              addWidth(40),
-              textTimeStamp('00'
-                  // getDate(
-                  //   listOfEvents[0].dateTime.hour.toString(),
-                  // ),
-                  ),
+          textDateTimeStamp('${events[_indexPosition].dateTime!.day.toString()}/${events[_indexPosition].dateTime!.month.toString()}/${events[_indexPosition].dateTime!.year.toString()}'
+              ),
+              addWidth(30),
+              textTimeStamp(
+                getDate(
+                    '${events[_indexPosition].dateTime!.hour.toString()}:${events[_indexPosition].dateTime!.minute.toString()}'
+                ),
+              ),
             ],
           ),
         ),
@@ -216,17 +213,22 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
         setState(() {
           if (_scrollController!.position.userScrollDirection ==
               ScrollDirection.reverse) {
-            position++;
-            // position = _scrollController!.position.pixels;
-            print(_scrollController!.position.pixels);
 
-            // _controller.forward();
+            _indexPosition++;
+            textDateTimeStamp('${events[_indexPosition].dateTime!.day.toString()}/${events[_indexPosition].dateTime!.month.toString()}/${events[_indexPosition].dateTime!.year.toString()}');
+                textTimeStamp(getDate(
+                '${events[_indexPosition].dateTime!.hour.toString()}:${events[_indexPosition].dateTime!.minute.toString()}'));
+
           }
           if (_scrollController!.position.userScrollDirection ==
               ScrollDirection.forward) {
-            position--;
+            _indexPosition--;
+            print(_indexPosition);
+            textDateTimeStamp('${events[_indexPosition].dateTime!.day.toString()}/${events[_indexPosition].dateTime!.month.toString()}/${events[_indexPosition].dateTime!.year.toString()}');
+            textTimeStamp(getDate(
+                '${events[_indexPosition].dateTime!.hour.toString()}:${events[_indexPosition].dateTime!.minute.toString()}'));
+            _indexPosition--;
 
-            // _controller.reverse();
           }
         });
         return true;
