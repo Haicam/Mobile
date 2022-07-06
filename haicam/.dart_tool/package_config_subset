@@ -98,6 +98,10 @@ intl
 2.12
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/lib/
+inview_notifier_list
+2.12
+file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/inview_notifier_list-3.0.0/
+file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/inview_notifier_list-3.0.0/lib/
 js
 2.16
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/js-0.6.4/
@@ -222,6 +226,10 @@ stream_channel
 2.12
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/stream_channel-2.1.0/
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/stream_channel-2.1.0/lib/
+stream_transform
+2.12
+file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/stream_transform-2.0.0/
+file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/stream_transform-2.0.0/lib/
 string_scanner
 2.12
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.1.0/
@@ -238,6 +246,10 @@ test_api
 2.12
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.9/
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.9/lib/
+timeline_tile
+2.12
+file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/timeline_tile-2.0.0/
+file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/timeline_tile-2.0.0/lib/
 typed_data
 2.12
 file:///Users/gb/development/flutter/.pub-cache/hosted/pub.dartlang.org/typed_data-1.3.1/

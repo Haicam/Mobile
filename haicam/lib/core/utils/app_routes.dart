@@ -8,6 +8,7 @@ import 'package:prac_haicam/features/setting/view/app_setting_view.dart';
 import 'package:prac_haicam/features/setting/view/cam_setting_view.dart';
 import 'package:prac_haicam/features/device/view/device_view.dart';
 import 'package:prac_haicam/features/home/view/home_view.dart';
+import 'package:prac_haicam/features/war/timeline/timeline_widget.dart';
 import 'package:prac_haicam/features/war/views/world_war.dart';
 
 // Route names
@@ -38,7 +39,7 @@ Route<dynamic> controller(RouteSettings settings) {
     case videoPlayerView:
       return MaterialPageRoute(builder: (context) => const VideoPlayerView());
     case worldWarView:
-      return MaterialPageRoute(builder: (context) => const WorldWarView());
+      return MaterialPageRoute(builder: (context) => const TimelineWidget());
     default:
       throw ('This route name does not exit');
   }
