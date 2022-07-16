@@ -37,7 +37,7 @@ Color interpolateColor(Color from, Color to, double elapsed) {
   return Color.fromARGB(a.round(), r.round(), g.round(), b.round());
 }
 
-String getExtension(String filename) {
+String? getExtension(String filename) {
   int dot = filename.lastIndexOf(".");
   if (dot == -1) {
     return null;
@@ -45,7 +45,7 @@ String getExtension(String filename) {
   return filename.substring(dot + 1);
 }
 
-String removeExtension(String filename) {
+String? removeExtension(String filename) {
   int dot = filename.lastIndexOf(".");
   if (dot == -1) {
     return null;
@@ -54,28 +54,28 @@ String removeExtension(String filename) {
 }
 
 class TimelineBackgroundColor {
-  Color color;
-  double start;
+  late Color color;
+  late double start;
 }
 
 class TickColors {
-  Color background;
-  Color long;
-  Color short;
-  Color text;
-  double start;
-  double screenY;
+  late Color background;
+  late Color long;
+  late Color short;
+  late Color text;
+  late double start;
+  late double screenY;
 }
 
 class HeaderColors {
-  Color background;
-  Color text;
-  double start;
-  double screenY;
+  late Color background;
+  late Color text;
+  late double start;
+  late double screenY;
 }
 
 class TapTarget {
-  TimelineEntry entry;
-  Rect rect;
+  late TimelineEntry entry;
+  late Rect rect;
   bool zoom = false;
 }

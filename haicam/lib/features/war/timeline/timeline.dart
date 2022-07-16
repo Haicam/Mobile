@@ -78,37 +78,37 @@ class Timeline {
   bool _isActive = false;
   bool _isSteady = false;
 
-  HeaderColors _currentHeaderColors;
+  late HeaderColors _currentHeaderColors;
 
-  Color _headerTextColor;
-  Color _headerBackgroundColor;
+  late Color _headerTextColor;
+  late Color _headerBackgroundColor;
 
   /// Depending on the current [Platform], different values are initialized
   /// so that they behave properly on iOS&Android.
-  ScrollPhysics _scrollPhysics;
+  ScrollPhysics? _scrollPhysics;
 
   /// [_scrollPhysics] needs a [ScrollMetrics] value to function.
-  ScrollMetrics _scrollMetrics;
-  Simulation _scrollSimulation;
+  ScrollMetrics? _scrollMetrics;
+  Simulation? _scrollSimulation;
 
   EdgeInsets padding = EdgeInsets.zero;
   EdgeInsets devicePadding = EdgeInsets.zero;
 
-  Timer _steadyTimer;
+  late Timer? _steadyTimer;
 
   /// Through these two references, the Timeline can access the era and update
   /// the top label accordingly.
-  TimelineEntry _currentEra;
-  TimelineEntry _lastEra;
+  late TimelineEntry? _currentEra;
+  late TimelineEntry _lastEra;
 
   /// These references allow to maintain a reference to the next and previous elements
   /// of the Timeline, depending on which elements are currently in focus.
   /// When there's enough space on the top/bottom, the Timeline will render a round button
   /// with an arrow to link to the next/previous element.
-  TimelineEntry _nextEntry;
-  TimelineEntry _renderNextEntry;
-  TimelineEntry _prevEntry;
-  TimelineEntry _renderPrevEntry;
+  late TimelineEntry? _nextEntry;
+  late TimelineEntry? _renderNextEntry;
+  late TimelineEntry? _prevEntry;
+  late TimelineEntry? _renderPrevEntry;
 
   /// A gradient is shown on the background, depending on the [_currentEra] we're in.
   List<TimelineBackgroundColor> _backgroundColors;
@@ -132,11 +132,11 @@ class Timeline {
 
   /// These next two callbacks are bound to set the state of the [TimelineWidget]
   /// so it can change the appeareance of the top AppBar.
-  ChangeEraCallback onEraChanged;
-  ChangeHeaderColorCallback onHeaderColorsChanged;
+  ChangeEraCallback? onEraChanged;
+  ChangeHeaderColorCallback? onHeaderColorsChanged;
 
   Timeline(this._platform) {
-    
+
     setViewport(start: 1536.0, end: 3072.0);
   }
 
@@ -155,9 +155,9 @@ class Timeline {
   Color get headerTextColor => _headerTextColor;
   Color get headerBackgroundColor => _headerBackgroundColor;
   HeaderColors get currentHeaderColors => _currentHeaderColors;
-  TimelineEntry get currentEra => _currentEra;
-  TimelineEntry get nextEntry => _renderNextEntry;
-  TimelineEntry get prevEntry => _renderPrevEntry;
+  TimelineEntry? get currentEra => _currentEra;
+  TimelineEntry? get nextEntry => _renderNextEntry;
+  TimelineEntry? get prevEntry => _renderPrevEntry;
   List<TimelineEntry> get entries => _entries;
   List<TimelineBackgroundColor> get backgroundColors => _backgroundColors;
   List<TickColors> get tickColors => _tickColors;
@@ -206,7 +206,7 @@ class Timeline {
 
     /// If a timer is currently active, dispose it.
     if (_steadyTimer != null) {
-      _steadyTimer.cancel();
+      _steadyTimer!.cancel();
       _steadyTimer = null;
     }
 
@@ -250,10 +250,10 @@ class Timeline {
     String data = await rootBundle.loadString(filename);
     List jsonEntries = json.decode(data) as List;
 
-    List<TimelineEntry> allEntries = List<TimelineEntry>();
-    _backgroundColors = List<TimelineBackgroundColor>();
-    _tickColors = List<TickColors>();
-    _headerColors = List<HeaderColors>();
+    List<TimelineEntry> allEntries = <TimelineEntry>[];
+    _backgroundColors = <TimelineBackgroundColor>[];
+    _tickColors = <TickColors>[];
+    _headerColors = <HeaderColors>[];
 
     /// The JSON decode doesn't provide strong typing, so we'll iterate
     /// on the dynamic entries in the [jsonEntries] list.
@@ -415,7 +415,7 @@ class Timeline {
         ///   - scale: a custom scale value.
         /// }
         if (map.containsKey("asset")) {
-          TimelineAsset asset;
+          late TimelineAsset asset;
           Map assetMap = map["asset"] as Map;
           String source = assetMap["source"];
           //CHKME use one jpg image to replace the flr and nma files in the timeline.json file
@@ -423,7 +423,7 @@ class Timeline {
           source = "timeline/photo-test.jpg";
 
           String filename = "assets/" + source;
-          String extension = getExtension(source);
+          String? extension = getExtension(source);
 
           /// Instantiate the correct object based on the file extension.
           switch (extension) {
@@ -483,10 +483,10 @@ class Timeline {
     _timeMax = -double.maxFinite;
 
     /// List for "root" entries, i.e. entries with no parents.
-    _entries = List<TimelineEntry>();
+    _entries = <TimelineEntry>[];
 
     /// Build up hierarchy (Eras are grouped into "Spanning Eras" and Events are placed into the Eras they belong to).
-    TimelineEntry previous;
+    late TimelineEntry previous;
     for (TimelineEntry entry in allEntries) {
       if (entry.start < _timeMin) {
         _timeMin = entry.start;
@@ -500,7 +500,7 @@ class Timeline {
       entry.previous = previous;
       previous = entry;
 
-      TimelineEntry parent;
+      late TimelineEntry parent;
       double minDistance = double.maxFinite;
       for (TimelineEntry checkEntry in allEntries) {
         if (checkEntry.type == TimelineEntryType.Era) {
@@ -515,7 +515,7 @@ class Timeline {
       if (parent != null) {
         entry.parent = parent;
         if (parent.children == null) {
-          parent.children = List<TimelineEntry>();
+          parent.children = <TimelineEntry>[];
         }
         parent.children.add(entry);
       } else {
@@ -527,7 +527,7 @@ class Timeline {
   }
 
   /// Helper function for [MenuVignette].
-  TimelineEntry getById(String id) {
+  TimelineEntry? getById(String id) {
     return _entriesById[id];
   }
 
@@ -639,7 +639,7 @@ class Timeline {
           axisDirection: AxisDirection.down);
 
       _scrollSimulation =
-          _scrollPhysics.createBallisticSimulation(_scrollMetrics, velocity);
+          _scrollPhysics!.createBallisticSimulation(_scrollMetrics!, velocity)!;
     }
     if (!animate) {
       _renderStart = start;
@@ -681,7 +681,7 @@ class Timeline {
     }
   }
 
-  TickColors findTickColors(double screen) {
+  TickColors? findTickColors(double screen) {
     if (_tickColors == null) {
       return null;
     }
@@ -696,7 +696,7 @@ class Timeline {
         : _tickColors.last;
   }
 
-  HeaderColors _findHeaderColors(double screen) {
+  HeaderColors? _findHeaderColors(double screen) {
     if (_headerColors == null) {
       return null;
     }
@@ -730,7 +730,7 @@ class Timeline {
       doneRendering = false;
       _simulationTime += elapsed;
       double scale = _height / (_end - _start);
-      double velocity = _scrollSimulation.dx(_simulationTime);
+      double velocity = _scrollSimulation!.dx(_simulationTime);
 
       double displace = velocity * elapsed / scale;
 
@@ -738,7 +738,7 @@ class Timeline {
       _end -= displace;
 
       /// If scrolling has terminated, clean up the resources.
-      if (_scrollSimulation.isDone(_simulationTime)) {
+      if (_scrollSimulation!.isDone(_simulationTime)) {
         _scrollMetrics = null;
         _scrollPhysics = null;
         _scrollSimulation = null;
@@ -797,7 +797,7 @@ class Timeline {
       }
     }
 
-    _currentHeaderColors = _findHeaderColors(0.0);
+    _currentHeaderColors = _findHeaderColors(0.0)!;
 
     if (_currentHeaderColors != null) {
       if (_headerTextColor == null) {
@@ -822,7 +822,7 @@ class Timeline {
         }
         if (stillColoring) {
           if (onHeaderColorsChanged != null) {
-            onHeaderColorsChanged(_headerBackgroundColor, _headerTextColor);
+            onHeaderColorsChanged!(_headerBackgroundColor, _headerTextColor);
           }
         }
       }
@@ -848,7 +848,7 @@ class Timeline {
       }
 
       /// Advance all the assets and add the rendered ones into [_renderAssets].
-      _renderAssets = List<TimelineAsset>();
+      _renderAssets = <TimelineAsset>[];
       if (_advanceAssets(_entries, elapsed, animate, _renderAssets)) {
         doneRendering = false;
       }
@@ -905,9 +905,9 @@ class Timeline {
 
     /// If a new era is currently in view, callback.
     if (_currentEra != _lastEra) {
-      _lastEra = _currentEra;
+      _lastEra = _currentEra!;
       if (onEraChanged != null) {
-        onEraChanged(_currentEra);
+        onEraChanged!(_currentEra!);
       }
     }
 

@@ -6,25 +6,25 @@ import 'dart:ui';
 /// Each [TimelineAsset] encapsulates all the relevant properties for drawing,
 /// as well as maintaining a reference to its original [TimelineEntry].
 class TimelineAsset {
-  double width;
-  double height;
+  late double width;
+  late double height;
   double opacity = 0.0;
   double scale = 0.0;
   double scaleVelocity = 0.0;
   double y = 0.0;
   double velocity = 0.0;
-  String filename;
-  TimelineEntry entry;
+  late String filename;
+  late TimelineEntry entry;
 }
 
 /// A renderable image.
 class TimelineImage extends TimelineAsset {
-  ui.Image image;
+  late ui.Image image;
 }
 
 /// This asset also has information regarding its animations.
 class TimelineAnimatedAsset extends TimelineAsset {
-  bool loop;
+  late bool loop;
   double animationTime = 0.0;
   double offset = 0.0;
   double gap = 0.0;
@@ -40,32 +40,32 @@ enum TimelineEntryType { Era, Incident }
 ///
 /// They are all initialized at startup time by the [BlocProvider] constructor.
 class TimelineEntry {
-  TimelineEntryType type;
+  late TimelineEntryType type;
 
   /// Used to calculate how many lines to draw for the bubble in the timeline.
   int lineCount = 1;
 
   ///
-  String _label;
-  String articleFilename;
-  String id;
+  late String _label;
+  late String articleFilename;
+  late String id;
 
-  Color accent;
+  late Color accent;
 
   /// Each entry constitues an element of a tree:
   /// eras are grouped into spanning eras and events are placed into the eras they belong to.
-  TimelineEntry parent;
-  List<TimelineEntry> children;
+  late TimelineEntry parent;
+  late List<TimelineEntry> children;
 
   /// All the timeline entries are also linked together to easily access the next/previous event.
   /// After a couple of seconds of inactivity on the timeline, a previous/next entry button will appear
   /// to allow the user to navigate faster between adjacent events.
-  TimelineEntry next;
-  TimelineEntry previous;
+  late TimelineEntry next;
+  late TimelineEntry previous;
 
   /// All these parameters are used by the [Timeline] object to properly position the current entry.
-  double start;
-  double end;
+  late double start;
+  late double end;
   double y = 0.0;
   double endY = 0.0;
   double length = 0.0;
@@ -81,7 +81,7 @@ class TimelineEntry {
   double favoriteY = 0.0;
   bool isFavoriteOccluded = false;
 
-  TimelineAsset asset;
+  late TimelineAsset asset;
 
   bool get isVisible {
     return opacity > 0.0;

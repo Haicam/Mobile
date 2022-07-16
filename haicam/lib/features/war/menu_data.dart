@@ -7,11 +7,11 @@ import 'timeline/timeline_entry.dart';
 
 /// Data container for the Section loaded in [MenuData.loadFromBundle()].
 class MenuSectionData {
-  String label;
-  Color textColor;
-  Color backgroundColor;
-  String assetId;
-  List<MenuItemData> items = List<MenuItemData>();
+  late String label;
+  late Color textColor;
+  late Color backgroundColor;
+  late String assetId;
+  late List<MenuItemData> items = <MenuItemData>[];
 }
 
 /// Data container for all the sub-elements of the [MenuSection].
@@ -86,7 +86,7 @@ class MenuItemData {
 class MenuData {
   List<MenuSectionData> sections = [];
   Future<bool> loadFromBundle(String filename) async {
-    List<MenuSectionData> menu = List<MenuSectionData>();
+    List<MenuSectionData> menu = <MenuSectionData>[];
     String data = await rootBundle.loadString(filename);
     List jsonEntries = json.decode(data) as List;
     for (dynamic entry in jsonEntries) {

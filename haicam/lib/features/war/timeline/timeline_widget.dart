@@ -14,25 +14,26 @@ typedef SelectItemCallback = Function(TimelineEntry item);
 /// focus on when it's created.
 class TimelineWidget extends StatefulWidget {
   final MenuItemData focusItem = MenuItemData();
-  final Timeline timeline;
+  final Timeline? timeline;
 
-  TimelineWidget({Key? key, TargetPlatform platform = TargetPlatform.iOS})
-  :timeline = Timeline(platform), 
-  super(key: key) {
+  TimelineWidget({Key? key, TargetPlatform? platform = TargetPlatform.iOS})
+      : timeline = Timeline(platform!),
+        super(key: key) {
     focusItem.label = "World War II";
     focusItem.start = 1930;
     focusItem.end = 1955;
 
-    timeline
+    timeline!
         .loadFromBundle("assets/timeline/timeline.json")
         .then((List<TimelineEntry> entries) {
-          timeline.setViewport(
-              start: entries.first.start * 2.0,
-              end: entries.first.start,
-              animate: true);
-          /// Advance the timeline to its starting position.
-          timeline.advance(0.0, false);
-        });
+      timeline!.setViewport(
+          start: entries.first.start * 2.0,
+          end: entries.first.start,
+          animate: true);
+
+      /// Advance the timeline to its starting position.
+      timeline!.advance(0.0, false);
+    });
   }
 
   @override
@@ -45,24 +46,24 @@ class _TimelineWidgetState extends State<TimelineWidget> {
 
   /// These variables are used to calculate the correct viewport for the timeline
   /// when performing a scaling operation as in [_scaleStart], [_scaleUpdate], [_scaleEnd].
-  Offset _lastFocalPoint;
+  late Offset _lastFocalPoint;
   double _scaleStartYearStart = -100.0;
   double _scaleStartYearEnd = 100.0;
 
   /// When touching a bubble on the [Timeline] keep track of which
   /// element has been touched in order to move to the [article_widget].
-  TapTarget _touchedBubble;
-  TimelineEntry _touchedEntry;
+  late TapTarget _touchedBubble;
+  late TimelineEntry _touchedEntry;
 
   /// Which era the Timeline is currently focused on.
   /// Defaults to [DefaultEraName].
-  String _eraName;
+  late String? _eraName;
 
   /// Syntactic-sugar-getter.
-  Timeline get timeline => widget.timeline;
+  Timeline? get timeline => widget.timeline;
 
-  Color _headerTextColor;
-  Color _headerBackgroundColor;
+  late Color _headerTextColor;
+  late Color _headerBackgroundColor;
 
   /// This state variable toggles the rendering of the left sidebar
   /// showing the favorite elements already on the timeline.
@@ -76,30 +77,30 @@ class _TimelineWidgetState extends State<TimelineWidget> {
   /// all the relevant information properly.
   void _scaleStart(ScaleStartDetails details) {
     _lastFocalPoint = details.focalPoint;
-    _scaleStartYearStart = timeline.start;
-    _scaleStartYearEnd = timeline.end;
-    timeline.isInteracting = true;
-    timeline.setViewport(velocity: 0.0, animate: true);
+    _scaleStartYearStart = timeline!.start;
+    _scaleStartYearEnd = timeline!.end;
+    timeline!.isInteracting = true;
+    timeline!.setViewport(velocity: 0.0, animate: true);
   }
 
   void _scaleUpdate(ScaleUpdateDetails details) {
     double changeScale = details.scale;
     double scale =
-        (_scaleStartYearEnd - _scaleStartYearStart) / context.size.height;
+        (_scaleStartYearEnd - _scaleStartYearStart) / context.size!.height;
 
     double focus = _scaleStartYearStart + details.focalPoint.dy * scale;
     double focalDiff =
         (_scaleStartYearStart + _lastFocalPoint.dy * scale) - focus;
-    timeline.setViewport(
+    timeline!.setViewport(
         start: focus + (_scaleStartYearStart - focus) / changeScale + focalDiff,
         end: focus + (_scaleStartYearEnd - focus) / changeScale + focalDiff,
-        height: context.size.height,
+        height: context.size!.height,
         animate: true);
   }
 
   void _scaleEnd(ScaleEndDetails details) {
-    timeline.isInteracting = false;
-    timeline.setViewport(
+    timeline!.isInteracting = false;
+    timeline!.setViewport(
         velocity: details.velocity.pixelsPerSecond.dy, animate: true);
   }
 
@@ -114,7 +115,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
   }
 
   void _tapDown(TapDownDetails details) {
-    timeline.setViewport(velocity: 0.0, animate: true);
+    timeline!.setViewport(velocity: 0.0, animate: true);
   }
 
   /// If the [TimelineRenderWidget] has set the [_touchedBubble] to the currently
@@ -130,13 +131,13 @@ class _TimelineWidgetState extends State<TimelineWidget> {
       if (_touchedBubble.zoom) {
         MenuItemData target = MenuItemData.fromEntry(_touchedBubble.entry);
 
-        timeline.padding = EdgeInsets.only(
+        timeline!.padding = EdgeInsets.only(
             top: TopOverlap +
                 devicePadding.top +
                 target.padTop +
                 Timeline.Parallax,
             bottom: target.padBottom);
-        timeline.setViewport(
+        timeline!.setViewport(
             start: target.start, end: target.end, animate: true, pad: true);
       } else {
         /*widget.timeline.isActive = false;
@@ -150,13 +151,13 @@ class _TimelineWidgetState extends State<TimelineWidget> {
     } else if (_touchedEntry != null) {
       MenuItemData target = MenuItemData.fromEntry(_touchedEntry);
 
-      timeline.padding = EdgeInsets.only(
+      timeline!.padding = EdgeInsets.only(
           top: TopOverlap +
               devicePadding.top +
               target.padTop +
               Timeline.Parallax,
           bottom: target.padBottom);
-      timeline.setViewport(
+      timeline!.setViewport(
           start: target.start, end: target.end, animate: true, pad: true);
     }
   }
@@ -170,13 +171,13 @@ class _TimelineWidgetState extends State<TimelineWidget> {
     if (_touchedBubble != null) {
       MenuItemData target = MenuItemData.fromEntry(_touchedBubble.entry);
 
-      timeline.padding = EdgeInsets.only(
+      timeline!.padding = EdgeInsets.only(
           top: TopOverlap +
               devicePadding.top +
               target.padTop +
               Timeline.Parallax,
           bottom: target.padBottom);
-      timeline.setViewport(
+      timeline!.setViewport(
           start: target.start, end: target.end, animate: true, pad: true);
     }
   }
@@ -185,11 +186,11 @@ class _TimelineWidgetState extends State<TimelineWidget> {
   initState() {
     super.initState();
     if (timeline != null) {
-      widget.timeline.isActive = true;
-      _eraName = timeline.currentEra != null
-          ? timeline.currentEra.label
+      widget.timeline!.isActive = true;
+      _eraName = timeline!.currentEra != null
+          ? timeline!.currentEra!.label
           : DefaultEraName;
-      timeline.onHeaderColorsChanged = (Color background, Color text) {
+      timeline!.onHeaderColorsChanged = (Color background, Color text) {
         setState(() {
           _headerTextColor = text;
           _headerBackgroundColor = background;
@@ -197,15 +198,15 @@ class _TimelineWidgetState extends State<TimelineWidget> {
       };
 
       /// Update the label for the [Timeline] object.
-      timeline.onEraChanged = (TimelineEntry entry) {
+      timeline!.onEraChanged = (TimelineEntry entry) {
         setState(() {
           _eraName = entry != null ? entry.label : DefaultEraName;
         });
       };
 
-      _headerTextColor = timeline.headerTextColor;
-      _headerBackgroundColor = timeline.headerBackgroundColor;
-      _showFavorites = timeline.showFavorites;
+      _headerTextColor = timeline!.headerTextColor;
+      _headerBackgroundColor = timeline!.headerBackgroundColor;
+      _showFavorites = timeline!.showFavorites;
     }
   }
 
@@ -216,25 +217,26 @@ class _TimelineWidgetState extends State<TimelineWidget> {
 
     if (timeline != oldWidget.timeline && timeline != null) {
       setState(() {
-        _headerTextColor = timeline.headerTextColor;
-        _headerBackgroundColor = timeline.headerBackgroundColor;
+        _headerTextColor = timeline!.headerTextColor;
+        _headerBackgroundColor = timeline!.headerBackgroundColor;
       });
 
-      timeline.onHeaderColorsChanged = (Color background, Color text) {
+      timeline!.onHeaderColorsChanged = (Color background, Color text) {
         setState(() {
           _headerTextColor = text;
           _headerBackgroundColor = background;
         });
       };
-      timeline.onEraChanged = (TimelineEntry entry) {
+      timeline!.onEraChanged = (TimelineEntry entry) {
         setState(() {
           _eraName = entry != null ? entry.label : DefaultEraName;
         });
       };
       setState(() {
-        _eraName =
-            timeline.currentEra != null ? timeline.currentEra : DefaultEraName;
-        _showFavorites = timeline.showFavorites;
+        _eraName = (timeline!.currentEra != null
+            ? timeline!.currentEra
+            : DefaultEraName) as String?;
+        _showFavorites = timeline!.showFavorites;
       });
     }
   }
@@ -245,8 +247,8 @@ class _TimelineWidgetState extends State<TimelineWidget> {
   deactivate() {
     super.deactivate();
     if (timeline != null) {
-      timeline.onHeaderColorsChanged = null;
-      timeline.onEraChanged = null;
+      timeline!.onHeaderColorsChanged = null;
+      timeline!.onEraChanged = null;
     }
   }
 
@@ -260,7 +262,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
   Widget build(BuildContext context) {
     EdgeInsets devicePadding = MediaQuery.of(context).padding;
     if (timeline != null) {
-      timeline.devicePadding = devicePadding;
+      timeline!.devicePadding = devicePadding;
     }
     return Scaffold(
       backgroundColor: Colors.white,
@@ -303,13 +305,13 @@ class _TimelineWidgetState extends State<TimelineWidget> {
                               alignment: Alignment.centerLeft,
                               icon: Icon(Icons.arrow_back),
                               onPressed: () {
-                                widget.timeline.isActive = false;
+                                widget.timeline!.isActive = false;
                                 Navigator.of(context).pop();
-                                return true;
+                                // return true;
                               },
                             ),
                             Text(
-                              _eraName,
+                              _eraName!,
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontFamily: "RobotoMedium",
@@ -324,16 +326,17 @@ class _TimelineWidgetState extends State<TimelineWidget> {
                                     child: Transform.translate(
                                         offset: const Offset(0.0, 0.0),
                                         child: Container(
-                                          height: 60.0,
-                                          width: 60.0,
-                                          padding: EdgeInsets.all(18.0),
-                                          color: Colors.white.withOpacity(0.0)
-                                        )),
+                                            height: 60.0,
+                                            width: 60.0,
+                                            padding: EdgeInsets.all(18.0),
+                                            color:
+                                                Colors.white.withOpacity(0.0))),
                                     onTap: () {
-                                      timeline.showFavorites =
-                                          !timeline.showFavorites;
+                                      timeline!.showFavorites =
+                                          !timeline!.showFavorites;
                                       setState(() {
-                                        _showFavorites = timeline.showFavorites;
+                                        _showFavorites =
+                                            timeline!.showFavorites;
                                       });
                                     })),
                           ]))

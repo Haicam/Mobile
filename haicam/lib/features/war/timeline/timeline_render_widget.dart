@@ -19,14 +19,14 @@ typedef TouchEntryCallback = Function(TimelineEntry entry);
 /// This widget's fields are accessible from the [RenderBox] so that it can
 /// be aligned with the current state.
 class TimelineRenderWidget extends LeafRenderObjectWidget {
-  final double topOverlap;
-  final Timeline timeline;
-  final MenuItemData focusItem;
-  final TouchBubbleCallback touchBubble;
-  final TouchEntryCallback touchEntry;
+  final double? topOverlap;
+  final Timeline? timeline;
+  final MenuItemData? focusItem;
+  final TouchBubbleCallback? touchBubble;
+  final TouchEntryCallback? touchEntry;
 
   TimelineRenderWidget(
-      {Key key,
+      {Key? key,
       this.focusItem,
       this.touchBubble,
       this.touchEntry,
@@ -37,22 +37,22 @@ class TimelineRenderWidget extends LeafRenderObjectWidget {
   @override
   RenderObject createRenderObject(BuildContext context) {
     return TimelineRenderObject()
-      ..timeline = timeline
-      ..touchBubble = touchBubble
-      ..touchEntry = touchEntry
-      ..focusItem = focusItem
-      ..topOverlap = topOverlap;
+      ..timeline = timeline!
+      ..touchBubble = touchBubble!
+      ..touchEntry = touchEntry!
+      ..focusItem = focusItem!
+      ..topOverlap = topOverlap!;
   }
 
   @override
   void updateRenderObject(
       BuildContext context, covariant TimelineRenderObject renderObject) {
     renderObject
-      ..timeline = timeline
-      ..focusItem = focusItem
-      ..touchBubble = touchBubble
-      ..touchEntry = touchEntry
-      ..topOverlap = topOverlap;
+      ..timeline = timeline!
+      ..focusItem = focusItem!
+      ..touchBubble = touchBubble!
+      ..touchEntry = touchEntry!
+      ..topOverlap = topOverlap!;
   }
 
   @override
@@ -77,13 +77,13 @@ class TimelineRenderObject extends RenderBox {
 
   double _topOverlap = 0.0;
   Ticks _ticks = Ticks();
-  Timeline _timeline;
-  MenuItemData _focusItem;
-  MenuItemData _processedFocusItem;
-  List<TapTarget> _tapTargets = List<TapTarget>();
+  late Timeline _timeline;
+  late MenuItemData? _focusItem;
+  late MenuItemData? _processedFocusItem;
+  List<TapTarget> _tapTargets = <TapTarget>[];
 
-  TouchBubbleCallback touchBubble;
-  TouchEntryCallback touchEntry;
+  late TouchBubbleCallback touchBubble;
+  late TouchEntryCallback touchEntry;
 
   @override
   bool get sizedByParent => true;
@@ -91,7 +91,7 @@ class TimelineRenderObject extends RenderBox {
   double get topOverlap => _topOverlap;
   Timeline get timeline => _timeline;
  
-  MenuItemData get focusItem => _focusItem;
+  MenuItemData get focusItem => _focusItem!;
 
   set topOverlap(double value) {
     if (_topOverlap == value) {
@@ -135,19 +135,19 @@ class TimelineRenderObject extends RenderBox {
 
     //CHKME select focusItem from the main menu, timeline.setViewport(_focusItem.start & focusItem.end)
     /// Adjust the current timeline padding and consequentely the viewport.
-    if (_focusItem.pad) {
+    if (_focusItem!.pad) {
       timeline.padding = EdgeInsets.only(
-          top: topOverlap + _focusItem.padTop + Timeline.Parallax,
-          bottom: _focusItem.padBottom);
+          top: topOverlap + _focusItem!.padTop + Timeline.Parallax,
+          bottom: _focusItem!.padBottom);
       timeline.setViewport(
-          start: _focusItem.start,
-          end: _focusItem.end,
+          start: _focusItem!.start,
+          end: _focusItem!.end,
           animate: true,
           pad: true);
     } else {
       timeline.padding = EdgeInsets.zero;
       timeline.setViewport(
-          start: _focusItem.start, end: _focusItem.end, animate: true);
+          start: _focusItem!.start, end: _focusItem!.end, animate: true);
     }
     _processedFocusItem = _focusItem;
   }
@@ -155,7 +155,7 @@ class TimelineRenderObject extends RenderBox {
   /// Check if the current tap on the screen has hit a bubble.
   @override
   bool hitTestSelf(Offset screenOffset) {
-    touchEntry(null);
+    // touchEntry(null);
     for (TapTarget bubble in _tapTargets.reversed) {
       if (bubble.rect.contains(screenOffset)) {
         if (touchBubble != null) {
@@ -164,7 +164,7 @@ class TimelineRenderObject extends RenderBox {
         return true;
       }
     }
-    touchBubble(null);
+    // touchBubble(null);
 
     return true;
   }
@@ -302,7 +302,7 @@ class TimelineRenderObject extends RenderBox {
           textAlign: TextAlign.start, fontFamily: "Roboto", fontSize: 20.0))
         ..pushStyle(ui.TextStyle(color: color));
 
-      builder.addText(_timeline.nextEntry.label);
+      builder.addText(_timeline.nextEntry!.label);
       ui.Paragraph labelParagraph = builder.build();
       labelParagraph.layout(ui.ParagraphConstraints(width: MaxLabelWidth));
 
@@ -354,7 +354,7 @@ class TimelineRenderObject extends RenderBox {
           height: 1.3))
         ..pushStyle(ui.TextStyle(color: color));
 
-      double timeUntil = _timeline.nextEntry.start - pageReference;
+      double timeUntil = _timeline.nextEntry!.start - pageReference;
       double pages = timeUntil / pageSize;
       NumberFormat formatter = NumberFormat.compact();
       String pagesFormatted = formatter.format(pages);
@@ -371,7 +371,7 @@ class TimelineRenderObject extends RenderBox {
 
       /// Add this to the list of *tappable* elements.
       _tapTargets.add(TapTarget()
-        ..entry = _timeline.nextEntry
+        ..entry = _timeline.nextEntry!
         ..rect = nextEntryRect
         ..zoom = true);
     }
@@ -389,7 +389,7 @@ class TimelineRenderObject extends RenderBox {
           textAlign: TextAlign.start, fontFamily: "Roboto", fontSize: 20.0))
         ..pushStyle(ui.TextStyle(color: color));
 
-      builder.addText(_timeline.prevEntry.label);
+      builder.addText(_timeline.prevEntry!.label);
       ui.Paragraph labelParagraph = builder.build();
       labelParagraph.layout(ui.ParagraphConstraints(width: MaxLabelWidth));
 
@@ -436,7 +436,7 @@ class TimelineRenderObject extends RenderBox {
           height: 1.3))
         ..pushStyle(ui.TextStyle(color: color));
 
-      double timeUntil = _timeline.prevEntry.start - pageReference;
+      double timeUntil = _timeline.prevEntry!.start - pageReference;
       double pages = timeUntil / pageSize;
       NumberFormat formatter = NumberFormat.compact();
       String pagesFormatted = formatter.format(pages.abs());
@@ -449,7 +449,7 @@ class TimelineRenderObject extends RenderBox {
       y += labelParagraph.height;
 
       _tapTargets.add(TapTarget()
-        ..entry = _timeline.prevEntry
+        ..entry = _timeline.prevEntry!
         ..rect = prevEntryRect
         ..zoom = true);
     }
