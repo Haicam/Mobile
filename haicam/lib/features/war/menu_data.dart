@@ -16,9 +16,9 @@ class MenuSectionData {
 
 /// Data container for all the sub-elements of the [MenuSection].
 class MenuItemData {
-  String label;
-  double start;
-  double end;
+  late String label;
+  late double start;
+  late double end;
   bool pad = false;
   double padTop = 0.0;
   double padBottom = 0.0;

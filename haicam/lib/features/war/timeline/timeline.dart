@@ -50,8 +50,8 @@ class Timeline {
 
   double _start = 0.0;
   double _end = 0.0;
-  double _renderStart;
-  double _renderEnd;
+  late double _renderStart;
+  late double _renderEnd;
   double _lastFrameTime = 0.0;
   double _height = 0.0;
   double _firstOnScreenEntryY = 0.0;
@@ -111,24 +111,24 @@ class Timeline {
   late TimelineEntry? _renderPrevEntry;
 
   /// A gradient is shown on the background, depending on the [_currentEra] we're in.
-  List<TimelineBackgroundColor> _backgroundColors;
+  late List<TimelineBackgroundColor> _backgroundColors;
 
   /// [Ticks] also have custom colors so that they are always visible with the changing background.
-  List<TickColors> _tickColors;
-  List<HeaderColors> _headerColors;
+  List<TickColors>? _tickColors;
+  late List<HeaderColors>? _headerColors;
 
   /// All the [TimelineEntry]s that are loaded from disk at boot (in [loadFromBundle()]).
-  List<TimelineEntry> _entries;
+  late List<TimelineEntry> _entries;
 
   /// The list of [TimelineAsset], also loaded from disk at boot.
-  List<TimelineAsset> _renderAssets;
+  late List<TimelineAsset> _renderAssets;
 
   Map<String, TimelineEntry> _entriesById = Map<String, TimelineEntry>();
 
 
   /// Callback set by [TimelineRenderWidget] when adding a reference to this object.
   /// It'll trigger [RenderBox.markNeedsPaint()].
-  PaintCallback onNeedPaint;
+  PaintCallback? onNeedPaint;
 
   /// These next two callbacks are bound to set the state of the [TimelineWidget]
   /// so it can change the appeareance of the top AppBar.
@@ -160,7 +160,7 @@ class Timeline {
   TimelineEntry? get prevEntry => _renderPrevEntry;
   List<TimelineEntry> get entries => _entries;
   List<TimelineBackgroundColor> get backgroundColors => _backgroundColors;
-  List<TickColors> get tickColors => _tickColors;
+  List<TickColors>? get tickColors => _tickColors;
   List<TimelineAsset> get renderAssets => _renderAssets;
 
   /// Setter for toggling the gutter on the left side of the timeline with
@@ -338,7 +338,7 @@ class Timeline {
                   text[0] as int, text[1] as int, text[2] as int);
             }
 
-            _tickColors.add(TickColors()
+            _tickColors!.add(TickColors()
               ..background = bgColor
               ..long = longColor
               ..short = shortColor
@@ -366,7 +366,7 @@ class Timeline {
                   text[0] as int, text[1] as int, text[2] as int);
             }
 
-            _headerColors.add(HeaderColors()
+            _headerColors!.add(HeaderColors()
               ..background = bgColor
               ..text = textColor
               ..start = timelineEntry.start
@@ -500,7 +500,7 @@ class Timeline {
       entry.previous = previous;
       previous = entry;
 
-      late TimelineEntry parent;
+      TimelineEntry? parent;
       double minDistance = double.maxFinite;
       for (TimelineEntry checkEntry in allEntries) {
         if (checkEntry.type == TimelineEntryType.Era) {
@@ -514,10 +514,8 @@ class Timeline {
       }
       if (parent != null) {
         entry.parent = parent;
-        if (parent.children == null) {
-          parent.children = <TimelineEntry>[];
-        }
-        parent.children.add(entry);
+        parent.children ??= <TimelineEntry>[];
+        parent.children!.add(entry);
       } else {
         /// no parent, so this is a root entry.
         _entries.add(entry);
@@ -646,7 +644,7 @@ class Timeline {
       _renderEnd = end;
       advance(0.0, false);
       if (onNeedPaint != null) {
-        onNeedPaint();
+        onNeedPaint!();
       }
     } else if (!_isFrameScheduled) {
       _isFrameScheduled = true;
@@ -677,7 +675,7 @@ class Timeline {
     }
 
     if (onNeedPaint != null) {
-      onNeedPaint();
+      onNeedPaint!();
     }
   }
 
@@ -685,30 +683,30 @@ class Timeline {
     if (_tickColors == null) {
       return null;
     }
-    for (TickColors color in _tickColors.reversed) {
+    for (TickColors color in _tickColors!.reversed) {
       if (screen >= color.screenY) {
         return color;
       }
     }
 
-    return screen < _tickColors.first.screenY
-        ? _tickColors.first
-        : _tickColors.last;
+    return screen < _tickColors!.first.screenY
+        ? _tickColors!.first
+        : _tickColors!.last;
   }
 
   HeaderColors? _findHeaderColors(double screen) {
     if (_headerColors == null) {
       return null;
     }
-    for (HeaderColors color in _headerColors.reversed) {
+    for (HeaderColors color in _headerColors!.reversed) {
       if (screen >= color.screenY) {
         return color;
       }
     }
 
-    return screen < _headerColors.first.screenY
-        ? _headerColors.first
-        : _headerColors.last;
+    return screen < _headerColors!.first.screenY
+        ? _headerColors!.first
+        : _headerColors!.last;
   }
 
   //CHKME this function will be called when viewport change to filter the events and and show events in the current window
@@ -778,18 +776,18 @@ class Timeline {
     scale = _height / (_renderEnd - _renderStart);
 
     /// Update color screen positions.
-    if (_tickColors != null && _tickColors.length > 0) {
-      double lastStart = _tickColors.first.start;
-      for (TickColors color in _tickColors) {
+    if (_tickColors != null && _tickColors!.isNotEmpty) {
+      double lastStart = _tickColors!.first.start;
+      for (TickColors color in _tickColors!) {
         color.screenY =
             (lastStart + (color.start - lastStart / 2.0) - _renderStart) *
                 scale;
         lastStart = color.start;
       }
     }
-    if (_headerColors != null && _headerColors.length > 0) {
-      double lastStart = _headerColors.first.start;
-      for (HeaderColors color in _headerColors) {
+    if (_headerColors != null && _headerColors!.isNotEmpty) {
+      double lastStart = _headerColors!.first.start;
+      for (HeaderColors color in _headerColors!) {
         color.screenY =
             (lastStart + (color.start - lastStart / 2.0) - _renderStart) *
                 scale;
@@ -1085,7 +1083,7 @@ class Timeline {
 
       if (item.children != null && item.isVisible) {
         /// Advance the rest of the hierarchy.
-        if (_advanceItems(item.children, x + LineSpacing + LineWidth, scale,
+        if (_advanceItems(item.children!, x + LineSpacing + LineWidth, scale,
             elapsed, animate, depth + 1)) {
           stillAnimating = true;
         }
@@ -1197,7 +1195,7 @@ class Timeline {
 
       if (item.children != null && item.isVisible) {
         /// Proceed down the hierarchy.
-        if (_advanceAssets(item.children, elapsed, animate, renderAssets)) {
+        if (_advanceAssets(item.children!, elapsed, animate, renderAssets)) {
           stillAnimating = true;
         }
       }

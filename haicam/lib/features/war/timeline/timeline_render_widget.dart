@@ -552,7 +552,7 @@ class TimelineRenderObject extends RenderBox {
       canvas.restore();
       if (item.children != null) {
         /// Draw the other elements in the hierarchy.
-        drawItems(context, offset, item.children, x + Timeline.DepthOffset,
+        drawItems(context, offset, item.children!, x + Timeline.DepthOffset,
             scale, depth + 1);
       }
     }

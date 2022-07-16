@@ -79,8 +79,8 @@ class Ticks {
     /// Ticks can change color because the timeline background will also change color
     /// depending on the current era. The [TickColors] object, in `timeline_utils.dart`,
     /// wraps this information.
-    List<TickColors> tickColors = timeline.tickColors;
-    if (tickColors != null && tickColors.length > 0) {
+    List<TickColors>? tickColors = timeline.tickColors;
+    if (tickColors != null && tickColors.isNotEmpty) {
       /// Build up the color stops for the linear gradient.
       double rangeStart = tickColors.first.start;
       double range = tickColors.last.start - tickColors.first.start;
@@ -165,7 +165,7 @@ class Ticks {
           label = formatter.format(value);
           int? digits = formatter.significantDigits;
           while (usedValues.contains(label) && digits! < 10) {
-            formatter.significantDigits = (++digits)!;
+            formatter.significantDigits = ++digits;
             label = formatter.format(value);
           }
         }

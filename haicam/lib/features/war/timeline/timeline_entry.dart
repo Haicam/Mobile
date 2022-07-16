@@ -55,7 +55,7 @@ class TimelineEntry {
   /// Each entry constitues an element of a tree:
   /// eras are grouped into spanning eras and events are placed into the eras they belong to.
   late TimelineEntry parent;
-  late List<TimelineEntry> children;
+  List<TimelineEntry>? children;
 
   /// All the timeline entries are also linked together to easily access the next/previous event.
   /// After a couple of seconds of inactivity on the timeline, a previous/next entry button will appear
