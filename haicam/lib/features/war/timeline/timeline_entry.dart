@@ -30,7 +30,6 @@ class TimelineAnimatedAsset extends TimelineAsset {
   double gap = 0.0;
 }
 
-
 /// A label for [TimelineEntry].
 enum TimelineEntryType { Era, Incident }
 
@@ -110,7 +109,7 @@ class TimelineEntry {
     if (start > 0) {
       return start.round().toString();
     }
-    return TimelineEntry.formatYears(start) + " Ago";
+    return "${TimelineEntry.formatYears(start)} Ago";
   }
 
   /// Debug information.
@@ -126,23 +125,20 @@ class TimelineEntry {
     if (valueAbs > 1000000000) {
       double v = (valueAbs / 100000000.0).floorToDouble() / 10.0;
 
-      label = (valueAbs / 1000000000)
-              .toStringAsFixed(v == v.floorToDouble() ? 0 : 1) +
-          " Billion";
+      label =
+          "${(valueAbs / 1000000000).toStringAsFixed(v == v.floorToDouble() ? 0 : 1)} Billion";
     } else if (valueAbs > 1000000) {
       double v = (valueAbs / 100000.0).floorToDouble() / 10.0;
       label =
-          (valueAbs / 1000000).toStringAsFixed(v == v.floorToDouble() ? 0 : 1) +
-              " Million";
+          "${(valueAbs / 1000000).toStringAsFixed(v == v.floorToDouble() ? 0 : 1)} Million";
     } else if (valueAbs > 10000) // N.B. < 10,000
     {
       double v = (valueAbs / 100.0).floorToDouble() / 10.0;
       label =
-          (valueAbs / 1000).toStringAsFixed(v == v.floorToDouble() ? 0 : 1) +
-              " Thousand";
+          "${(valueAbs / 1000).toStringAsFixed(v == v.floorToDouble() ? 0 : 1)} Thousand";
     } else {
       label = valueAbs.toStringAsFixed(0);
     }
-    return label + " Years";
+    return "$label Years";
   }
 }

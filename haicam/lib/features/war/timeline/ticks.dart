@@ -17,9 +17,11 @@ class Ticks {
   static const double LabelPadLeft = 5.0;
   static const double LabelPadRight = 1.0;
   static const int TickDistance = 4; //CHKME unit years
-  static const int TextTickDistance = 40;//CHKME unit years, show TextTick every 10 Tick (TextTickDistance = TickDistance * 10)
+  static const int TextTickDistance =
+      40; //CHKME unit years, show TextTick every 10 Tick (TextTickDistance = TickDistance * 10)
   static const double TickSize = 20.0;
-  static const double MiddleTickSize = 10.0; //CHKME add one MiddleTick in the middle (ttt % (textTickDistance/2) == 0)
+  static const double MiddleTickSize =
+      10.0; //CHKME add one MiddleTick in the middle (ttt % (textTickDistance/2) == 0)
   static const double SmallTickSize = 5.0;
 
   /// Other than providing the [PaintingContext] to allow the ticks to paint themselves,
@@ -82,20 +84,20 @@ class Ticks {
     List<TickColors>? tickColors = timeline.tickColors;
     if (tickColors != null && tickColors.isNotEmpty) {
       /// Build up the color stops for the linear gradient.
-      double rangeStart = tickColors.first.start;
-      double range = tickColors.last.start - tickColors.first.start;
+      double? rangeStart = tickColors.first.start;
+      double range = tickColors.last.start! - tickColors.first.start!;
       List<ui.Color> colors = <ui.Color>[];
       List<double> stops = <double>[];
       for (TickColors bg in tickColors) {
-        colors.add(bg.background);
-        stops.add((bg.start - rangeStart) / range);
+        colors.add(bg.background!);
+        stops.add((bg.start! - rangeStart!) / range);
       }
       double s =
           timeline.computeScale(timeline.renderStart, timeline.renderEnd);
 
       /// y-coordinate for the starting and ending element.
-      double y1 = (tickColors.first.start - timeline.renderStart) * s;
-      double y2 = (tickColors.last.start - timeline.renderStart) * s;
+      double y1 = (tickColors.first.start! - timeline.renderStart) * s;
+      double y2 = (tickColors.last.start! - timeline.renderStart) * s;
 
       /// Fill Background.
       ui.Paint paint = ui.Paint()
@@ -108,13 +110,13 @@ class Ticks {
         canvas.drawRect(
             Rect.fromLTWH(
                 offset.dx, offset.dy, gutterWidth, y1 - offset.dy + 1.0),
-            ui.Paint()..color = tickColors.first.background);
+            ui.Paint()..color = tickColors.first.background!);
       }
       if (y2 < offset.dy + height) {
         canvas.drawRect(
             Rect.fromLTWH(
                 offset.dx, y2 - 1, gutterWidth, (offset.dy + height) - y2),
-            ui.Paint()..color = tickColors.last.background);
+            ui.Paint()..color = tickColors.last.background!);
       }
 
       /// Draw the gutter.
@@ -122,17 +124,18 @@ class Ticks {
           Rect.fromLTWH(offset.dx, y1, gutterWidth, y2 - y1), paint);
     } else {
       canvas.drawRect(Rect.fromLTWH(offset.dx, offset.dy, gutterWidth, height),
-          Paint()..color = Color.fromRGBO(246, 246, 246, 0.95));
+          Paint()..color = const Color.fromRGBO(246, 246, 246, 0.95));
     }
 
     //CHKME add a guild line to show date time for current video
     //TODO print the year text in the guild line in the top right of the timeline
     canvas.drawRect(
-            Rect.fromLTWH(offset.dx + gutterWidth + TickSize,
-                200, TickSize * 10, 1.0),
-            Paint()..color = Color.fromARGB(255, 255, 0, 0));
+      Rect.fromLTWH(
+          offset.dx + gutterWidth + TickSize, 200, TickSize * 10, 1.0),
+      Paint()..color = const Color.fromARGB(255, 255, 0, 0),
+    );
 
-    Set<String> usedValues = Set<String>();
+    Set<String> usedValues = <String>{};
 
     /// Draw all the ticks.
     for (int i = 0; i < numTicks; i++) {
@@ -147,7 +150,7 @@ class Ticks {
         canvas.drawRect(
             Rect.fromLTWH(offset.dx + gutterWidth - TickSize,
                 offset.dy + height - o, TickSize, 1.0),
-            Paint()..color = colors!.long);
+            Paint()..color = colors!.long!);
 
         /// Drawing text to [canvas] is done by using the [ParagraphBuilder] directly.
         ui.ParagraphBuilder builder = ui.ParagraphBuilder(ui.ParagraphStyle(
@@ -179,18 +182,18 @@ class Ticks {
             Offset(offset.dx + LabelPadLeft - LabelPadRight,
                 offset.dy + height - o - tickParagraph.height - 5));
       } else {
-        if (tt % (textTickDistance/2) == 0) {
-            canvas.drawRect(
+        if (tt % (textTickDistance / 2) == 0) {
+          canvas.drawRect(
               Rect.fromLTWH(offset.dx + gutterWidth - MiddleTickSize,
                   offset.dy + height - o, MiddleTickSize, 1.0),
-              Paint()..color = colors!.short);
-         } else {
+              Paint()..color = colors!.short!);
+        } else {
           /// If we're within two text-ticks, just draw a smaller line.
           canvas.drawRect(
               Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
                   offset.dy + height - o, SmallTickSize, 1.0),
-              Paint()..color = colors!.short);
-         }
+              Paint()..color = colors!.short!);
+        }
       }
       startingTickMarkValue += tickDistance;
     }

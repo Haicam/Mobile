@@ -48,7 +48,7 @@ class MenuItemData {
     } else {
       /// No need to pad here as we are centering on a single item.
       double rangeBefore = double.maxFinite;
-      for (TimelineEntry prev = entry.previous;
+      for (TimelineEntry? prev = entry.previous;
           prev != null;
           prev = prev.previous) {
         double diff = entry.start - prev.start;
@@ -59,7 +59,7 @@ class MenuItemData {
       }
 
       double rangeAfter = double.maxFinite;
-      for (TimelineEntry next = entry.next; next != null; next = next.next) {
+      for (TimelineEntry? next = entry.next; next != null; next = next.next) {
         double diff = next.start - entry.start;
         if (diff > 0.0) {
           rangeAfter = diff;
@@ -85,6 +85,7 @@ class MenuItemData {
 /// as well as the label to display in the [MenuSection].
 class MenuData {
   List<MenuSectionData> sections = [];
+
   Future<bool> loadFromBundle(String filename) async {
     List<MenuSectionData> menu = <MenuSectionData>[];
     String data = await rootBundle.loadString(filename);

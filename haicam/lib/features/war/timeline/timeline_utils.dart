@@ -54,17 +54,17 @@ String? removeExtension(String filename) {
 }
 
 class TimelineBackgroundColor {
-  late Color color;
-  late double start;
+  Color? color;
+  double? start;
 }
 
 class TickColors {
-  late Color background;
-  late Color long;
-  late Color short;
-  late Color text;
-  late double start;
-  late double screenY;
+  Color? background;
+  Color? long;
+  Color? short;
+  Color? text;
+  double? start;
+  double? screenY;
 }
 
 class HeaderColors {

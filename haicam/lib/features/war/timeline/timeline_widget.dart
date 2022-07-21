@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import '../colors.dart';
 import '../menu_data.dart';
@@ -46,24 +48,24 @@ class _TimelineWidgetState extends State<TimelineWidget> {
 
   /// These variables are used to calculate the correct viewport for the timeline
   /// when performing a scaling operation as in [_scaleStart], [_scaleUpdate], [_scaleEnd].
-  late Offset _lastFocalPoint;
+  Offset? _lastFocalPoint;
   double _scaleStartYearStart = -100.0;
   double _scaleStartYearEnd = 100.0;
 
   /// When touching a bubble on the [Timeline] keep track of which
   /// element has been touched in order to move to the [article_widget].
-  late TapTarget _touchedBubble;
-  late TimelineEntry _touchedEntry;
+  TapTarget? _touchedBubble;
+  TimelineEntry? _touchedEntry;
 
   /// Which era the Timeline is currently focused on.
   /// Defaults to [DefaultEraName].
-  late String? _eraName;
+  String? _eraName;
 
   /// Syntactic-sugar-getter.
   Timeline? get timeline => widget.timeline;
 
-  late Color _headerTextColor;
-  late Color _headerBackgroundColor;
+  Color? _headerTextColor;
+  Color? _headerBackgroundColor;
 
   /// This state variable toggles the rendering of the left sidebar
   /// showing the favorite elements already on the timeline.
@@ -90,7 +92,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
 
     double focus = _scaleStartYearStart + details.focalPoint.dy * scale;
     double focalDiff =
-        (_scaleStartYearStart + _lastFocalPoint.dy * scale) - focus;
+        (_scaleStartYearStart + _lastFocalPoint!.dy * scale) - focus;
     timeline!.setViewport(
         start: focus + (_scaleStartYearStart - focus) / changeScale + focalDiff,
         end: focus + (_scaleStartYearEnd - focus) / changeScale + focalDiff,
@@ -128,8 +130,8 @@ class _TimelineWidgetState extends State<TimelineWidget> {
   void _tapUp(TapUpDetails details) {
     EdgeInsets devicePadding = MediaQuery.of(context).padding;
     if (_touchedBubble != null) {
-      if (_touchedBubble.zoom) {
-        MenuItemData target = MenuItemData.fromEntry(_touchedBubble.entry);
+      if (_touchedBubble!.zoom) {
+        MenuItemData target = MenuItemData.fromEntry(_touchedBubble!.entry);
 
         timeline!.padding = EdgeInsets.only(
             top: TopOverlap +
@@ -149,7 +151,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
             .then((v) => widget.timeline.isActive = true);*/
       }
     } else if (_touchedEntry != null) {
-      MenuItemData target = MenuItemData.fromEntry(_touchedEntry);
+      MenuItemData target = MenuItemData.fromEntry(_touchedEntry!);
 
       timeline!.padding = EdgeInsets.only(
           top: TopOverlap +
@@ -169,7 +171,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
   void _longPress() {
     EdgeInsets devicePadding = MediaQuery.of(context).padding;
     if (_touchedBubble != null) {
-      MenuItemData target = MenuItemData.fromEntry(_touchedBubble.entry);
+      MenuItemData target = MenuItemData.fromEntry(_touchedBubble!.entry);
 
       timeline!.padding = EdgeInsets.only(
           top: TopOverlap +
@@ -233,9 +235,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
         });
       };
       setState(() {
-        _eraName = (timeline!.currentEra != null
-            ? timeline!.currentEra
-            : DefaultEraName) as String?;
+        _eraName = (timeline!.currentEra ?? DefaultEraName) as String?;
         _showFavorites = timeline!.showFavorites;
       });
     }
@@ -280,67 +280,61 @@ class _TimelineWidgetState extends State<TimelineWidget> {
                 focusItem: widget.focusItem,
                 touchBubble: onTouchBubble,
                 touchEntry: onTouchEntry),
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                      height: devicePadding.top,
-                      color: _headerBackgroundColor != null
-                          ? _headerBackgroundColor
-                          : Color.fromRGBO(238, 240, 242, 0.81)),
-                  Container(
-                      color: _headerBackgroundColor != null
-                          ? _headerBackgroundColor
-                          : Color.fromRGBO(238, 240, 242, 0.81),
-                      height: 56.0,
-                      width: double.infinity,
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            IconButton(
-                              padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                              color: _headerTextColor != null
-                                  ? _headerTextColor
-                                  : Colors.black.withOpacity(0.5),
-                              alignment: Alignment.centerLeft,
-                              icon: Icon(Icons.arrow_back),
-                              onPressed: () {
-                                widget.timeline!.isActive = false;
-                                Navigator.of(context).pop();
-                                // return true;
-                              },
-                            ),
-                            Text(
-                              _eraName!,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontFamily: "RobotoMedium",
-                                  fontSize: 20.0,
-                                  color: _headerTextColor != null
-                                      ? _headerTextColor
-                                      : darkText.withOpacity(
-                                          darkText.opacity * 0.75)),
-                            ),
-                            Expanded(
-                                child: GestureDetector(
-                                    child: Transform.translate(
-                                        offset: const Offset(0.0, 0.0),
-                                        child: Container(
-                                            height: 60.0,
-                                            width: 60.0,
-                                            padding: EdgeInsets.all(18.0),
-                                            color:
-                                                Colors.white.withOpacity(0.0))),
-                                    onTap: () {
-                                      timeline!.showFavorites =
-                                          !timeline!.showFavorites;
-                                      setState(() {
-                                        _showFavorites =
-                                            timeline!.showFavorites;
-                                      });
-                                    })),
-                          ]))
-                ])
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
+                Widget>[
+              Container(
+                  height: devicePadding.top,
+                  color: _headerBackgroundColor ??
+                      const Color.fromRGBO(238, 240, 242, 0.81)),
+              Container(
+                  color: _headerBackgroundColor ??
+                      const Color.fromRGBO(238, 240, 242, 0.81),
+                  height: 56.0,
+                  width: double.infinity,
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        IconButton(
+                          padding:
+                              const EdgeInsets.only(left: 20.0, right: 20.0),
+                          color:
+                              _headerTextColor ?? Colors.black.withOpacity(0.5),
+                          alignment: Alignment.centerLeft,
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () {
+                            widget.timeline!.isActive = false;
+                            Navigator.of(context).pop();
+                            // return true;
+                          },
+                        ),
+                        Text(
+                          _eraName!,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              fontFamily: "RobotoMedium",
+                              fontSize: 20.0,
+                              color: _headerTextColor ??
+                                  darkText
+                                      .withOpacity(darkText.opacity * 0.75)),
+                        ),
+                        Expanded(
+                            child: GestureDetector(
+                                child: Transform.translate(
+                                    offset: const Offset(0.0, 0.0),
+                                    child: Container(
+                                        height: 60.0,
+                                        width: 60.0,
+                                        padding: const EdgeInsets.all(18.0),
+                                        color: Colors.white.withOpacity(0.0))),
+                                onTap: () {
+                                  timeline!.showFavorites =
+                                      !timeline!.showFavorites;
+                                  setState(() {
+                                    _showFavorites = timeline!.showFavorites;
+                                  });
+                                })),
+                      ]))
+            ])
           ])),
     );
   }

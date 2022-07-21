@@ -80,8 +80,8 @@ class Timeline {
 
   late HeaderColors _currentHeaderColors;
 
-  late Color _headerTextColor;
-  late Color _headerBackgroundColor;
+  Color? _headerTextColor;
+  Color? _headerBackgroundColor;
 
   /// Depending on the current [Platform], different values are initialized
   /// so that they behave properly on iOS&Android.
@@ -94,37 +94,36 @@ class Timeline {
   EdgeInsets padding = EdgeInsets.zero;
   EdgeInsets devicePadding = EdgeInsets.zero;
 
-  late Timer? _steadyTimer;
+  Timer? _steadyTimer;
 
   /// Through these two references, the Timeline can access the era and update
   /// the top label accordingly.
-  late TimelineEntry? _currentEra;
-  late TimelineEntry _lastEra;
+  TimelineEntry? _currentEra;
+  TimelineEntry? _lastEra;
 
   /// These references allow to maintain a reference to the next and previous elements
   /// of the Timeline, depending on which elements are currently in focus.
   /// When there's enough space on the top/bottom, the Timeline will render a round button
   /// with an arrow to link to the next/previous element.
-  late TimelineEntry? _nextEntry;
-  late TimelineEntry? _renderNextEntry;
-  late TimelineEntry? _prevEntry;
-  late TimelineEntry? _renderPrevEntry;
+  TimelineEntry? _nextEntry;
+  TimelineEntry? _renderNextEntry;
+  TimelineEntry? _prevEntry;
+  TimelineEntry? _renderPrevEntry;
 
   /// A gradient is shown on the background, depending on the [_currentEra] we're in.
-  late List<TimelineBackgroundColor> _backgroundColors;
+  List<TimelineBackgroundColor>? _backgroundColors;
 
   /// [Ticks] also have custom colors so that they are always visible with the changing background.
   List<TickColors>? _tickColors;
-  late List<HeaderColors>? _headerColors;
+  List<HeaderColors>? _headerColors;
 
   /// All the [TimelineEntry]s that are loaded from disk at boot (in [loadFromBundle()]).
-  late List<TimelineEntry> _entries;
+  List<TimelineEntry>? _entries;
 
   /// The list of [TimelineAsset], also loaded from disk at boot.
-  late List<TimelineAsset> _renderAssets;
+  List<TimelineAsset>? _renderAssets;
 
-  Map<String, TimelineEntry> _entriesById = Map<String, TimelineEntry>();
-
+  final Map<String, TimelineEntry> _entriesById = <String, TimelineEntry>{};
 
   /// Callback set by [TimelineRenderWidget] when adding a reference to this object.
   /// It'll trigger [RenderBox.markNeedsPaint()].
@@ -136,32 +135,52 @@ class Timeline {
   ChangeHeaderColorCallback? onHeaderColorsChanged;
 
   Timeline(this._platform) {
-
     setViewport(start: 1536.0, end: 3072.0);
   }
 
   double get renderOffsetDepth => _renderOffsetDepth;
+
   double get renderLabelX => _renderLabelX;
+
   double get start => _start;
+
   double get end => _end;
+
   double get renderStart => _renderStart;
+
   double get renderEnd => _renderEnd;
+
   double get gutterWidth => _gutterWidth;
+
   double get nextEntryOpacity => _nextEntryOpacity;
+
   double get prevEntryOpacity => _prevEntryOpacity;
+
   bool get isInteracting => _isInteracting;
+
   bool get showFavorites => _showFavorites;
+
   bool get isActive => _isActive;
-  Color get headerTextColor => _headerTextColor;
-  Color get headerBackgroundColor => _headerBackgroundColor;
+
+  ui.Color? get headerTextColor => _headerTextColor;
+
+  Color? get headerBackgroundColor => _headerBackgroundColor;
+
   HeaderColors get currentHeaderColors => _currentHeaderColors;
+
   TimelineEntry? get currentEra => _currentEra;
+
   TimelineEntry? get nextEntry => _renderNextEntry;
+
   TimelineEntry? get prevEntry => _renderPrevEntry;
-  List<TimelineEntry> get entries => _entries;
-  List<TimelineBackgroundColor> get backgroundColors => _backgroundColors;
+
+  List<TimelineEntry>? get entries => _entries;
+
+  List<TimelineBackgroundColor>? get backgroundColors => _backgroundColors;
+
   List<TickColors>? get tickColors => _tickColors;
-  List<TimelineAsset> get renderAssets => _renderAssets;
+
+  List<TimelineAsset>? get renderAssets => _renderAssets;
 
   /// Setter for toggling the gutter on the left side of the timeline with
   /// quick references to the favorites on the timeline.
@@ -212,7 +231,8 @@ class Timeline {
 
     if (isIt) {
       /// If another timer is still needed, recreate it.
-      _steadyTimer = Timer(Duration(milliseconds: SteadyMilliseconds), () {
+      _steadyTimer =
+          Timer(const Duration(milliseconds: SteadyMilliseconds), () {
         _steadyTimer = null;
         _isSteady = true;
         _startRendering();
@@ -261,212 +281,203 @@ class Timeline {
       Map map = entry as Map;
 
       /// Sanity check.
-      if (map != null) {
-        /// Create the current entry and fill in the current date if it's
-        /// an `Incident`, or look for the `start` property if it's an `Era` instead.
-        /// Some entries will have a `start` element, but not an `end` specified.
-        /// These entries specify a particular event such as the appeareance of
-        /// "Humans" in history, which hasn't come to an end -- yet.
-        TimelineEntry timelineEntry = TimelineEntry();
-        if (map.containsKey("date")) {
-          timelineEntry.type = TimelineEntryType.Incident;
-          dynamic date = map["date"];
-          timelineEntry.start = date is int ? date.toDouble() : date;
-        } else if (map.containsKey("start")) {
-          timelineEntry.type = TimelineEntryType.Era;
-          dynamic start = map["start"];
+      TimelineEntry timelineEntry = TimelineEntry();
+      if (map.containsKey("date")) {
+        timelineEntry.type = TimelineEntryType.Incident;
+        dynamic date = map["date"];
+        timelineEntry.start = date is int ? date.toDouble() : date;
+      } else if (map.containsKey("start")) {
+        timelineEntry.type = TimelineEntryType.Era;
+        dynamic start = map["start"];
 
-          timelineEntry.start = start is int ? start.toDouble() : start;
-        } else {
-          continue;
-        }
-
-        /// If a custom background color for this [TimelineEntry] is specified,
-        /// extract its RGB values and save them for reference, along with the starting
-        /// date of the current entry.
-        if (map.containsKey("background")) {
-          dynamic bg = map["background"];
-          if (bg is List && bg.length >= 3) {
-            _backgroundColors.add(TimelineBackgroundColor()
-              ..color =
-                  Color.fromARGB(255, bg[0] as int, bg[1] as int, bg[2] as int)
-              ..start = timelineEntry.start);
-          }
-        }
-
-        /// An accent color is also specified at times.
-        dynamic accent = map["accent"];
-        if (accent is List && accent.length >= 3) {
-          timelineEntry.accent = Color.fromARGB(
-              accent.length > 3 ? accent[3] as int : 255,
-              accent[0] as int,
-              accent[1] as int,
-              accent[2] as int);
-        }
-
-        /// [Ticks] can also have custom colors, so that everything's is visible
-        /// even with custom colored backgrounds.
-        if (map.containsKey("ticks")) {
-          dynamic ticks = map["ticks"];
-          if (ticks is Map) {
-            Color bgColor = Colors.black;
-            Color longColor = Colors.black;
-            Color shortColor = Colors.black;
-            Color textColor = Colors.black;
-
-            dynamic bg = ticks["background"];
-            if (bg is List && bg.length >= 3) {
-              bgColor = Color.fromARGB(bg.length > 3 ? bg[3] as int : 255,
-                  bg[0] as int, bg[1] as int, bg[2] as int);
-            }
-            dynamic long = ticks["long"];
-            if (long is List && long.length >= 3) {
-              longColor = Color.fromARGB(long.length > 3 ? long[3] as int : 255,
-                  long[0] as int, long[1] as int, long[2] as int);
-            }
-            dynamic short = ticks["short"];
-            if (short is List && short.length >= 3) {
-              shortColor = Color.fromARGB(
-                  short.length > 3 ? short[3] as int : 255,
-                  short[0] as int,
-                  short[1] as int,
-                  short[2] as int);
-            }
-            dynamic text = ticks["text"];
-            if (text is List && text.length >= 3) {
-              textColor = Color.fromARGB(text.length > 3 ? text[3] as int : 255,
-                  text[0] as int, text[1] as int, text[2] as int);
-            }
-
-            _tickColors!.add(TickColors()
-              ..background = bgColor
-              ..long = longColor
-              ..short = shortColor
-              ..text = textColor
-              ..start = timelineEntry.start
-              ..screenY = 0.0);
-          }
-        }
-
-        /// If a `header` element is present, de-serialize the colors for it too.
-        if (map.containsKey("header")) {
-          dynamic header = map["header"];
-          if (header is Map) {
-            Color bgColor = Colors.black;
-            Color textColor = Colors.black;
-
-            dynamic bg = header["background"];
-            if (bg is List && bg.length >= 3) {
-              bgColor = Color.fromARGB(bg.length > 3 ? bg[3] as int : 255,
-                  bg[0] as int, bg[1] as int, bg[2] as int);
-            }
-            dynamic text = header["text"];
-            if (text is List && text.length >= 3) {
-              textColor = Color.fromARGB(text.length > 3 ? text[3] as int : 255,
-                  text[0] as int, text[1] as int, text[2] as int);
-            }
-
-            _headerColors!.add(HeaderColors()
-              ..background = bgColor
-              ..text = textColor
-              ..start = timelineEntry.start
-              ..screenY = 0.0);
-          }
-        }
-
-        /// Some elements will have an `end` time specified.
-        /// If not `end` key is present in this entry, create the value based
-        /// on the type of the event:
-        /// - Eras use the current year as an end time.
-        /// - Other entries are just single points in time (start == end).
-        if (map.containsKey("end")) {
-          dynamic end = map["end"];
-          timelineEntry.end = end is int ? end.toDouble() : end;
-        } else if (timelineEntry.type == TimelineEntryType.Era) {
-          timelineEntry.end = DateTime.now().year.toDouble() * 10.0;
-        } else {
-          timelineEntry.end = timelineEntry.start;
-        }
-
-        /// The label is a brief description for the current entry.
-        if (map.containsKey("label")) {
-          timelineEntry.label = map["label"] as String;
-        }
-
-        /// Some entries will also have an id
-        if (map.containsKey("id")) {
-          timelineEntry.id = map["id"] as String;
-          _entriesById[timelineEntry.id] = timelineEntry;
-        }
-        if (map.containsKey("article")) {
-          timelineEntry.articleFilename = map["article"] as String;
-        }
-
-        /// The `asset` key in the current entry contains all the information
-        /// for the nXima/fXlare animation file that'll be played on the timeline.
-        ///
-        /// `asset` is a JSON object thus made:
-        /// {
-        ///   - source: the name of the nXima/fXlare file in the assets folder;
-        ///   - width/height/offset/bounds/gap: sizes of the animation to properly align it in the timeline, together with its Axis-Aligned Bounding Box container.
-        ///   - intro: some files have an 'intro' animation, to be played before idling.
-        ///   - idle: some files have one or more idle animations, and these are their names.
-        ///   - loop: some animations shouldn't loop (e.g. Big Bang) but just settle onto their idle animation. If that's the case, this flag is raised.
-        ///   - scale: a custom scale value.
-        /// }
-        if (map.containsKey("asset")) {
-          late TimelineAsset asset;
-          Map assetMap = map["asset"] as Map;
-          String source = assetMap["source"];
-          //CHKME use one jpg image to replace the flr and nma files in the timeline.json file
-          // only use image
-          source = "timeline/photo-test.jpg";
-
-          String filename = "assets/" + source;
-          String? extension = getExtension(source);
-
-          /// Instantiate the correct object based on the file extension.
-          switch (extension) {
-            case "flr":
-
-              break;
-            case "nma":
-
-              break;
-            default:
-
-              /// Legacy fallback case: some elements could have been just images.
-              TimelineImage imageAsset = TimelineImage();
-              asset = imageAsset;
-
-              ByteData data = await rootBundle.load(filename);
-              Uint8List list = Uint8List.view(data.buffer);
-              ui.Codec codec = await ui.instantiateImageCodec(list);
-              ui.FrameInfo frame = await codec.getNextFrame();
-              imageAsset.image = frame.image;
-
-              break;
-          }
-
-          double scale = 1.0;
-          if (assetMap.containsKey("scale")) {
-            dynamic s = assetMap["scale"];
-            scale = s is int ? s.toDouble() : s;
-          }
-
-          dynamic width = assetMap["width"];
-          asset.width = (width is int ? width.toDouble() : width) * scale;
-
-          dynamic height = assetMap["height"];
-          asset.height = (height is int ? height.toDouble() : height) * scale;
-          asset.entry = timelineEntry;
-          asset.filename = filename;
-          timelineEntry.asset = asset;
-        }
-
-        /// Add this entry to the list.
-        allEntries.add(timelineEntry);
+        timelineEntry.start = start is int ? start.toDouble() : start;
+      } else {
+        continue;
       }
+
+      /// If a custom background color for this [TimelineEntry] is specified,
+      /// extract its RGB values and save them for reference, along with the starting
+      /// date of the current entry.
+      if (map.containsKey("background")) {
+        dynamic bg = map["background"];
+        if (bg is List && bg.length >= 3) {
+          _backgroundColors!.add(TimelineBackgroundColor()
+            ..color =
+                Color.fromARGB(255, bg[0] as int, bg[1] as int, bg[2] as int)
+            ..start = timelineEntry.start);
+        }
+      }
+
+      /// An accent color is also specified at times.
+      dynamic accent = map["accent"];
+      if (accent is List && accent.length >= 3) {
+        timelineEntry.accent = Color.fromARGB(
+            accent.length > 3 ? accent[3] as int : 255,
+            accent[0] as int,
+            accent[1] as int,
+            accent[2] as int);
+      }
+
+      /// [Ticks] can also have custom colors, so that everything's is visible
+      /// even with custom colored backgrounds.
+      if (map.containsKey("ticks")) {
+        dynamic ticks = map["ticks"];
+        if (ticks is Map) {
+          Color bgColor = Colors.black;
+          Color longColor = Colors.black;
+          Color shortColor = Colors.black;
+          Color textColor = Colors.black;
+
+          dynamic bg = ticks["background"];
+          if (bg is List && bg.length >= 3) {
+            bgColor = Color.fromARGB(bg.length > 3 ? bg[3] as int : 255,
+                bg[0] as int, bg[1] as int, bg[2] as int);
+          }
+          dynamic long = ticks["long"];
+          if (long is List && long.length >= 3) {
+            longColor = Color.fromARGB(long.length > 3 ? long[3] as int : 255,
+                long[0] as int, long[1] as int, long[2] as int);
+          }
+          dynamic short = ticks["short"];
+          if (short is List && short.length >= 3) {
+            shortColor = Color.fromARGB(
+                short.length > 3 ? short[3] as int : 255,
+                short[0] as int,
+                short[1] as int,
+                short[2] as int);
+          }
+          dynamic text = ticks["text"];
+          if (text is List && text.length >= 3) {
+            textColor = Color.fromARGB(text.length > 3 ? text[3] as int : 255,
+                text[0] as int, text[1] as int, text[2] as int);
+          }
+
+          _tickColors!.add(TickColors()
+            ..background = bgColor
+            ..long = longColor
+            ..short = shortColor
+            ..text = textColor
+            ..start = timelineEntry.start
+            ..screenY = 0.0);
+        }
+      }
+
+      /// If a `header` element is present, de-serialize the colors for it too.
+      if (map.containsKey("header")) {
+        dynamic header = map["header"];
+        if (header is Map) {
+          Color bgColor = Colors.black;
+          Color textColor = Colors.black;
+
+          dynamic bg = header["background"];
+          if (bg is List && bg.length >= 3) {
+            bgColor = Color.fromARGB(bg.length > 3 ? bg[3] as int : 255,
+                bg[0] as int, bg[1] as int, bg[2] as int);
+          }
+          dynamic text = header["text"];
+          if (text is List && text.length >= 3) {
+            textColor = Color.fromARGB(text.length > 3 ? text[3] as int : 255,
+                text[0] as int, text[1] as int, text[2] as int);
+          }
+
+          _headerColors!.add(HeaderColors()
+            ..background = bgColor
+            ..text = textColor
+            ..start = timelineEntry.start
+            ..screenY = 0.0);
+        }
+      }
+
+      /// Some elements will have an `end` time specified.
+      /// If not `end` key is present in this entry, create the value based
+      /// on the type of the event:
+      /// - Eras use the current year as an end time.
+      /// - Other entries are just single points in time (start == end).
+      if (map.containsKey("end")) {
+        dynamic end = map["end"];
+        timelineEntry.end = end is int ? end.toDouble() : end;
+      } else if (timelineEntry.type == TimelineEntryType.Era) {
+        timelineEntry.end = DateTime.now().year.toDouble() * 10.0;
+      } else {
+        timelineEntry.end = timelineEntry.start;
+      }
+
+      /// The label is a brief description for the current entry.
+      if (map.containsKey("label")) {
+        timelineEntry.label = map["label"] as String;
+      }
+
+      /// Some entries will also have an id
+      if (map.containsKey("id")) {
+        timelineEntry.id = map["id"] as String;
+        _entriesById[timelineEntry.id] = timelineEntry;
+      }
+      if (map.containsKey("article")) {
+        timelineEntry.articleFilename = map["article"] as String;
+      }
+
+      /// The `asset` key in the current entry contains all the information
+      /// for the nXima/fXlare animation file that'll be played on the timeline.
+      ///
+      /// `asset` is a JSON object thus made:
+      /// {
+      ///   - source: the name of the nXima/fXlare file in the assets folder;
+      ///   - width/height/offset/bounds/gap: sizes of the animation to properly align it in the timeline, together with its Axis-Aligned Bounding Box container.
+      ///   - intro: some files have an 'intro' animation, to be played before idling.
+      ///   - idle: some files have one or more idle animations, and these are their names.
+      ///   - loop: some animations shouldn't loop (e.g. Big Bang) but just settle onto their idle animation. If that's the case, this flag is raised.
+      ///   - scale: a custom scale value.
+      /// }
+      if (map.containsKey("asset")) {
+        late TimelineAsset asset;
+        Map assetMap = map["asset"] as Map;
+        String source = assetMap["source"];
+        //CHKME use one jpg image to replace the flr and nma files in the timeline.json file
+        // only use image
+        source = "timeline/photo-test.jpg";
+
+        String filename = "assets/$source";
+        String? extension = getExtension(source);
+
+        /// Instantiate the correct object based on the file extension.
+        switch (extension) {
+          case "flr":
+            break;
+          case "nma":
+            break;
+          default:
+
+            /// Legacy fallback case: some elements could have been just images.
+            TimelineImage imageAsset = TimelineImage();
+            asset = imageAsset;
+
+            ByteData data = await rootBundle.load(filename);
+            Uint8List list = Uint8List.view(data.buffer);
+            ui.Codec codec = await ui.instantiateImageCodec(list);
+            ui.FrameInfo frame = await codec.getNextFrame();
+            imageAsset.image = frame.image;
+
+            break;
+        }
+
+        double scale = 1.0;
+        if (assetMap.containsKey("scale")) {
+          dynamic s = assetMap["scale"];
+          scale = s is int ? s.toDouble() : s;
+        }
+
+        dynamic width = assetMap["width"];
+        asset.width = (width is int ? width.toDouble() : width) * scale;
+
+        dynamic height = assetMap["height"];
+        asset.height = (height is int ? height.toDouble() : height) * scale;
+        asset.entry = timelineEntry;
+        asset.filename = filename;
+        timelineEntry.asset = asset;
+      }
+
+      /// Add this entry to the list.
+      allEntries.add(timelineEntry);
     }
 
     /// sort the full list so they are in order of oldest to newest
@@ -474,9 +485,9 @@ class Timeline {
       return a.start.compareTo(b.start);
     });
 
-    _backgroundColors
+    _backgroundColors!
         .sort((TimelineBackgroundColor a, TimelineBackgroundColor b) {
-      return a.start.compareTo(b.start);
+      return a.start!.compareTo(b.start!);
     });
 
     _timeMin = double.maxFinite;
@@ -494,9 +505,7 @@ class Timeline {
       if (entry.end > _timeMax) {
         _timeMax = entry.end;
       }
-      if (previous != null) {
-        previous.next = entry;
-      }
+      previous.next = entry;
       entry.previous = previous;
       previous = entry;
 
@@ -518,7 +527,7 @@ class Timeline {
         parent.children!.add(entry);
       } else {
         /// no parent, so this is a root entry.
-        _entries.add(entry);
+        _entries!.add(entry);
       }
     }
     return allEntries;
@@ -579,7 +588,7 @@ class Timeline {
       bool animate = false}) {
     /// Calculate the current height.
     if (height != double.maxFinite) {
-      if (_height == 0.0 && _entries != null && _entries.length > 0) {
+      if (_height == 0.0 && _entries != null && _entries!.isNotEmpty) {
         double scale = height / (_end - _start);
         _start = _start - padding.top / scale;
         _end = _end + padding.bottom / scale;
@@ -625,9 +634,9 @@ class Timeline {
 
       _simulationTime = 0.0;
       if (_platform == TargetPlatform.iOS) {
-        _scrollPhysics = BouncingScrollPhysics();
+        _scrollPhysics = const BouncingScrollPhysics();
       } else {
-        _scrollPhysics = ClampingScrollPhysics();
+        _scrollPhysics = const ClampingScrollPhysics();
       }
       _scrollMetrics = FixedScrollMetrics(
           minScrollExtent: double.negativeInfinity,
@@ -684,12 +693,12 @@ class Timeline {
       return null;
     }
     for (TickColors color in _tickColors!.reversed) {
-      if (screen >= color.screenY) {
+      if (screen >= color.screenY!) {
         return color;
       }
     }
 
-    return screen < _tickColors!.first.screenY
+    return screen < _tickColors!.first.screenY!
         ? _tickColors!.first
         : _tickColors!.last;
   }
@@ -777,10 +786,10 @@ class Timeline {
 
     /// Update color screen positions.
     if (_tickColors != null && _tickColors!.isNotEmpty) {
-      double lastStart = _tickColors!.first.start;
+      double? lastStart = _tickColors!.first.start;
       for (TickColors color in _tickColors!) {
         color.screenY =
-            (lastStart + (color.start - lastStart / 2.0) - _renderStart) *
+            (lastStart! + (color.start! - lastStart / 2.0) - _renderStart) *
                 scale;
         lastStart = color.start;
       }
@@ -797,31 +806,29 @@ class Timeline {
 
     _currentHeaderColors = _findHeaderColors(0.0)!;
 
-    if (_currentHeaderColors != null) {
-      if (_headerTextColor == null) {
-        _headerTextColor = _currentHeaderColors.text;
-        _headerBackgroundColor = _currentHeaderColors.background;
-      } else {
-        bool stillColoring = false;
-        Color headerTextColor = interpolateColor(
-            _headerTextColor, _currentHeaderColors.text, elapsed);
+    if (_headerTextColor == null) {
+      _headerTextColor = _currentHeaderColors.text;
+      _headerBackgroundColor = _currentHeaderColors.background;
+    } else {
+      bool stillColoring = false;
+      Color headerTextColor = interpolateColor(
+          _headerTextColor!, _currentHeaderColors.text, elapsed);
 
-        if (headerTextColor != _headerTextColor) {
-          _headerTextColor = headerTextColor;
-          stillColoring = true;
-          doneRendering = false;
-        }
-        Color headerBackgroundColor = interpolateColor(
-            _headerBackgroundColor, _currentHeaderColors.background, elapsed);
-        if (headerBackgroundColor != _headerBackgroundColor) {
-          _headerBackgroundColor = headerBackgroundColor;
-          stillColoring = true;
-          doneRendering = false;
-        }
-        if (stillColoring) {
-          if (onHeaderColorsChanged != null) {
-            onHeaderColorsChanged!(_headerBackgroundColor, _headerTextColor);
-          }
+      if (headerTextColor != _headerTextColor) {
+        _headerTextColor = headerTextColor;
+        stillColoring = true;
+        doneRendering = false;
+      }
+      Color headerBackgroundColor = interpolateColor(
+          _headerBackgroundColor!, _currentHeaderColors.background, elapsed);
+      if (headerBackgroundColor != _headerBackgroundColor) {
+        _headerBackgroundColor = headerBackgroundColor;
+        stillColoring = true;
+        doneRendering = false;
+      }
+      if (stillColoring) {
+        if (onHeaderColorsChanged != null) {
+          onHeaderColorsChanged!(_headerBackgroundColor!, _headerTextColor!);
         }
       }
     }
@@ -841,13 +848,13 @@ class Timeline {
     if (_entries != null) {
       /// Advance the items hierarchy one level at a time.
       if (_advanceItems(
-          _entries, _gutterWidth + LineSpacing, scale, elapsed, animate, 0)) {
+          _entries!, _gutterWidth + LineSpacing, scale, elapsed, animate, 0)) {
         doneRendering = false;
       }
 
       /// Advance all the assets and add the rendered ones into [_renderAssets].
       _renderAssets = <TimelineAsset>[];
-      if (_advanceAssets(_entries, elapsed, animate, _renderAssets)) {
+      if (_advanceAssets(_entries!, elapsed, animate, _renderAssets!)) {
         doneRendering = false;
       }
     }
