@@ -67,7 +67,7 @@ class TimelineRenderWidget extends LeafRenderObjectWidget {
 /// The core method of this object is [paint()]: this is where all the elements
 /// are actually drawn to screen.
 class TimelineRenderObject extends RenderBox {
-  static const List<Color> lineColors = [
+  static const List<Color> LineColors = [
     Color.fromARGB(255, 125, 195, 184),
     Color.fromARGB(255, 190, 224, 146),
     Color.fromARGB(255, 238, 155, 75),
@@ -479,9 +479,15 @@ class TimelineRenderObject extends RenderBox {
 
       /// Draw the small circle on the left side of the timeline.
       canvas.drawCircle(entryOffset, Timeline.EdgeRadius,
-          Paint()..color = (item.accent).withOpacity(item.opacity));
+          Paint()..color = (item.accent != null
+                    ? item.accent!
+                    : LineColors[depth % LineColors.length])
+                .withOpacity(item.opacity));
       if (legOpacity > 0.0) {
-        Paint legPaint = Paint()..color = (item.accent).withOpacity(legOpacity);
+        Paint legPaint = Paint()..color = (item.accent != null
+                  ? item.accent!
+                  : LineColors[depth % LineColors.length])
+              .withOpacity(legOpacity);
 
         /// Draw the line connecting the start&point of this item on the timeline.
         canvas.drawRect(
@@ -526,8 +532,10 @@ class TimelineRenderObject extends RenderBox {
       canvas.drawPath(
           bubble,
           Paint()
-            ..color =
-                (item.accent).withOpacity(item.opacity * item.labelOpacity));
+            ..color = (item.accent != null
+                    ? item.accent!
+                    : LineColors[depth % LineColors.length])
+                .withOpacity(item.opacity * item.labelOpacity));
       canvas
           .clipRect(Rect.fromLTWH(bubblePadding, 0.0, textWidth, bubbleHeight));
       _tapTargets.add(TapTarget()
