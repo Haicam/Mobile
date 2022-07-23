@@ -13,7 +13,7 @@ import 'timeline_utils.dart';
 import 'timeline_entry.dart';
 
 typedef PaintCallback = Function();
-typedef ChangeEraCallback = Function(TimelineEntry era);
+typedef ChangeEraCallback = Function(TimelineEntry? era);
 typedef ChangeHeaderColorCallback = Function(Color background, Color text);
 
 class Timeline {
@@ -659,7 +659,7 @@ class Timeline {
           axisDirection: AxisDirection.down);
 
       _scrollSimulation =
-          _scrollPhysics!.createBallisticSimulation(_scrollMetrics!, velocity)!;
+          _scrollPhysics!.createBallisticSimulation(_scrollMetrics!, velocity);
     }
     if (!animate) {
       _renderStart = start;
@@ -925,9 +925,9 @@ class Timeline {
 
     /// If a new era is currently in view, callback.
     if (_currentEra != _lastEra) {
-      _lastEra = _currentEra!;
+      _lastEra = _currentEra;
       if (onEraChanged != null) {
-        onEraChanged!(_currentEra!);
+        onEraChanged!(_currentEra);
       }
     }
 

@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: unnecessary_null_comparison, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import '../colors.dart';
@@ -28,10 +28,11 @@ class TimelineWidget extends StatefulWidget {
     timeline!
         .loadFromBundle("assets/timeline/timeline.json")
         .then((List<TimelineEntry> entries) {
-      timeline!.setViewport(
-          start: entries.first.start * 2.0,
-          end: entries.first.start,
-          animate: true);
+
+          timeline!.setViewport(
+            start: focusItem.start,
+            end: focusItem.end,
+            animate: true);
 
       /// Advance the timeline to its starting position.
       timeline!.advance(0.0, false);
@@ -200,7 +201,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
       };
 
       /// Update the label for the [Timeline] object.
-      timeline!.onEraChanged = (TimelineEntry entry) {
+      timeline!.onEraChanged = (TimelineEntry? entry) {
         setState(() {
           _eraName = entry != null ? entry.label : DefaultEraName;
         });
@@ -229,7 +230,7 @@ class _TimelineWidgetState extends State<TimelineWidget> {
           _headerBackgroundColor = background;
         });
       };
-      timeline!.onEraChanged = (TimelineEntry entry) {
+      timeline!.onEraChanged = (TimelineEntry? entry) {
         setState(() {
           _eraName = entry != null ? entry.label : DefaultEraName;
         });

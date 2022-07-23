@@ -59,7 +59,7 @@ class TimelineEntry {
   /// All the timeline entries are also linked together to easily access the next/previous event.
   /// After a couple of seconds of inactivity on the timeline, a previous/next entry button will appear
   /// to allow the user to navigate faster between adjacent events.
-  late TimelineEntry next;
+  TimelineEntry? next;
   TimelineEntry? previous;
 
   /// All these parameters are used by the [Timeline] object to properly position the current entry.
