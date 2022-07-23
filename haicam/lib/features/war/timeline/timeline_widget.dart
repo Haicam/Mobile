@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_null_comparison, library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import '../colors.dart';
 import '../menu_data.dart';
@@ -40,10 +38,10 @@ class TimelineWidget extends StatefulWidget {
   }
 
   @override
-  _TimelineWidgetState createState() => _TimelineWidgetState();
+  TimelineWidgetState createState() => TimelineWidgetState();
 }
 
-class _TimelineWidgetState extends State<TimelineWidget> {
+class TimelineWidgetState extends State<TimelineWidget> {
   static const String DefaultEraName = "Birth of the Universe";
   static const double TopOverlap = 56.0;
 
