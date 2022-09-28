@@ -4,8 +4,11 @@ import 'package:prac_haicam/features/theme/bloc/theme_bloc.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:prac_haicam/core/utils/app_routes.dart' as route;
 
+import 'package:haicam_ffi/haicam_ffi.dart' as haicam_ffi;
+
 // Build main of app(start) including device preview multiple devices.
 void main() {
+  haicam_ffi.hello_world();
   runApp(
     DevicePreview(
       enabled: false,

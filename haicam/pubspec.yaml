@@ -46,6 +46,9 @@ dependencies:
   timeline_tile: ^2.0.0
   inview_notifier_list: ^3.0.0
 
+  haicam_ffi:
+    path: ../../Haicam/flutter/haicam_ffi/
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -152,6 +152,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "haicam_ffi",
+      "rootUri": "../../../Haicam/flutter/haicam_ffi",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "hive",
       "rootUri": "file:///home/frankhe/flutter/.pub-cache/hosted/pub.dartlang.org/hive-2.2.1",
       "packageUri": "lib/",
@@ -470,7 +476,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2022-07-21T13:55:59.726632Z",
+  "generated": "2022-09-28T02:21:00.808364Z",
   "generator": "pub",
   "generatorVersion": "2.17.1"
 }
