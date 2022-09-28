@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-
 import 'package:prac_haicam/core/utils/app_routes.dart' as route;
 
 class NavigationDrawer extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
+
+  // This widget is the root of the widget.
+  // Including Drawer View list menu
+  // Name and Email data
   @override
   Widget build(BuildContext context) {
     const name = 'Frank';
     const email = 'frank@haicam.tech';
-
     return Drawer(
       child: Material(
         child: ListView(
@@ -35,6 +37,12 @@ class NavigationDrawer extends StatelessWidget {
                     icon: Icons.settings,
                     onClicked: () => selectedItem(context, 1),
                   ),
+                  const SizedBox(height: 16),
+                  buildMenuItem(
+                    text: 'World War II',
+                    icon: Icons.history_edu,
+                    onClicked: () => selectedItem(context, 2),
+                  ),
                 ],
               ),
             ),
@@ -44,6 +52,7 @@ class NavigationDrawer extends StatelessWidget {
     );
   }
 
+//build drawer header view
   Widget buildHeader({
     required String name,
     required String email,
@@ -83,14 +92,12 @@ class NavigationDrawer extends StatelessWidget {
         ),
       );
 
+  //build drawer item list setting
   Widget buildMenuItem({
     required String text,
     required IconData icon,
     VoidCallback? onClicked,
   }) {
-    // const color = Colors.black;
-    // const hoverColor = Colors.black87;
-
     return ListTile(
       // leading: Icon(icon, color: backgroundColor),
       leading: Icon(icon),
@@ -101,9 +108,9 @@ class NavigationDrawer extends StatelessWidget {
     );
   }
 
+//build on selected action
   void selectedItem(BuildContext context, int index) {
     Navigator.of(context).pop();
-
     switch (index) {
       case 0:
         Navigator.pushNamed(context, route.homeView);
@@ -111,6 +118,9 @@ class NavigationDrawer extends StatelessWidget {
       case 1:
         Navigator.pushNamed(context, route.appSettingView);
         break;
+      case 2:
+        Navigator.pushNamed(context, route.worldWarView);
+        break;
     }
   }
-}
+} //end

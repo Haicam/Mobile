@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class LineGen extends StatelessWidget {
+class LineGenerator extends StatelessWidget {
   final List lines;
-  const LineGen({Key? key, required this.lines}) : super(key: key);
+  const LineGenerator({Key? key, required this.lines}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class LineGen extends StatelessWidget {
           height: 2.0,
           width: lines[index],
           color: Colors.grey,
-          margin: const EdgeInsets.symmetric(vertical: 14),
+          margin: const EdgeInsets.symmetric(vertical: 10),
         ),
       ),
     );

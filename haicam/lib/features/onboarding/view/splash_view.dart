@@ -11,12 +11,15 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
+
+  // init state of view
   @override
   void initState() {
     super.initState();
     goToHome();
   }
 
+  // Build goToHome for LoginView (auto after some seconds).
   void goToHome() async {
     await Future.delayed(const Duration(milliseconds: 3000), () {});
     if (!mounted) return;
@@ -28,7 +31,7 @@ class _SplashViewState extends State<SplashView> {
     );
   }
 
-  validateAndSubmit() {}
+// This widget is the root of view.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,4 +45,4 @@ class _SplashViewState extends State<SplashView> {
       ),
     );
   }
-}
+}//end

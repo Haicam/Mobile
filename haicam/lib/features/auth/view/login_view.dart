@@ -14,10 +14,12 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   final formKey = GlobalKey<FormState>();
 
+  // onTap SignIn
   validateAndSubmit() {
     Navigator.pushNamed(context, route.homeView);
   }
 
+// This widget is the root of view.
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -67,7 +69,7 @@ class _LoginViewState extends State<LoginView> {
     ];
   }
 
-// build Tab. view
+// build auth Tab view
   List<Widget> _buildInputView() {
     return <Widget>[
       Container(
@@ -313,4 +315,4 @@ class _LoginViewState extends State<LoginView> {
       ],
     );
   }
-}
+} //end

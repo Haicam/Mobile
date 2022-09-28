@@ -14,6 +14,8 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+
+  // This widget is the root of view.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,4 +99,4 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
-}
+}//end

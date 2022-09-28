@@ -2,20 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prac_haicam/core/utils/app_colors.dart';
 import 'package:prac_haicam/core/utils/app_fonts.dart';
 
-Widget addVerticalPadding({required Widget child}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 8.0),
-    child: child,
-  );
-}
-
-Widget addHorizentalPadding({required Widget child}) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-    child: child,
-  );
-}
-
+//To set padding all sides
 Widget addPadding({required Widget child}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
@@ -23,6 +10,7 @@ Widget addPadding({required Widget child}) {
   );
 }
 
+//To set custom padding values
 Widget addCustomPadding({
   required Widget child,
   required double top,
@@ -37,6 +25,7 @@ Widget addCustomPadding({
   );
 }
 
+//To set logo text
 Text logoText(String title) {
   return Text(
     title,
@@ -47,6 +36,7 @@ Text logoText(String title) {
   );
 }
 
+//To set body light text
 Text bodyLightText(String title) {
   return Text(
     title,
@@ -58,6 +48,7 @@ Text bodyLightText(String title) {
   );
 }
 
+//To set app bar title
 Text appBarTitle(String title) {
   return Text(
     title,
@@ -68,6 +59,7 @@ Text appBarTitle(String title) {
   );
 }
 
+// To set body dark text
 Text bodyDarkText(String title) {
   return Text(
     title,
@@ -78,6 +70,7 @@ Text bodyDarkText(String title) {
   );
 }
 
+// To set header title
 Text headerTitleText(String title) {
   return Text(
     title,
@@ -88,6 +81,7 @@ Text headerTitleText(String title) {
   );
 }
 
+// To set header medium text
 Text subHeadingMediumText(String title) {
   return Text(
     title,
@@ -99,6 +93,7 @@ Text subHeadingMediumText(String title) {
   );
 }
 
+// To set primary button
 Widget appPrimaryButton(String title, Function function) {
   return Padding(
     key: Key(title),
@@ -108,12 +103,15 @@ Widget appPrimaryButton(String title, Function function) {
       width: 300,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            primary: AppColors.primary, //background color of button
+            primary: AppColors.primary,
+            //background color of button
             side: const BorderSide(
               width: 1,
               color: AppColors.primary,
-            ), //border width and color
-            elevation: 3, //elevation of button
+            ),
+            //border width and color
+            elevation: 3,
+            //elevation of button
             shape: RoundedRectangleBorder(
                 //to set border radius to button
                 borderRadius: BorderRadius.circular(30)),
@@ -131,24 +129,28 @@ Widget appPrimaryButton(String title, Function function) {
   );
 }
 
+// To set regular space
 Widget regularSpace() {
   return const SizedBox(
     height: 10,
   );
 }
 
+// To set width
 Widget addHeight(double value) {
   return SizedBox(
     height: value,
   );
 }
 
+// To set width
 Widget addWidth(double value) {
   return SizedBox(
     width: value,
   );
 }
 
+// To set primary text field
 Widget appPrimaryTextField(
     String title, bool obscureText, IconData prefixIcon, String key) {
   return SizedBox(
@@ -183,6 +185,7 @@ Widget appPrimaryTextField(
   );
 }
 
+// To set horizontal bar
 Widget horizentalBar() {
   return Container(
     height: 2,
@@ -197,6 +200,7 @@ Widget horizentalBar() {
   );
 }
 
+// To set menu normal text
 Text menuNormalText(String title) {
   return Text(
     title,
@@ -208,7 +212,19 @@ Text menuNormalText(String title) {
   );
 }
 
+// To set timestamp
 Text textTimeStamp(String title) {
+  return Text(
+    title,
+    style: const TextStyle(
+      fontSize: AppFonts.smallSize,
+      fontWeight: FontWeight.w400,
+    ),
+  );
+}
+
+// To set datetamp date
+Text textDateStamp(String title) {
   return Text(
     title,
     style: const TextStyle(

@@ -19,6 +19,7 @@ class _AppSettingViewState extends State<AppSettingView> {
   bool _isThemeSwitch = false;
   List<Menu> data = [];
 
+//init state of view
   @override
   void initState() {
     for (var element in dataList) {
@@ -27,6 +28,7 @@ class _AppSettingViewState extends State<AppSettingView> {
     super.initState();
   }
 
+// This widget is the root of view.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +51,7 @@ class _AppSettingViewState extends State<AppSettingView> {
     );
   }
 
+// Build main view
   Widget buildMainView() {
     return SafeArea(
       child: SingleChildScrollView(
@@ -63,6 +66,7 @@ class _AppSettingViewState extends State<AppSettingView> {
     );
   }
 
+//  build theme setting row view
   Widget buildThemeRow() {
     return Container(
       height: 50,
@@ -97,6 +101,7 @@ class _AppSettingViewState extends State<AppSettingView> {
     );
   }
 
+// Build more row view
   ListView buildMoreRow() {
     return ListView.builder(
       shrinkWrap: true,
@@ -106,6 +111,7 @@ class _AppSettingViewState extends State<AppSettingView> {
     );
   }
 
+// Build list of more item list view
   Widget _buildList(Menu list) {
     if (list.subMenu!.isEmpty) {
       return Builder(builder: (context) {
@@ -163,4 +169,4 @@ class _AppSettingViewState extends State<AppSettingView> {
       ),
     );
   }
-}
+}//end

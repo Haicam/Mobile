@@ -10,9 +10,11 @@ class CameraSettingView extends StatefulWidget {
 }
 
 class _CameraSettingViewState extends State<CameraSettingView> {
+  // set values on/off
   bool _value_on = false;
   bool _value_audio = false;
 
+// This widget is the root of view.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,6 +37,7 @@ class _CameraSettingViewState extends State<CameraSettingView> {
     );
   }
 
+// Build main view
   Widget _buildMainMenu() {
     return ListView(
       children: [
@@ -46,6 +49,7 @@ class _CameraSettingViewState extends State<CameraSettingView> {
     );
   }
 
+// Build camera row setting view
   Widget buildCameraRow() {
     return Container(
       decoration: const BoxDecoration(
@@ -74,6 +78,7 @@ class _CameraSettingViewState extends State<CameraSettingView> {
     );
   }
 
+// Build IP row setting view
   Widget buildIpRow() {
     return Container(
       decoration: const BoxDecoration(
@@ -102,6 +107,7 @@ class _CameraSettingViewState extends State<CameraSettingView> {
     );
   }
 
+// Build on/off setting row view
   Widget buildOnOffRow() {
     return Container(
       decoration: const BoxDecoration(
@@ -130,6 +136,7 @@ class _CameraSettingViewState extends State<CameraSettingView> {
     );
   }
 
+// Build audio setting row view
   Widget buildAudioRow() {
     return Container(
       decoration: const BoxDecoration(
