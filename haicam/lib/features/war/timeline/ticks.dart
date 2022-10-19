@@ -131,9 +131,23 @@ class Ticks {
     //TODO print the year text in the guild line in the top right of the timeline
     canvas.drawRect(
       Rect.fromLTWH(
-          offset.dx + gutterWidth + TickSize, 200, TickSize * 10, 1.0),
+          offset.dx + gutterWidth + TickSize + 50, 200, TickSize * 10, 1.0),
       Paint()..color = const Color.fromARGB(255, 255, 0, 0),
     );
+
+    ui.ParagraphBuilder builder = ui.ParagraphBuilder(ui.ParagraphStyle(
+            textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 10.0))
+          ..pushStyle(ui.TextStyle(color: const Color.fromARGB(255, 255, 0, 0)));
+
+    double currentTime = timeline.renderStart + (timeline.renderEnd - timeline.renderStart) * 200 / height;
+
+    builder.addText(currentTime.toStringAsFixed(2));
+    ui.Paragraph guildParagraph = builder.build();
+
+    guildParagraph.layout(const ui.ParagraphConstraints(width: 200.0));
+    canvas.drawParagraph(
+        guildParagraph,
+        Offset(offset.dx + gutterWidth + TickSize + 50, 185));
 
     Set<String> usedValues = <String>{};
 
