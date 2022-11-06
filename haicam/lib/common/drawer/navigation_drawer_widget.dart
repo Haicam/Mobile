@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:prac_haicam/core/utils/app_routes.dart' as route;
+import 'package:prac_haicam/localization/language_constants.dart';
+
+import '../../core/utils/local_string.dart';
 
 class NavigationDrawer extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
@@ -27,19 +30,19 @@ class NavigationDrawer extends StatelessWidget {
                 children: [
                   const Divider(),
                   buildMenuItem(
-                    text: 'Home',
+                    text: getTranslated(context, LocalString.home)!,
                     icon: Icons.home,
                     onClicked: () => selectedItem(context, 0),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Setting',
+                    text: getTranslated(context, LocalString.setting)!,
                     icon: Icons.settings,
                     onClicked: () => selectedItem(context, 1),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'World War II',
+                    text: getTranslated(context, LocalString.world_war_II)!,
                     icon: Icons.history_edu,
                     onClicked: () => selectedItem(context, 2),
                   ),
