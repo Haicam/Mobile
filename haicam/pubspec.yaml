@@ -46,7 +46,15 @@ dependencies:
   ffi: ^1.2.1
   timeline_tile: ^2.0.0
   inview_notifier_list: ^3.0.0
-
+  #Scan QR code
+  qr_code_scanner: ^1.0.1
+  # Grid View
+  flutter_staggered_grid_view: ^0.6.1
+  # Circular progress bar
+  percent_indicator: 4.0.1
+  # Event Bus
+  event_bus: ^2.0.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
