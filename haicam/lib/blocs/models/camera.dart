@@ -1,11 +1,11 @@
 class Camera {
   int? id;
   int? addrId;
-  int? cameraType;
+  int? type;
   int? hubId;
   int? hubType;
   String? serialNumber;
-  String? caemraName;
+  String? name;
   String? videoSize; // "1920:1080"
   String? lastImage; // local jpg image path
   String? hubName;
