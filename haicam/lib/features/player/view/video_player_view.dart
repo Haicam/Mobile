@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:prac_haicam/blocs/models/camera.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
 import 'package:prac_haicam/common/drawer/navigation_drawer_widget.dart';
 import 'package:prac_haicam/core/utils/app_colors.dart';
@@ -46,7 +47,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
 
   //Video Player
   VlcPlayerController? _videoPlayerController;
-
+  Camera? camera;
   // init state of view
   @override
   initState() {
@@ -389,14 +390,25 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     return Center(
       child: VlcPlayer(
         controller: _videoPlayerController!,
-        aspectRatio: 16 / 9,
+        aspectRatio: getAspectRatio(),
         placeholder: Center(child: CircularProgressIndicator()),
       ),
     );
   }
+
+  double getAspectRatio(){
+    List<String> ratio = camera!.videoSize!.split(":");
+    return double.parse(ratio[0])/double.parse(ratio[1]);
+  }
+
   void initializeVideoPlayer() {
+
+    camera = Camera();
+    camera!.videoSize = "1920:1080";
+
     _videoPlayerController = VlcPlayerController.network(
-      'https://media.w3.org/2010/05/sintel/trailer.mp4',
+      //'https://media.w3.org/2010/05/sintel/trailer.mp4',
+      'http://samples.mplayerhq.hu/MPEG-4/embedded_subs/1Video_2Audio_2SUBs_timed_text_streams_.mp4',
       hwAcc: HwAcc.full,
       autoPlay: true,
       options: VlcPlayerOptions(),
