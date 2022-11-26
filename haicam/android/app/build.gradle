@@ -26,6 +26,11 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    packagingOptions {
+        // Fixes duplicate libraries build issue,
+        // when your project uses more than one plugin that depend on C++ libs.
+        pickFirst 'lib/**/libc++_shared.so'
+    }
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -47,8 +52,9 @@ android {
         applicationId "com.example.prac_haicam"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 20
         targetSdkVersion flutter.targetSdkVersion
+        multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

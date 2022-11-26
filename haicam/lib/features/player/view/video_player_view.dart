@@ -11,6 +11,7 @@ import 'package:prac_haicam/features/player/widget/point_widget.dart';
 import 'package:prac_haicam/features/player/widget/set_dialog.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 
 class VideoPlayerView extends StatefulWidget {
   const VideoPlayerView({Key? key}) : super(key: key);
@@ -42,6 +43,10 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   late int _indexTimeLine;
   late double setPosition = 52704;
 
+
+  //Video Player
+  VlcPlayerController? _videoPlayerController;
+
   // init state of view
   @override
   initState() {
@@ -59,13 +64,17 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
       );
     }
     super.initState();
+    initializeVideoPlayer();
   }
+
+
 
 // dispose state of view
   @override
   void dispose() {
     super.dispose();
     _scrollController!.dispose();
+    stopVideoPlayer();
   }
 
   // set get Date for timestamp view
@@ -152,7 +161,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   //build came view
   List<Widget> _buildCamView() {
     return <Widget>[
-      Container(
+      getViedoPlayer()
+      /*Container(
         height: height! * 0.25,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(
@@ -163,7 +173,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
             fit: BoxFit.fill,
           ),
         ),
-      ),
+      ),*/
     ];
   }
 
@@ -369,5 +379,32 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     // if (index >= 0) {
     //   goToItemIndex(index);
     // }
+  }
+
+  /**
+   * Video Player
+   */
+
+  Widget getViedoPlayer() {
+    return Center(
+      child: VlcPlayer(
+        controller: _videoPlayerController!,
+        aspectRatio: 16 / 9,
+        placeholder: Center(child: CircularProgressIndicator()),
+      ),
+    );
+  }
+  void initializeVideoPlayer() {
+    _videoPlayerController = VlcPlayerController.network(
+      'https://media.w3.org/2010/05/sintel/trailer.mp4',
+      hwAcc: HwAcc.full,
+      autoPlay: true,
+      options: VlcPlayerOptions(),
+    );
+  }
+
+  void stopVideoPlayer() async {
+    await _videoPlayerController!.stopRendererScanning();
+    await _videoPlayerController!.dispose();
   }
 }

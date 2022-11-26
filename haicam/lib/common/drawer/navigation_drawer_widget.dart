@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:prac_haicam/core/utils/app_routes.dart' as route;
+import 'package:prac_haicam/localization/language_constants.dart';
+
+import '../../core/utils/local_string.dart';
+import '../../features/camera/view/addcamera/add_camera_screen.dart';
 
 class NavigationDrawer extends StatelessWidget {
   final padding = const EdgeInsets.symmetric(horizontal: 20);
+
+   static const int MENU_ITEM_INDEX_HOME = 0,
+      MENU_ITEM_INDEX_ADD_CAMERA = 1,
+      MENU_ITEM_INDEX_SETTINGS = 2,
+      MENU_ITEM_INDEX_WORL_WAR_II = 3;
 
   // This widget is the root of the widget.
   // Including Drawer View list menu
@@ -27,21 +36,27 @@ class NavigationDrawer extends StatelessWidget {
                 children: [
                   const Divider(),
                   buildMenuItem(
-                    text: 'Home',
+                    text: getTranslated(context, LocalString.home)!,
                     icon: Icons.home,
-                    onClicked: () => selectedItem(context, 0),
+                    onClicked: () => selectedItem(context, MENU_ITEM_INDEX_HOME),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'Setting',
+                    text: getTranslated(context, LocalString.add_camera)!,
+                    icon: Icons.add_a_photo,
+                    onClicked: () => selectedItem(context, MENU_ITEM_INDEX_ADD_CAMERA),
+                  ),
+                  const SizedBox(height: 16),
+                  buildMenuItem(
+                    text: getTranslated(context, LocalString.setting)!,
                     icon: Icons.settings,
-                    onClicked: () => selectedItem(context, 1),
+                    onClicked: () => selectedItem(context, MENU_ITEM_INDEX_SETTINGS),
                   ),
                   const SizedBox(height: 16),
                   buildMenuItem(
-                    text: 'World War II',
+                    text: getTranslated(context, LocalString.world_war_II)!,
                     icon: Icons.history_edu,
-                    onClicked: () => selectedItem(context, 2),
+                    onClicked: () => selectedItem(context, MENU_ITEM_INDEX_WORL_WAR_II),
                   ),
                 ],
               ),
@@ -112,14 +127,19 @@ class NavigationDrawer extends StatelessWidget {
   void selectedItem(BuildContext context, int index) {
     Navigator.of(context).pop();
     switch (index) {
-      case 0:
+      case MENU_ITEM_INDEX_HOME:
         Navigator.pushNamed(context, route.homeView);
         break;
-      case 1:
+      case MENU_ITEM_INDEX_SETTINGS:
         Navigator.pushNamed(context, route.appSettingView);
         break;
-      case 2:
+      case MENU_ITEM_INDEX_WORL_WAR_II:
         Navigator.pushNamed(context, route.worldWarView);
+        break;
+
+      case MENU_ITEM_INDEX_ADD_CAMERA:
+        Navigator.push(context,
+            new MaterialPageRoute(builder: (context) => new AddCameraScreen()));
         break;
     }
   }

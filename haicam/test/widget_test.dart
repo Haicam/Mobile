@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:prac_haicam/main.dart';
+import 'package:prac_haicam/my_app.dart';
 
 void main() {
   //To find Material Widget in app
