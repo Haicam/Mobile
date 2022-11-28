@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:prac_haicam/blocs/models/camera.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
 import 'package:prac_haicam/core/utils/app_colors.dart';
 import 'package:prac_haicam/core/utils/app_images.dart';
 import 'package:prac_haicam/common/drawer/navigation_drawer_widget.dart';
 
 import 'package:prac_haicam/core/utils/app_routes.dart' as route;
+import 'package:prac_haicam/features/player/view/video_player_view.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -14,6 +16,14 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+
+  List<Camera> dataList = [];
+
+  @override
+  initState() {
+    super.initState();
+    setDataList();
+  }
 
   // This widget is the root of view.
   @override
@@ -34,22 +44,51 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  void setDataList(){
+    Camera pi = Camera();
+    pi.name = "Doorbell";
+    pi.lastImage = "cam_pic_01.png";
+    pi.videoSize = "1920:1080";
+    dataList.add(pi);
+
+    pi = Camera();
+    pi.name = "Garden";
+    pi.lastImage = "cam_pic_02.png";
+    pi.videoSize = "1080:1920";
+    dataList.add(pi);
+
+    pi = Camera();
+    pi.name = "Gate-02";
+    pi.lastImage = "cam_pic_03.png";
+    pi.videoSize = "1920:1080";
+    dataList.add(pi);
+
+  }
 // build main view (using Listview)
   Widget buildMainView() {
     return ListView(
-      children: <Widget>[
-        displayDevice("Doorbell", "cam_pic_01.png"),
-        displayDevice("Garden", "cam_pic_02.png"),
-        displayDevice("Gate-02", "cam_pic_03.png"),
-      ],
+      children: getDataFields(),
     );
   }
 
+  List<Widget> getDataFields(){
+    List<Widget> list = [];
+    for(Camera pi in dataList){
+      list.add(displayDevice(pi));
+    }
+    return list;
+  }
+
 // build to display camera
-  Widget displayDevice(String camLocation, String camName) {
+  Widget displayDevice(Camera pi) {
+
+    String camName = pi!.lastImage.toString();
+
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, route.videoPlayerView);
+        //Navigator.pushNamed(context, route.);
+        Navigator.push(context,
+            new MaterialPageRoute(builder: (context) => new VideoPlayerView(pi)));
       },
       child: Container(
         padding: const EdgeInsets.all(5),
@@ -69,7 +108,7 @@ class _HomeViewState extends State<HomeView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  camLocation,
+                  pi!.name.toString(),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,

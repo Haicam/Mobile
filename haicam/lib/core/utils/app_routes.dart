@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prac_haicam/blocs/models/camera.dart';
 
 // Define Routes
 import 'package:prac_haicam/features/onboarding/view/splash_view.dart';
@@ -36,7 +37,7 @@ Route<dynamic> controller(RouteSettings settings) {
     case cameraSettingView:
       return MaterialPageRoute(builder: (context) => const CameraSettingView());
     case videoPlayerView:
-      return MaterialPageRoute(builder: (context) => const VideoPlayerView());
+      return MaterialPageRoute(builder: (context) =>  VideoPlayerView(Camera()));
     case worldWarView:
       return MaterialPageRoute(builder: (context) => TimelineWidget(platform: Theme.of(context).platform));
     default:

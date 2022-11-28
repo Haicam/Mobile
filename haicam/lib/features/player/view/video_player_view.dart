@@ -15,10 +15,14 @@ import 'package:intl/intl.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 
 class VideoPlayerView extends StatefulWidget {
-  const VideoPlayerView({Key? key}) : super(key: key);
+
+  Camera? camera;
+  VideoPlayerView(Camera? camera){
+    this.camera = camera;
+  }
 
   @override
-  _VideoPlayerViewState createState() => _VideoPlayerViewState();
+  _VideoPlayerViewState createState() => _VideoPlayerViewState(camera);
 }
 
 class _VideoPlayerViewState extends State<VideoPlayerView> {
@@ -44,10 +48,14 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   late int _indexTimeLine;
   late double setPosition = 52704;
 
-
   //Video Player
   VlcPlayerController? _videoPlayerController;
   Camera? camera;
+
+  _VideoPlayerViewState(Camera? camera){
+      this.camera = camera;
+  }
+
   // init state of view
   @override
   initState() {
@@ -382,6 +390,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     // }
   }
 
+
   /**
    * Video Player
    */
@@ -398,13 +407,12 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
 
   double getAspectRatio(){
     List<String> ratio = camera!.videoSize!.split(":");
-    return double.parse(ratio[0])/double.parse(ratio[1]);
+    double horizontalRatio = double.parse(ratio[0]);
+    double verticalRatio = double.parse(ratio[1]);
+    return horizontalRatio/verticalRatio;
   }
 
   void initializeVideoPlayer() {
-
-    camera = Camera();
-    camera!.videoSize = "1920:1080";
 
     _videoPlayerController = VlcPlayerController.network(
       //'https://media.w3.org/2010/05/sintel/trailer.mp4',

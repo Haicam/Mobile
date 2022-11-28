@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../../../blocs/models/camera.dart';
+import '../../../core/utils/app_colors.dart';
+import '../../player/widget/set_dialog.dart';
 import '../colors.dart';
 import '../menu_data.dart';
 import 'timeline.dart';
 import 'timeline_entry.dart';
 import 'timeline_render_widget.dart';
 import 'timeline_utils.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 
 typedef ShowMenuCallback = Function();
 typedef SelectItemCallback = Function(TimelineEntry item);
@@ -42,6 +48,15 @@ class TimelineWidget extends StatefulWidget {
 }
 
 class TimelineWidgetState extends State<TimelineWidget> {
+
+  //Video Player
+  VlcPlayerController? _videoPlayerController;
+  Camera? camera;
+
+  DateTime? dateTime;
+  //set date formatting
+  final DateFormat dateFormat = DateFormat('hh:mm');
+
   static const String DefaultEraName = "Birth of the Universe";
   static const double TopOverlap = 56.0;
 
@@ -209,6 +224,14 @@ class TimelineWidgetState extends State<TimelineWidget> {
       _headerBackgroundColor = timeline!.headerBackgroundColor;
       _showFavorites = timeline!.showFavorites;
     }
+    initializeVideoPlayer();
+  }
+
+  // dispose state of view
+  @override
+  void dispose() {
+    super.dispose();
+    stopVideoPlayer();
   }
 
   /// Update the current view and change the timeline header, color and background color,
@@ -265,6 +288,7 @@ class TimelineWidgetState extends State<TimelineWidget> {
     }
     return Scaffold(
       backgroundColor: Colors.white,
+      bottomNavigationBar: _buildBottomTabActions(),
       body: GestureDetector(
           onLongPress: _longPress,
           onTapDown: _tapDown,
@@ -275,12 +299,14 @@ class TimelineWidgetState extends State<TimelineWidget> {
           child: Stack(children: <Widget>[
             TimelineRenderWidget(
                 timeline: timeline,
-                topOverlap: TopOverlap + devicePadding.top,
+                //topOverlap: TopOverlap + devicePadding.top,
+                topOverlap: getTopOverlap() + devicePadding.top,
                 focusItem: widget.focusItem,
                 touchBubble: onTouchBubble,
                 touchEntry: onTouchEntry),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
                 Widget>[
+
               Container(
                   height: devicePadding.top,
                   color: _headerBackgroundColor ??
@@ -332,9 +358,193 @@ class TimelineWidgetState extends State<TimelineWidget> {
                                     _showFavorites = timeline!.showFavorites;
                                   });
                                 })),
-                      ]))
+                      ])),
+              getViedoPlayer(),
             ])
           ])),
     );
+  }
+
+  // build bottom tab
+  Widget _buildBottomTabActions() {
+    double iconSize = 32;
+    return SizedBox(
+      height: 60,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                  icon: const Icon(Icons.calendar_month),
+                  color: AppColors.darkGrey,
+                  iconSize: iconSize,
+                  onPressed: onTapCalendarTab),
+            ],
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.volume_down_alt),
+                color: AppColors.darkGrey,
+                iconSize: iconSize,
+                onPressed: onTapSpeakerTab,
+              ),
+            ],
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                  icon: const Icon(Icons.mic_outlined),
+                  color: AppColors.darkGrey,
+                  iconSize: iconSize,
+                  onPressed: onTapMicTab),
+            ],
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.forward_10),
+                color: AppColors.darkGrey,
+                iconSize: iconSize,
+                onPressed: onTapForwardITab,
+              ),
+            ],
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.circle_sharp),
+                color: AppColors.darkGrey,
+                iconSize: iconSize,
+                onPressed: onTapCircleTab,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // set get Date for timestamp view
+  String getDate(String string) {
+    if (dateTime == null) {
+      return string;
+    } else {
+      return dateFormat.format(DateTime.parse(dateTime.toString()));
+    }
+  }
+
+  //on Tap calendar icon
+  onTapCalendarTab() {
+    pickDateAndTime(context);
+  }
+
+  //on Tap Speaker icon
+  onTapSpeakerTab() {}
+
+  //on Tap Mic icon
+  onTapMicTab() {}
+
+  //on Tap timelapse forward icon
+  onTapForwardITab() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const ShowTimelapseBox();
+      },
+    );
+  }
+
+  //on Tap Circle icon
+  void onTapCircleTab() {}
+
+  // build time and date picker
+  Future pickDateAndTime(BuildContext context) async {
+    final initialDate = DateTime.now().toUtc().add(const Duration(hours: -11));
+    DateTime? newdateTime = await showOmniDateTimePicker(
+      context: context,
+      is24HourMode: false,
+      isShowSeconds: false,
+      startInitialDate: dateTime ?? initialDate,
+      startFirstDate:
+      DateTime.now().toUtc().subtract(const Duration(days: 365)),
+      startLastDate: DateTime.now().toUtc(),
+      borderRadius: const Radius.circular(16),
+    );
+    if (newdateTime == null) return;
+    setState(() => dateTime = newdateTime);
+    DateTime selectTime = newdateTime;
+    // String selectedFormattedTime = DateFormat.jm().format(selectTime);
+    selectTime = DateTime(
+      selectTime.year,
+      selectTime.month,
+      selectTime.day,
+      selectTime.hour,
+      selectTime.minute,
+    );
+    // print(selectTime);
+    // final index =
+    //     events.indexWhere((element) => element.dateTime == selectTime);
+    // if (index >= 0) {
+    //   goToItemIndex(index);
+    // }
+  }
+
+  double getTopOverlap(){
+    if(camera != null){
+      List<String> ratio = camera!.videoSize!.split(":");
+      double horizontalRatio = double.parse(ratio[0]);
+      double verticalRatio = double.parse(ratio[1]);
+      double calculatedHeight = (MediaQuery.of(context).size.height * getAspectRatio());
+      print("calculatedHeight = $calculatedHeight");
+      print("calculatedHeight2 = ${calculatedHeight-2*TopOverlap}");
+      return calculatedHeight-TopOverlap;
+    }
+    return TopOverlap;
+  }
+
+
+  /**
+   * Video Player
+   */
+
+  Widget getViedoPlayer() {
+    return VlcPlayer(
+      controller: _videoPlayerController!,
+      aspectRatio: getAspectRatio(),
+      placeholder: Center(child: CircularProgressIndicator()),
+    );
+  }
+
+  double getAspectRatio(){
+    List<String> ratio = camera!.videoSize!.split(":");
+    double horizontalRatio = double.parse(ratio[0]);
+    double verticalRatio = double.parse(ratio[1]);
+    return horizontalRatio/verticalRatio;
+  }
+
+  void initializeVideoPlayer() {
+
+    camera = Camera();
+    camera!.videoSize = "1920:1080";
+    _videoPlayerController = VlcPlayerController.network(
+      //'https://media.w3.org/2010/05/sintel/trailer.mp4',
+      'http://samples.mplayerhq.hu/MPEG-4/embedded_subs/1Video_2Audio_2SUBs_timed_text_streams_.mp4',
+      hwAcc: HwAcc.full,
+      autoPlay: true,
+      options: VlcPlayerOptions(),
+    );
+  }
+
+  void stopVideoPlayer() async {
+    await _videoPlayerController!.stopRendererScanning();
+    await _videoPlayerController!.dispose();
   }
 }
