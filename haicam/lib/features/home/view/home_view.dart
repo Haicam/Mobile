@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:prac_haicam/blocs/models/account.dart';
 import 'package:prac_haicam/blocs/models/camera.dart';
+import 'package:prac_haicam/blocs/patterns/account_bloc.dart';
 import 'package:prac_haicam/common/widgets/base_widget.dart';
 import 'package:prac_haicam/core/utils/app_colors.dart';
 import 'package:prac_haicam/core/utils/app_images.dart';
@@ -17,12 +19,12 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
 
-  List<Camera> dataList = [];
-
+  Account account = Account();
+  AccountBloc accountBloc = AccountBloc();
   @override
   initState() {
     super.initState();
-    setDataList();
+    accountBloc.eventSink.add(AccountAction .GetData);
   }
 
   // This widget is the root of view.
@@ -44,36 +46,24 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  void setDataList(){
-    Camera pi = Camera();
-    pi.name = "Doorbell";
-    pi.lastImage = "cam_pic_01.png";
-    pi.videoSize = "1920:1080";
-    dataList.add(pi);
 
-    pi = Camera();
-    pi.name = "Garden";
-    pi.lastImage = "cam_pic_02.png";
-    pi.videoSize = "1080:1920";
-    dataList.add(pi);
-
-    pi = Camera();
-    pi.name = "Gate-02";
-    pi.lastImage = "cam_pic_03.png";
-    pi.videoSize = "1920:1080";
-    dataList.add(pi);
-
-  }
 // build main view (using Listview)
   Widget buildMainView() {
-    return ListView(
-      children: getDataFields(),
+    return StreamBuilder(
+        initialData: Account(),
+        stream: accountBloc.accountStream,
+        builder: (context, snapshot){
+          account = snapshot.data as Account;
+          return ListView(
+            children: getDataFields(),
+          );
+        }
     );
   }
 
   List<Widget> getDataFields(){
     List<Widget> list = [];
-    for(Camera pi in dataList){
+    for(Camera pi in account!.cameras){
       list.add(displayDevice(pi));
     }
     return list;
@@ -82,7 +72,7 @@ class _HomeViewState extends State<HomeView> {
 // build to display camera
   Widget displayDevice(Camera pi) {
 
-    String camName = pi!.lastImage.toString();
+    String camName = pi.lastImage.toString();
 
     return InkWell(
       onTap: () {
@@ -108,7 +98,7 @@ class _HomeViewState extends State<HomeView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  pi!.name.toString(),
+                  pi.name.toString(),
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 16,
