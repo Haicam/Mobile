@@ -10,8 +10,7 @@ class NavigationDrawer extends StatelessWidget {
 
    static const int MENU_ITEM_INDEX_HOME = 0,
       MENU_ITEM_INDEX_ADD_CAMERA = 1,
-      MENU_ITEM_INDEX_SETTINGS = 2,
-      MENU_ITEM_INDEX_WORL_WAR_II = 3;
+      MENU_ITEM_INDEX_SETTINGS = 2;
 
   // This widget is the root of the widget.
   // Including Drawer View list menu
@@ -51,12 +50,6 @@ class NavigationDrawer extends StatelessWidget {
                     text: getTranslated(context, LocalString.setting)!,
                     icon: Icons.settings,
                     onClicked: () => selectedItem(context, MENU_ITEM_INDEX_SETTINGS),
-                  ),
-                  const SizedBox(height: 16),
-                  buildMenuItem(
-                    text: getTranslated(context, LocalString.world_war_II)!,
-                    icon: Icons.history_edu,
-                    onClicked: () => selectedItem(context, MENU_ITEM_INDEX_WORL_WAR_II),
                   ),
                 ],
               ),
@@ -132,9 +125,6 @@ class NavigationDrawer extends StatelessWidget {
         break;
       case MENU_ITEM_INDEX_SETTINGS:
         Navigator.pushNamed(context, route.appSettingView);
-        break;
-      case MENU_ITEM_INDEX_WORL_WAR_II:
-        Navigator.pushNamed(context, route.worldWarView);
         break;
 
       case MENU_ITEM_INDEX_ADD_CAMERA:

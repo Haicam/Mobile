@@ -76,9 +76,9 @@ class _HomeViewState extends State<HomeView> {
 
     return InkWell(
       onTap: () {
-        //Navigator.pushNamed(context, route.);
-        Navigator.push(context,
-            new MaterialPageRoute(builder: (context) => new VideoPlayerView(pi)));
+        //Navigator.push(context,
+          //  new MaterialPageRoute(builder: (context) => new VideoPlayerView(pi)));
+        Navigator.pushNamed(context, route.worldWarView);
       },
       child: Container(
         padding: const EdgeInsets.all(5),
