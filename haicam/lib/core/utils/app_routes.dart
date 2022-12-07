@@ -9,7 +9,8 @@ import 'package:prac_haicam/features/setting/view/app_setting_view.dart';
 import 'package:prac_haicam/features/setting/view/cam_setting_view.dart';
 import 'package:prac_haicam/features/device/view/device_view.dart';
 import 'package:prac_haicam/features/home/view/home_view.dart';
-import 'package:prac_haicam/features/war/timeline/timeline_widget.dart';
+
+import '../../features/recording/timeline/timeline_widget.dart';
 
 // Route names
 const String splashView = 'splash';

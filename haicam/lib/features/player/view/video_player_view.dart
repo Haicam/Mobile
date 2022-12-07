@@ -163,6 +163,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: _buildCamView() + _buildCamPlayerView(),
+
       ),
     );
   }
@@ -170,7 +171,8 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
   //build came view
   List<Widget> _buildCamView() {
     return <Widget>[
-      getViedoPlayer()
+      getViedoPlayer(),
+
       /*Container(
         height: height! * 0.25,
         decoration: const BoxDecoration(
