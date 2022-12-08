@@ -298,7 +298,7 @@ class TimelineWidgetState extends State<TimelineWidget> {
           onScaleEnd: _scaleEnd,
           onTapUp: _tapUp,
           child: Stack(children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: getTopMargin()),
+            Padding(padding: EdgeInsets.only(top: getTopMargin(devicePadding.top)),
               child: TimelineRenderWidget(
                   timeline: timeline,
                   topOverlap: TopOverlap + devicePadding.top,
@@ -498,16 +498,16 @@ class TimelineWidgetState extends State<TimelineWidget> {
     // }
   }
 
-  double getTopMargin(){
+  double getTopMargin(double deviceTopPadding){
     double calculatedHeight = 200;
     if(camera != null){
       List<String> ratio = camera!.videoSize!.split(":");
       double horizontalRatio = double.parse(ratio[0]);
       double verticalRatio = double.parse(ratio[1]);
-      double calculatedHeight = (MediaQuery.of(context).size.width * verticalRatio/horizontalRatio);
+      calculatedHeight = (MediaQuery.of(context).size.width * verticalRatio/horizontalRatio);
     }
     Constants.timeTopMargin = 2*calculatedHeight;
-    return calculatedHeight;
+    return calculatedHeight+deviceTopPadding/4;
 
   }
 
