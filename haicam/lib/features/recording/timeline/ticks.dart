@@ -130,21 +130,25 @@ class Ticks {
 
     //CHKME add a guild line to show date time for current video
     //TODO print the year text in the guild line in the top right of the timeline
+
+    //double lineY = 200;
+    double lineY = Constants.timeTopMargin;
     canvas.drawRect(
       Rect.fromLTWH(
-          offset.dx + gutterWidth + TickSize + 50, 200, TickSize * 10, 1.0),
+          offset.dx + gutterWidth + TickSize + 50, lineY, TickSize * 10, 1.0),
       Paint()..color = const Color.fromARGB(255, 255, 0, 0),
     );
 
-    canvas.drawRect(
+    /*canvas.drawRect(
       Rect.fromLTWH(
           offset.dx + gutterWidth + TickSize, Constants.timeTopMargin, TickSize * 10, 1.0),
       Paint()..color =  Colors.green,
-    );
+    );*/
 
-    double currentTime = timeline.renderStart + (timeline.renderEnd - timeline.renderStart) * 200 / height;
+    //double currentTime = timeline.renderStart + (timeline.renderEnd - timeline.renderStart) * 200 / height;
+    double currentTime = timeline.renderStart + (timeline.renderEnd - timeline.renderStart) * (lineY-lineY/2-80) / height;
 
-    ui.ParagraphBuilder tBuilder = ui.ParagraphBuilder(ui.ParagraphStyle(
+    /*ui.ParagraphBuilder tBuilder = ui.ParagraphBuilder(ui.ParagraphStyle(
         textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 10.0))
       ..pushStyle(ui.TextStyle(color: Colors.black));
 
@@ -155,6 +159,7 @@ class Ticks {
     canvas.drawParagraph(
         tGuildParagraph,
         Offset((offset.dx + TickSize)/2, Constants.timeTopMargin-20));
+    */
 
 
 
@@ -167,9 +172,12 @@ class Ticks {
     ui.Paragraph guildParagraph = builder.build();
 
     guildParagraph.layout(const ui.ParagraphConstraints(width: 200.0));
+    /*canvas.drawParagraph(
+        guildParagraph,
+        Offset(offset.dx + gutterWidth + TickSize + 50, 185));*/
     canvas.drawParagraph(
         guildParagraph,
-        Offset(offset.dx + gutterWidth + TickSize + 50, 185));
+        Offset(offset.dx + gutterWidth + TickSize + 50, lineY-20));
 
     Set<String> usedValues = <String>{};
 

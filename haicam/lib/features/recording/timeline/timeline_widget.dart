@@ -225,14 +225,14 @@ class TimelineWidgetState extends State<TimelineWidget> {
       _headerBackgroundColor = timeline!.headerBackgroundColor;
       _showFavorites = timeline!.showFavorites;
     }
-    initializeVideoPlayer();
+    //initializeVideoPlayer();
   }
 
   // dispose state of view
   @override
   void dispose() {
     super.dispose();
-    stopVideoPlayer();
+    //stopVideoPlayer();
   }
 
   /// Update the current view and change the timeline header, color and background color,
@@ -287,7 +287,23 @@ class TimelineWidgetState extends State<TimelineWidget> {
     if (timeline != null) {
       timeline!.devicePadding = devicePadding;
     }
-    return Scaffold(
+
+    return GestureDetector(
+        onLongPress: _longPress,
+        onTapDown: _tapDown,
+        onScaleStart: _scaleStart,
+        onScaleUpdate: _scaleUpdate,
+        onScaleEnd: _scaleEnd,
+        onTapUp: _tapUp,
+        child: TimelineRenderWidget(
+            timeline: timeline,
+            //topOverlap: TopOverlap + devicePadding.top,
+            topOverlap: devicePadding.top,
+            focusItem: widget.focusItem,
+            touchBubble: onTouchBubble,
+            touchEntry: onTouchEntry));
+
+    /*return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: _buildBottomTabActions(),
       body: GestureDetector(
@@ -298,7 +314,7 @@ class TimelineWidgetState extends State<TimelineWidget> {
           onScaleEnd: _scaleEnd,
           onTapUp: _tapUp,
           child: Stack(children: <Widget>[
-            Padding(padding: EdgeInsets.only(top: getTopMargin(devicePadding.top)),
+            Padding(padding: EdgeInsets.only(top:0 ),
               child: TimelineRenderWidget(
                   timeline: timeline,
                   topOverlap: TopOverlap + devicePadding.top,
@@ -360,10 +376,10 @@ class TimelineWidgetState extends State<TimelineWidget> {
                                   });
                                 })),
                       ])),
-              getViedoPlayer(),
-            ])
+              //getViedoPlayer(),
+            ]),
           ])),
-    );
+    );*/
   }
 
   // build bottom tab

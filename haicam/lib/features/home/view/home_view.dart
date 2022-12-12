@@ -10,6 +10,8 @@ import 'package:prac_haicam/common/drawer/navigation_drawer_widget.dart';
 import 'package:prac_haicam/core/utils/app_routes.dart' as route;
 import 'package:prac_haicam/features/player/view/video_player_view.dart';
 
+import '../../recording/video_player_widget.dart';
+
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
 
@@ -76,9 +78,10 @@ class _HomeViewState extends State<HomeView> {
 
     return InkWell(
       onTap: () {
-        //Navigator.push(context,
-          //  new MaterialPageRoute(builder: (context) => new VideoPlayerView(pi)));
-        Navigator.pushNamed(context, route.worldWarView);
+        Navigator.push(context,
+            new MaterialPageRoute(builder: (context) => new VideoPlayerWidget(pi)));
+        //Navigator.pushNamed(context, route.worldWarView);
+
       },
       child: Container(
         padding: const EdgeInsets.all(5),
