@@ -59,8 +59,8 @@ dependencies:
   flutter_vlc_player:
     git:
       url: https://github.com/ezhomelabs/flutter_vlc_player.git
+      ref: 709b7c6
       path: flutter_vlc_player/
-
 
 dev_dependencies:
   flutter_test:
