@@ -41,7 +41,7 @@ class AccountBloc {
     pi = Camera();
     pi.name = "Garden";
     pi.lastImage = "cam_pic_02.png";
-    pi.videoSize = "1080:1920";
+    pi.videoSize = "1920:1080";
     dataList.add(pi);
 
     pi = Camera();
