@@ -31,7 +31,8 @@ android {
         // when your project uses more than one plugin that depend on C++ libs.
         pickFirst 'lib/**/libc++_shared.so'
     }
-    compileSdkVersion flutter.compileSdkVersion
+    //compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 32
     ndkVersion flutter.ndkVersion
 
     compileOptions {
