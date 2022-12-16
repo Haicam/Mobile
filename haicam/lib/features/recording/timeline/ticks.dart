@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:prac_haicam/core/utils/utils.dart';
 import '../../../core/utils/constants.dart';
 import 'timeline.dart';
 import 'timeline_utils.dart';
@@ -61,6 +62,7 @@ class Ticks {
 
     /// The number of ticks to draw.
     int numTicks = (height / scaledTickDistance).ceil() + 2;
+
     if (scaledTickDistance > TextTickDistance) {
       textTickDistance = tickDistance;
     }
@@ -139,29 +141,9 @@ class Ticks {
       Paint()..color = const Color.fromARGB(255, 255, 0, 0),
     );
 
-    /*canvas.drawRect(
-      Rect.fromLTWH(
-          offset.dx + gutterWidth + TickSize, Constants.timeTopMargin, TickSize * 10, 1.0),
-      Paint()..color =  Colors.green,
-    );*/
 
     //double currentTime = timeline.renderStart + (timeline.renderEnd - timeline.renderStart) * 200 / height;
     double currentTime = timeline.renderStart + (timeline.renderEnd - timeline.renderStart) * (lineY-lineY/2-80) / height;
-
-    /*ui.ParagraphBuilder tBuilder = ui.ParagraphBuilder(ui.ParagraphStyle(
-        textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 10.0))
-      ..pushStyle(ui.TextStyle(color: Colors.black));
-
-    tBuilder.addText(currentTime.toStringAsFixed(0));
-    ui.Paragraph tGuildParagraph = tBuilder.build();
-
-    tGuildParagraph.layout(const ui.ParagraphConstraints(width: 200.0));
-    canvas.drawParagraph(
-        tGuildParagraph,
-        Offset((offset.dx + TickSize)/2, Constants.timeTopMargin-20));
-    */
-
-
 
 
     ui.ParagraphBuilder builder = ui.ParagraphBuilder(ui.ParagraphStyle(
@@ -189,12 +171,58 @@ class Ticks {
       tt = -tt;
       int o = tickOffset.floor();
       TickColors? colors = timeline.findTickColors(offset.dy + height - o);
+      print("tt = $tt");
+      print("textTickDistance = $textTickDistance");
       if (tt % textTickDistance == 0) {
+        print("*****Match 1*****");
+
+
         /// Every `textTickDistance`, draw a wider tick with the a label laid on top.
         canvas.drawRect(
             Rect.fromLTWH(offset.dx + gutterWidth - TickSize,
                 offset.dy + height - o, TickSize, 1.0),
             Paint()..color = colors!.long!);
+
+
+        if(textTickDistance == 1.0){
+          /*print("scaledTickDistance = $scaledTickDistance");
+          print("tt = $tt");
+          print("textTickDistance = $textTickDistance");
+          print("numTicks = $numTicks");
+          print("tickOffset = $tickOffset");
+          print("o = $o");
+          print("offset.dy = $offset.dy");
+          print("height = $height");*/
+
+          double monthzdis = scaledTickDistance/13;
+          print("monthzdis = $monthzdis");
+
+          for(int i = 1; i <= 12; i++){
+
+            double yCor = offset.dy + height + (i*monthzdis.toInt()) - o;
+            canvas.drawRect(
+                Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
+                    yCor, SmallTickSize, 1.0),
+                Paint()..color = colors!.short!);
+
+            if(monthzdis > 6){
+              ui.ParagraphBuilder monthBuilder = ui.ParagraphBuilder(ui.ParagraphStyle(
+                  textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 7.0))
+                ..pushStyle(ui.TextStyle(color: colors.text));
+
+              monthBuilder.addText(Utils.monthAaryy.elementAt(i-1));
+              ui.Paragraph monthParagraph = monthBuilder.build();
+              monthParagraph.layout(ui.ParagraphConstraints(
+                  width: gutterWidth - LabelPadLeft - LabelPadRight));
+              canvas.drawParagraph(
+                  monthParagraph,
+                  Offset(offset.dx- LabelPadRight,
+                      yCor - monthParagraph.height/2));
+
+            }
+
+          }
+        }
 
         /// Drawing text to [canvas] is done by using the [ParagraphBuilder] directly.
         ui.ParagraphBuilder builder = ui.ParagraphBuilder(ui.ParagraphStyle(
@@ -202,7 +230,7 @@ class Ticks {
           ..pushStyle(ui.TextStyle(color: colors.text));
 
         int value = tt.round().abs();
-
+        print("value = $value");
         /// Format the label nicely depending on how long ago the tick is placed at.
         String label;
         if (value < 9000) {
@@ -216,6 +244,8 @@ class Ticks {
             label = formatter.format(value);
           }
         }
+
+        print("label = $label");
         usedValues.add(label);
         builder.addText(label);
         ui.Paragraph tickParagraph = builder.build();
@@ -226,12 +256,15 @@ class Ticks {
             Offset(offset.dx + LabelPadLeft - LabelPadRight,
                 offset.dy + height - o - tickParagraph.height - 5));
       } else {
+        print("*****Match 2*****");
         if (tt % (textTickDistance / 2) == 0) {
+          print("*****Match 3*****");
           canvas.drawRect(
               Rect.fromLTWH(offset.dx + gutterWidth - MiddleTickSize,
                   offset.dy + height - o, MiddleTickSize, 1.0),
               Paint()..color = colors!.short!);
         } else {
+          print("*****Match 4*****");
           /// If we're within two text-ticks, just draw a smaller line.
           canvas.drawRect(
               Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,

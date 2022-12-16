@@ -3,6 +3,25 @@ import 'constants.dart';
 
 class Utils {
 
+  static List<String> monthAaryy = getMonthArray();
+
+  static List<String> getMonthArray(){
+    List<String>  list = [];
+    list.add("Jan");
+    list.add("Feb");
+    list.add("Mar");
+    list.add("Apr");
+    list.add("May");
+    list.add("Jun");
+    list.add("Jul");
+    list.add("Aug");
+    list.add("Sep");
+    list.add("Oct");
+    list.add("Nov");
+    list.add("Dec");
+
+    return list;
+  }
   static bool isEmpty(String str) {
     if (str == null || str.length == 0 || str.contains("null")) {
       return true;
