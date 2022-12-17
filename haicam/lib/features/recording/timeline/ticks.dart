@@ -171,11 +171,12 @@ class Ticks {
       tt = -tt;
       int o = tickOffset.floor();
       TickColors? colors = timeline.findTickColors(offset.dy + height - o);
-      print("tt = $tt");
-      print("textTickDistance = $textTickDistance");
+
       if (tt % textTickDistance == 0) {
         print("*****Match 1*****");
-
+        print("tt = $tt");
+        print("textTickDistance = $textTickDistance");
+        print("scaledTickDistance = $scaledTickDistance");
 
         /// Every `textTickDistance`, draw a wider tick with the a label laid on top.
         canvas.drawRect(
@@ -184,7 +185,10 @@ class Ticks {
             Paint()..color = colors!.long!);
 
 
-        if(textTickDistance == 1.0){
+        //Draw month
+        double monthzdis = scaledTickDistance/13;
+        if(textTickDistance == 1.0 && monthzdis > 13 ){
+          print("monthzdis = $monthzdis");
           /*print("scaledTickDistance = $scaledTickDistance");
           print("tt = $tt");
           print("textTickDistance = $textTickDistance");
@@ -194,33 +198,28 @@ class Ticks {
           print("offset.dy = $offset.dy");
           print("height = $height");*/
 
-          double monthzdis = scaledTickDistance/13;
-          print("monthzdis = $monthzdis");
+
 
           for(int i = 1; i <= 12; i++){
 
-            double yCor = offset.dy + height + (i*monthzdis.toInt()) - o;
+            double yCor = offset.dy + height + (i*monthzdis) - o;
             canvas.drawRect(
                 Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
                     yCor, SmallTickSize, 1.0),
                 Paint()..color = colors!.short!);
 
-            if(monthzdis > 6){
-              ui.ParagraphBuilder monthBuilder = ui.ParagraphBuilder(ui.ParagraphStyle(
-                  textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 7.0))
-                ..pushStyle(ui.TextStyle(color: colors.text));
+            ui.ParagraphBuilder monthBuilder = ui.ParagraphBuilder(ui.ParagraphStyle(
+                textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 7.0))
+              ..pushStyle(ui.TextStyle(color: colors.text));
 
-              monthBuilder.addText(Utils.monthAaryy.elementAt(i-1));
-              ui.Paragraph monthParagraph = monthBuilder.build();
-              monthParagraph.layout(ui.ParagraphConstraints(
-                  width: gutterWidth - LabelPadLeft - LabelPadRight));
-              canvas.drawParagraph(
-                  monthParagraph,
-                  Offset(offset.dx- LabelPadRight,
-                      yCor - monthParagraph.height/2));
-
-            }
-
+            monthBuilder.addText(Utils.monthAaryy.elementAt(i-1));
+            ui.Paragraph monthParagraph = monthBuilder.build();
+            monthParagraph.layout(ui.ParagraphConstraints(
+                width: gutterWidth - LabelPadLeft - LabelPadRight));
+            canvas.drawParagraph(
+                monthParagraph,
+                Offset(offset.dx- LabelPadRight,
+                    yCor - monthParagraph.height/2));
           }
         }
 
