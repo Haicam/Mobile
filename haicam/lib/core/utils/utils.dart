@@ -23,13 +23,13 @@ class Utils {
     return list;
   }
   static bool isEmpty(String str) {
-    if (str == null || str.length == 0 || str.contains("null")) {
+    if (str.isEmpty || str.toLowerCase().startsWith("null")) {
       return true;
     }
     return false;
   }
 
-  static bool StringEqualIgnoreCase(String str1, String str2){
+  static bool stringEqualIgnoreCase(String str1, String str2){
     if(str1.toLowerCase().compareTo(str2.toLowerCase()) == 0){
       return true;
     }

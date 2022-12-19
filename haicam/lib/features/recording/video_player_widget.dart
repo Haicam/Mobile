@@ -278,7 +278,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       //'https://media.w3.org/2010/05/sintel/trailer.mp4',
       'http://samples.mplayerhq.hu/MPEG-4/embedded_subs/1Video_2Audio_2SUBs_timed_text_streams_.mp4',
       hwAcc: HwAcc.full,
-      autoPlay: true,
+      autoPlay: false,
       options: VlcPlayerOptions(),
     );
   }

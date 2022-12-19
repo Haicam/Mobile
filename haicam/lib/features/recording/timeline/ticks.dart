@@ -187,18 +187,9 @@ class Ticks {
 
         //Draw month
         double monthzdis = scaledTickDistance/13;
-        if(textTickDistance == 1.0 && monthzdis > 13 ){
-          print("monthzdis = $monthzdis");
-          /*print("scaledTickDistance = $scaledTickDistance");
-          print("tt = $tt");
-          print("textTickDistance = $textTickDistance");
-          print("numTicks = $numTicks");
-          print("tickOffset = $tickOffset");
-          print("o = $o");
-          print("offset.dy = $offset.dy");
-          print("height = $height");*/
-
-
+        print("textTickDistance = $textTickDistance");
+        print("monthzdis = $monthzdis");
+        if(textTickDistance < 2.0 && monthzdis >=26 ){
 
           for(int i = 1; i <= 12; i++){
 
@@ -229,7 +220,6 @@ class Ticks {
           ..pushStyle(ui.TextStyle(color: colors.text));
 
         int value = tt.round().abs();
-        print("value = $value");
         /// Format the label nicely depending on how long ago the tick is placed at.
         String label;
         if (value < 9000) {
@@ -244,7 +234,6 @@ class Ticks {
           }
         }
 
-        print("label = $label");
         usedValues.add(label);
         builder.addText(label);
         ui.Paragraph tickParagraph = builder.build();
@@ -253,7 +242,7 @@ class Ticks {
         canvas.drawParagraph(
             tickParagraph,
             Offset(offset.dx + LabelPadLeft - LabelPadRight,
-                offset.dy + height - o - tickParagraph.height - 5));
+                offset.dy + height - o - tickParagraph.height - 2));
       } else {
         print("*****Match 2*****");
         if (tt % (textTickDistance / 2) == 0) {
