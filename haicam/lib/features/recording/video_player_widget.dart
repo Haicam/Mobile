@@ -118,11 +118,11 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
     double playerHeight = getPlayerHeight();
     //double timeLineHeight = MediaQuery.of(context).size.height-playerHeight-60-60;
      return <Widget>[
-       LimitedBox(
+       /*LimitedBox(
          maxHeight: playerHeight,
          maxWidth: double.infinity,
          child: getViedoPlayer(),
-       ),
+       ),*/
        Expanded(child: TimelineWidget(platform: Theme.of(context).platform)),
 
     ];
@@ -278,7 +278,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
       //'https://media.w3.org/2010/05/sintel/trailer.mp4',
       'http://samples.mplayerhq.hu/MPEG-4/embedded_subs/1Video_2Audio_2SUBs_timed_text_streams_.mp4',
       hwAcc: HwAcc.full,
-      autoPlay: false,
+      autoPlay: true,
       options: VlcPlayerOptions(),
     );
   }

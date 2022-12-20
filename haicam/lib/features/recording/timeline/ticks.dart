@@ -185,35 +185,6 @@ class Ticks {
             Paint()..color = colors!.long!);
 
 
-        //Draw month
-        double monthzdis = scaledTickDistance/13;
-        print("textTickDistance = $textTickDistance");
-        print("monthzdis = $monthzdis");
-        if(textTickDistance < 2.0 && monthzdis >=26 ){
-
-          for(int i = 1; i <= 12; i++){
-
-            double yCor = offset.dy + height + (i*monthzdis) - o;
-            canvas.drawRect(
-                Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
-                    yCor, SmallTickSize, 1.0),
-                Paint()..color = colors!.short!);
-
-            ui.ParagraphBuilder monthBuilder = ui.ParagraphBuilder(ui.ParagraphStyle(
-                textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 7.0))
-              ..pushStyle(ui.TextStyle(color: colors.text));
-
-            monthBuilder.addText(Utils.monthAaryy.elementAt(i-1));
-            ui.Paragraph monthParagraph = monthBuilder.build();
-            monthParagraph.layout(ui.ParagraphConstraints(
-                width: gutterWidth - LabelPadLeft - LabelPadRight));
-            canvas.drawParagraph(
-                monthParagraph,
-                Offset(offset.dx- LabelPadRight,
-                    yCor - monthParagraph.height/2));
-          }
-        }
-
         /// Drawing text to [canvas] is done by using the [ParagraphBuilder] directly.
         ui.ParagraphBuilder builder = ui.ParagraphBuilder(ui.ParagraphStyle(
             textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 10.0))
@@ -243,6 +214,67 @@ class Ticks {
             tickParagraph,
             Offset(offset.dx + LabelPadLeft - LabelPadRight,
                 offset.dy + height - o - tickParagraph.height - 2));
+
+
+
+        //Draw month
+        double monthzdis = scaledTickDistance/13;
+        print("textTickDistance = $textTickDistance");
+        print("monthzdis = $monthzdis");
+        if(textTickDistance < 2.0 && monthzdis >=26 ){
+
+          for(int i = 1; i <= 12; i++){
+
+            double yCor = offset.dy + height + (i*monthzdis) - o;
+            canvas.drawRect(
+                Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
+                    yCor, SmallTickSize, 1.0),
+                Paint()..color = colors!.short!);
+
+            ui.ParagraphBuilder monthBuilder = ui.ParagraphBuilder(ui.ParagraphStyle(
+                textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 7.0, fontWeight: FontWeight.w500))
+              ..pushStyle(ui.TextStyle(color: colors.text));
+
+            monthBuilder.addText(Utils.monthAaryy.elementAt(i-1));
+            ui.Paragraph monthParagraph = monthBuilder.build();
+            monthParagraph.layout(ui.ParagraphConstraints(
+                width: gutterWidth - LabelPadLeft - LabelPadRight));
+            canvas.drawParagraph(
+                monthParagraph,
+                Offset(offset.dx- LabelPadRight,
+                    yCor - monthParagraph.height/2));
+
+            //Draw days of month
+            if(monthzdis >= 250){
+              int numDays = DateUtils.getDaysInMonth(int.parse(label), i);
+              print("numDays = $numDays");
+              double dayDistance = monthzdis/(numDays+1);
+              print("dayDistance = $dayDistance");
+              for(int j = 1; j<=numDays; j++){
+
+                double yDayCor = yCor + (j*dayDistance);
+                canvas.drawRect(
+                    Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
+                        yDayCor, SmallTickSize, 1.0),
+                    Paint()..color = colors!.short!);
+
+                ui.ParagraphBuilder daysBuilder = ui.ParagraphBuilder(ui.ParagraphStyle(
+                    textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 7.0))
+                  ..pushStyle(ui.TextStyle(color: colors.text));
+
+                daysBuilder.addText(j.toString());
+                ui.Paragraph dayParagraph = daysBuilder.build();
+                dayParagraph.layout(ui.ParagraphConstraints(
+                    width: gutterWidth - LabelPadLeft - LabelPadRight));
+                canvas.drawParagraph(
+                    dayParagraph,
+                    Offset(offset.dx- LabelPadRight,
+                        yDayCor - dayParagraph.height/2));
+              }
+            }
+          }
+        }
+
       } else {
         print("*****Match 2*****");
         if (tt % (textTickDistance / 2) == 0) {
