@@ -52,6 +52,8 @@ dependencies:
   percent_indicator: 4.0.1
   # Event Bus
   event_bus: ^2.0.0
+  #DateFormat
+  jiffy: ^5.0.0
 
   #haicam_ffi:
     #path: ../../Haicam/flutter/haicam_ffi/

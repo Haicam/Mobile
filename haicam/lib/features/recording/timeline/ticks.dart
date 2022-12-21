@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:prac_haicam/core/utils/utils.dart';
 import '../../../core/utils/constants.dart';
 import 'timeline.dart';
@@ -173,10 +174,10 @@ class Ticks {
       TickColors? colors = timeline.findTickColors(offset.dy + height - o);
 
       if (tt % textTickDistance == 0) {
-        print("*****Match 1*****");
+        /*print("*****Match 1*****");
         print("tt = $tt");
         print("textTickDistance = $textTickDistance");
-        print("scaledTickDistance = $scaledTickDistance");
+        print("scaledTickDistance = $scaledTickDistance");*/
 
         /// Every `textTickDistance`, draw a wider tick with the a label laid on top.
         canvas.drawRect(
@@ -219,13 +220,20 @@ class Ticks {
 
         //Draw month
         double monthzdis = scaledTickDistance/13;
-        print("textTickDistance = $textTickDistance");
-        print("monthzdis = $monthzdis");
-        if(textTickDistance < 2.0 && monthzdis >=26 ){
-
+        //print("textTickDistance = $textTickDistance");
+        //print("monthzdis = $monthzdis");
+        //if(textTickDistance < 2.0 && monthzdis >=26 )
+        if(textTickDistance < 2.0 && scale >= height)
+        {
+          double lastMonthYCor = 0;
           for(int i = 1; i <= 12; i++){
+            //print("i = $i");
+            double monthYCor = getMonthYCordinate(label, i, height);
+            //print("getMonthYCordinate = ${getMonthYCordinate(label, i, height)}");
 
-            double yCor = offset.dy + height + (i*monthzdis) - o;
+            //double yCor = offset.dy + height + (i*monthzdis) - o;
+            double yCor = offset.dy + height + (monthYCor+lastMonthYCor) - o;
+            lastMonthYCor = lastMonthYCor+monthYCor;
             canvas.drawRect(
                 Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
                     yCor, SmallTickSize, 1.0),
@@ -245,11 +253,11 @@ class Ticks {
                     yCor - monthParagraph.height/2));
 
             //Draw days of month
-            if(monthzdis >= 250){
+            /*if(monthzdis >= 250){
               int numDays = DateUtils.getDaysInMonth(int.parse(label), i);
-              print("numDays = $numDays");
+              //print("numDays = $numDays");
               double dayDistance = monthzdis/(numDays+1);
-              print("dayDistance = $dayDistance");
+              //print("dayDistance = $dayDistance");
               for(int j = 1; j<=numDays; j++){
 
                 double yDayCor = yCor + (j*dayDistance);
@@ -271,20 +279,20 @@ class Ticks {
                     Offset(offset.dx- LabelPadRight,
                         yDayCor - dayParagraph.height/2));
               }
-            }
+            }*/
           }
         }
 
       } else {
-        print("*****Match 2*****");
+        //print("*****Match 2*****");
         if (tt % (textTickDistance / 2) == 0) {
-          print("*****Match 3*****");
+          //print("*****Match 3*****");
           canvas.drawRect(
               Rect.fromLTWH(offset.dx + gutterWidth - MiddleTickSize,
                   offset.dy + height - o, MiddleTickSize, 1.0),
               Paint()..color = colors!.short!);
         } else {
-          print("*****Match 4*****");
+          //print("*****Match 4*****");
           /// If we're within two text-ticks, just draw a smaller line.
           canvas.drawRect(
               Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
@@ -294,5 +302,55 @@ class Ticks {
       }
       startingTickMarkValue += tickDistance;
     }
+  }
+
+  double getMonthYCordinate(String year, int month, double timelineHeight){
+
+    int yearInt = int.parse(year);
+
+    int currentMonthMilli = DateTime(yearInt, month, 1).millisecondsSinceEpoch;
+    int nextMonthMilli = 0;
+    if(month == 12){
+      nextMonthMilli = DateTime(yearInt+1, 1, 1).millisecondsSinceEpoch;
+    }else {
+      nextMonthMilli = DateTime(yearInt, month+1, 1).millisecondsSinceEpoch;
+    }
+
+    int currentYearMilli = DateTime(yearInt, 1, 1).millisecondsSinceEpoch;
+    int nextYearMilli = DateTime(yearInt+1, 1, 1).millisecondsSinceEpoch;
+
+    int totalYearMilliSeconds = nextYearMilli-currentYearMilli;
+    print("totalYearMilliSeconds = ${totalYearMilliSeconds}");
+
+
+    return ((nextMonthMilli-currentMonthMilli)*timelineHeight)/totalYearMilliSeconds;
+
+    //print("year = $year");
+    //var y2005 = Jiffy(year+"-1-1");
+    //print("y2005.unix() = ${y2005.unix()}");
+    //print("y2005.add(years: 1).unix() = ${y2005.add(years: 1).unix()}");
+    //print("y2005.add(months: month).unix() - y2005.unix() = ${y2005.add(months: month).unix() - y2005.unix()}");
+    //Total seconds of the year:
+
+    //var totalYearSeconds = y2005.add(years: 1).unix() - y2005.unix();
+    //print("totalYearSeconds = $totalYearSeconds");
+    //The 1st month seconds of 2005:
+
+    //y2005.add(months: month).unix() - y2005.unix();
+
+    //The N month seconds of 2005:
+    //y2005.add(months: N).unix() - y2005.unix();
+
+
+    /*
+      The full year timeline pixels: 640
+      The N month timeline pixies:
+    */
+
+
+    //return ((y2005.add(months: month).unix() - y2005.unix())*timelineHeight)/(y2005.add(years: 1).unix() - y2005.unix());
+
+
+
   }
 }
