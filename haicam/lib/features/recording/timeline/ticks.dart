@@ -164,7 +164,14 @@ class Ticks {
 
     Set<String> usedValues = <String>{};
 
+    /// Format the label nicely depending on how long ago the tick is placed at.
+    String? label;
+
     /// Draw all the ticks.
+    print("numTicks = $numTicks");
+    if(scale >= height){
+      numTicks++;
+    }
     for (int i = 0; i < numTicks; i++) {
       tickOffset += scaledTickDistance;
 
@@ -174,8 +181,8 @@ class Ticks {
       TickColors? colors = timeline.findTickColors(offset.dy + height - o);
 
       if (tt % textTickDistance == 0) {
-        /*print("*****Match 1*****");
-        print("tt = $tt");
+        print("*****Match 1*****");
+        /*print("tt = $tt");
         print("textTickDistance = $textTickDistance");
         print("scaledTickDistance = $scaledTickDistance");*/
 
@@ -193,7 +200,7 @@ class Ticks {
 
         int value = tt.round().abs();
         /// Format the label nicely depending on how long ago the tick is placed at.
-        String label;
+        //String label;
         if (value < 9000) {
           label = value.toStringAsFixed(0);
         } else {
@@ -205,9 +212,9 @@ class Ticks {
             label = formatter.format(value);
           }
         }
-
-        usedValues.add(label);
-        builder.addText(label);
+        print("label = $label");
+        usedValues.add(label!);
+        builder.addText(label!);
         ui.Paragraph tickParagraph = builder.build();
         tickParagraph.layout(ui.ParagraphConstraints(
             width: gutterWidth - LabelPadLeft - LabelPadRight));
@@ -218,42 +225,63 @@ class Ticks {
 
 
 
-        //Draw month
-        double monthzdis = scaledTickDistance/13;
-        //print("textTickDistance = $textTickDistance");
-        //print("monthzdis = $monthzdis");
-        //if(textTickDistance < 2.0 && monthzdis >=26 )
-        if(textTickDistance < 2.0 && scale >= height)
-        {
-          double lastMonthYCor = 0;
-          for(int i = 1; i <= 12; i++){
-            //print("i = $i");
-            double monthYCor = getMonthYCordinate(label, i, height);
-            //print("getMonthYCordinate = ${getMonthYCordinate(label, i, height)}");
 
-            //double yCor = offset.dy + height + (i*monthzdis) - o;
-            double yCor = offset.dy + height + (monthYCor+lastMonthYCor) - o;
-            lastMonthYCor = lastMonthYCor+monthYCor;
-            canvas.drawRect(
-                Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
-                    yCor, SmallTickSize, 1.0),
-                Paint()..color = colors!.short!);
 
-            ui.ParagraphBuilder monthBuilder = ui.ParagraphBuilder(ui.ParagraphStyle(
-                textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 7.0, fontWeight: FontWeight.w500))
-              ..pushStyle(ui.TextStyle(color: colors.text));
+      } else {
+        //print("*****Match 2*****");
+        if (tt % (textTickDistance / 2) == 0) {
+          //print("*****Match 3*****");
+          canvas.drawRect(
+              Rect.fromLTWH(offset.dx + gutterWidth - MiddleTickSize,
+                  offset.dy + height - o, MiddleTickSize, 1.0),
+              Paint()..color = colors!.short!);
+        } else {
+          //print("*****Match 4*****");
+          /// If we're within two text-ticks, just draw a smaller line.
+          canvas.drawRect(
+              Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
+                  offset.dy + height - o, SmallTickSize, 1.0),
+              Paint()..color = colors!.short!);
+        }
+      }
 
-            monthBuilder.addText(Utils.monthAaryy.elementAt(i-1));
-            ui.Paragraph monthParagraph = monthBuilder.build();
-            monthParagraph.layout(ui.ParagraphConstraints(
-                width: gutterWidth - LabelPadLeft - LabelPadRight));
-            canvas.drawParagraph(
-                monthParagraph,
-                Offset(offset.dx- LabelPadRight,
-                    yCor - monthParagraph.height/2));
 
-            //Draw days of month
-            /*if(monthzdis >= 250){
+      //Draw month
+      //double monthzdis = scaledTickDistance/13;
+      //print("textTickDistance = $textTickDistance");
+      //print("monthzdis = $monthzdis");
+      //if(textTickDistance < 2.0 && monthzdis >=26 )
+      if(scale >= height) {
+
+        double lastMonthYCor = 0;
+        for(int i = 1; i <= 12; i++){
+          //print("i = $i");
+          double monthYCor = getMonthYCordinate(label!, i, height);
+          //print("getMonthYCordinate = ${getMonthYCordinate(label, i, height)}");
+
+          //double yCor = offset.dy + height + (i*monthzdis) - o;
+          double yCor = offset.dy + height + (monthYCor+lastMonthYCor) - o;
+          lastMonthYCor = lastMonthYCor+monthYCor;
+          canvas.drawRect(
+              Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
+                  yCor, SmallTickSize, 1.0),
+              Paint()..color = colors!.short!);
+
+          ui.ParagraphBuilder monthBuilder = ui.ParagraphBuilder(ui.ParagraphStyle(
+              textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 7.0, fontWeight: FontWeight.w500))
+            ..pushStyle(ui.TextStyle(color: colors.text));
+
+          monthBuilder.addText(Utils.monthAaryy.elementAt(i-1));
+          ui.Paragraph monthParagraph = monthBuilder.build();
+          monthParagraph.layout(ui.ParagraphConstraints(
+              width: gutterWidth - LabelPadLeft - LabelPadRight));
+          canvas.drawParagraph(
+              monthParagraph,
+              Offset(offset.dx- LabelPadRight,
+                  yCor - monthParagraph.height/2));
+
+          //Draw days of month
+          /*if(monthzdis >= 250){
               int numDays = DateUtils.getDaysInMonth(int.parse(label), i);
               //print("numDays = $numDays");
               double dayDistance = monthzdis/(numDays+1);
@@ -280,26 +308,10 @@ class Ticks {
                         yDayCor - dayParagraph.height/2));
               }
             }*/
-          }
-        }
-
-      } else {
-        //print("*****Match 2*****");
-        if (tt % (textTickDistance / 2) == 0) {
-          //print("*****Match 3*****");
-          canvas.drawRect(
-              Rect.fromLTWH(offset.dx + gutterWidth - MiddleTickSize,
-                  offset.dy + height - o, MiddleTickSize, 1.0),
-              Paint()..color = colors!.short!);
-        } else {
-          //print("*****Match 4*****");
-          /// If we're within two text-ticks, just draw a smaller line.
-          canvas.drawRect(
-              Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
-                  offset.dy + height - o, SmallTickSize, 1.0),
-              Paint()..color = colors!.short!);
         }
       }
+
+
       startingTickMarkValue += tickDistance;
     }
   }
@@ -320,35 +332,8 @@ class Ticks {
     int nextYearMilli = DateTime(yearInt+1, 1, 1).millisecondsSinceEpoch;
 
     int totalYearMilliSeconds = nextYearMilli-currentYearMilli;
-    print("totalYearMilliSeconds = ${totalYearMilliSeconds}");
-
 
     return ((nextMonthMilli-currentMonthMilli)*timelineHeight)/totalYearMilliSeconds;
-
-    //print("year = $year");
-    //var y2005 = Jiffy(year+"-1-1");
-    //print("y2005.unix() = ${y2005.unix()}");
-    //print("y2005.add(years: 1).unix() = ${y2005.add(years: 1).unix()}");
-    //print("y2005.add(months: month).unix() - y2005.unix() = ${y2005.add(months: month).unix() - y2005.unix()}");
-    //Total seconds of the year:
-
-    //var totalYearSeconds = y2005.add(years: 1).unix() - y2005.unix();
-    //print("totalYearSeconds = $totalYearSeconds");
-    //The 1st month seconds of 2005:
-
-    //y2005.add(months: month).unix() - y2005.unix();
-
-    //The N month seconds of 2005:
-    //y2005.add(months: N).unix() - y2005.unix();
-
-
-    /*
-      The full year timeline pixels: 640
-      The N month timeline pixies:
-    */
-
-
-    //return ((y2005.add(months: month).unix() - y2005.unix())*timelineHeight)/(y2005.add(years: 1).unix() - y2005.unix());
 
 
 
