@@ -34,8 +34,8 @@ class Ticks {
       double scale, double height, Timeline timeline) {
     final Canvas canvas = context.canvas;
 
-    //debugPrint("height -> " + height.toString()); //CHKME 730 pixels - the height of window
-    //debugPrint("scale -> " + scale.toString()); //CHKME  scale = size.height(730) / (renderEnd(1955) - renderStart(1930));
+    debugPrint("height -> " + height.toString()); //CHKME 730 pixels - the height of window
+    debugPrint("scale -> " + scale.toString()); //CHKME  scale = size.height(730) / (renderEnd(1955) - renderStart(1930));
 
     double bottom = height;
     double tickDistance = TickDistance.toDouble();
@@ -251,17 +251,35 @@ class Ticks {
       //print("textTickDistance = $textTickDistance");
       //print("monthzdis = $monthzdis");
       //if(textTickDistance < 2.0 && monthzdis >=26 )
-      if(scale >= height) {
+      bool result = false;
+      double val = (70*height)/100;
+      double timeLineHeight = 0;
+      if(scale >= val){
+        result = true;
+      }
+      //if(scale > height)
+      {
+        timeLineHeight = scaledTickDistance;
+      }/*else {
+        timeLineHeight = height;
+      }*/
 
+      if(result) {
+        //timeLineHeight = 600;
+        print("scaledTickDistance = $scaledTickDistance");
+        print("timeLineHeight = ${timeLineHeight})");
+        print("timeLineHeight/12 = ${timeLineHeight/12})");
         double lastMonthYCor = 0;
-        for(int i = 1; i <= 12; i++){
-          //print("i = $i");
-          double monthYCor = getMonthYCordinate(label!, i, height);
-          //print("getMonthYCordinate = ${getMonthYCordinate(label, i, height)}");
-
-          //double yCor = offset.dy + height + (i*monthzdis) - o;
-          double yCor = offset.dy + height + (monthYCor+lastMonthYCor) - o;
+        for(int i = 1; i < 12; i++){
+          print("i = $i");
+          double monthYCor = getMonthYCordinate1(label!, i, timeLineHeight);
+          print("monthYCor = $monthYCor");
+          //print("getMonthYCordinate = ${getMonthYCordinate(label!, i, timeLineHeight  )}");
           lastMonthYCor = lastMonthYCor+monthYCor;
+          //double yCor = offset.dy + height + (i*monthzdis) - o;
+          double yCor = offset.dy + height + (lastMonthYCor) - o;
+
+          print("lastMonthYCor = $lastMonthYCor");
           canvas.drawRect(
               Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
                   yCor, SmallTickSize, 1.0),
@@ -271,7 +289,8 @@ class Ticks {
               textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 7.0, fontWeight: FontWeight.w500))
             ..pushStyle(ui.TextStyle(color: colors.text));
 
-          monthBuilder.addText(Utils.monthAaryy.elementAt(i-1));
+
+          monthBuilder.addText(Utils.monthAaryy.elementAt(i));
           ui.Paragraph monthParagraph = monthBuilder.build();
           monthParagraph.layout(ui.ParagraphConstraints(
               width: gutterWidth - LabelPadLeft - LabelPadRight));
@@ -316,26 +335,31 @@ class Ticks {
     }
   }
 
-  double getMonthYCordinate(String year, int month, double timelineHeight){
+
+  double getMonthYCordinate1(String year, int month, double timelineHeight){
+
+
 
     int yearInt = int.parse(year);
+    int numDays = DateUtils.getDaysInMonth(yearInt, month);
+    print("numDays = $numDays");
+    int currentMonthMilli =   numDays*24*60*60*1000;
 
-    int currentMonthMilli = DateTime(yearInt, month, 1).millisecondsSinceEpoch;
-    int nextMonthMilli = 0;
-    if(month == 12){
-      nextMonthMilli = DateTime(yearInt+1, 1, 1).millisecondsSinceEpoch;
-    }else {
-      nextMonthMilli = DateTime(yearInt, month+1, 1).millisecondsSinceEpoch;
-    }
+    int totalYearMilliSeconds = convertDaysToMilliseconds(getTotalNumberOfDaysInYear(yearInt));
 
-    int currentYearMilli = DateTime(yearInt, 1, 1).millisecondsSinceEpoch;
-    int nextYearMilli = DateTime(yearInt+1, 1, 1).millisecondsSinceEpoch;
-
-    int totalYearMilliSeconds = nextYearMilli-currentYearMilli;
-
-    return ((nextMonthMilli-currentMonthMilli)*timelineHeight)/totalYearMilliSeconds;
-
-
-
+    return ((currentMonthMilli*timelineHeight)/totalYearMilliSeconds);
   }
+
+  int getTotalNumberOfDaysInYear(int year){
+      int numDays = 0;
+      for(int i = 1; i <=12;i++){
+        numDays = numDays + DateUtils.getDaysInMonth(year, 1);
+      }
+      return numDays;
+  }
+
+  int convertDaysToMilliseconds(int numDays){
+    return numDays*24*60*60*1000;
+  }
+
 }
