@@ -169,7 +169,7 @@ class Ticks {
 
     /// Draw all the ticks.
     print("numTicks = $numTicks");
-    if(scale >= height){
+    if(isDrawMonth(scale, height)){
       numTicks++;
     }
     for (int i = 0; i < numTicks; i++) {
@@ -251,12 +251,9 @@ class Ticks {
       //print("textTickDistance = $textTickDistance");
       //print("monthzdis = $monthzdis");
       //if(textTickDistance < 2.0 && monthzdis >=26 )
-      bool result = false;
-      double val = (70*height)/100;
+      bool result = isDrawMonth(scale, height);
       double timeLineHeight = 0;
-      if(scale >= val){
-        result = true;
-      }
+
       //if(scale > height)
       {
         timeLineHeight = scaledTickDistance;
@@ -337,14 +334,14 @@ class Ticks {
     }
   }
 
+  bool isDrawMonth(double scale, double height){
+    return (scale >= ((70*height)/100));
+  }
 
   double getMonthYCordinate1(String year, int month, double timelineHeight){
 
-
-
     int yearInt = int.parse(year);
     int numDays = DateUtils.getDaysInMonth(yearInt, month);
-    print("numDays = $numDays");
     int currentMonthMilli =   numDays*24*60*60*1000;
 
     int totalYearMilliSeconds = convertDaysToMilliseconds(getTotalNumberOfDaysInYear(yearInt));
