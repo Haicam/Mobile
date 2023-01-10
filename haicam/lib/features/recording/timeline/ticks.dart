@@ -270,7 +270,7 @@ class Ticks {
         print("timeLineHeight = ${timeLineHeight})");
         print("timeLineHeight/12 = ${timeLineHeight/12})");
         double lastMonthYCor = 0;
-        for(int i = 1; i < 12; i++){
+        for(int i = 1; i <= 12; i++){
           print("i = $i");
           double monthYCor = getMonthYCordinate1(label!, i, timeLineHeight);
           print("monthYCor = $monthYCor");
@@ -284,20 +284,22 @@ class Ticks {
               Rect.fromLTWH(offset.dx + gutterWidth - SmallTickSize,
                   yCor, SmallTickSize, 1.0),
               Paint()..color = colors!.short!);
+          if(i < 12){
+            ui.ParagraphBuilder monthBuilder = ui.ParagraphBuilder(ui.ParagraphStyle(
+                textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 7.0, fontWeight: FontWeight.w500))
+              ..pushStyle(ui.TextStyle(color: colors.text));
 
-          ui.ParagraphBuilder monthBuilder = ui.ParagraphBuilder(ui.ParagraphStyle(
-              textAlign: TextAlign.end, fontFamily: "Roboto", fontSize: 7.0, fontWeight: FontWeight.w500))
-            ..pushStyle(ui.TextStyle(color: colors.text));
 
+            monthBuilder.addText(Utils.monthAaryy.elementAt(i));
+            ui.Paragraph monthParagraph = monthBuilder.build();
+            monthParagraph.layout(ui.ParagraphConstraints(
+                width: gutterWidth - LabelPadLeft - LabelPadRight));
+            canvas.drawParagraph(
+                monthParagraph,
+                Offset(offset.dx- LabelPadRight,
+                    yCor - monthParagraph.height/2));
+          }
 
-          monthBuilder.addText(Utils.monthAaryy.elementAt(i));
-          ui.Paragraph monthParagraph = monthBuilder.build();
-          monthParagraph.layout(ui.ParagraphConstraints(
-              width: gutterWidth - LabelPadLeft - LabelPadRight));
-          canvas.drawParagraph(
-              monthParagraph,
-              Offset(offset.dx- LabelPadRight,
-                  yCor - monthParagraph.height/2));
 
           //Draw days of month
           /*if(monthzdis >= 250){
